@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: gm-hms-service
+
+spec:
+  selector:
+    app: gm-hms
+
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+
+  type: NodePort

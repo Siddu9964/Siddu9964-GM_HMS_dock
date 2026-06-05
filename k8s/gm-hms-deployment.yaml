@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: gm-hms
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: gm-hms
+
+  template:
+    metadata:
+      labels:
+        app: gm-hms
+
+    spec:
+      containers:
+      - name: gm-hms
+        image: gm_hms_dock:v1
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
