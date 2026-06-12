@@ -631,7 +631,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['role'])) {
                 <h1 class="logo-title">Hospital</h1>
             </div>
             <div class="header">
-                <p>Welcome back! Please login to your account.</p>
+                <p>Welcome back! Running live on Kubernetes!.</p>
             </div>
 
             <form id="loginForm">
