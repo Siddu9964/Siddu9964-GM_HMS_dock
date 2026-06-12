@@ -23,3 +23,14 @@ spec:
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 80
+        env:
+        - name: DB_HOST
+          value: "mysql"
+        - name: DB_PORT
+          value: "3306"
+        - name: DB_NAME
+          value: "hmsci"
+        - name: DB_USERNAME
+          value: "gmuser"
+        - name: DB_PASSWORD
+          value: "gm123"
