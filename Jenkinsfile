@@ -27,14 +27,16 @@ pipeline {
                 // you might not even need withKubeConfig if permissions are right.
                 // But we leave it here as standard practice.
                 withKubeConfig([credentialsId: KUBECONFIG_CREDENTIALS_ID]) {
-                    sh '''
-                        # Update the image in the deployment to match the new build
-                        # Notice we removed the registry prefix since it's a local image
-                        sed -i "s|image: gm_hms_dock:.*|image: ${IMAGE_NAME}:${BUILD_ID}|g" k8s/gm-hms-deployment.yaml
-                        
-                        # Apply all Kubernetes manifests (DB and Web App)
-                        kubectl apply -f k8s/
-                    '''
+                    script {
+                        // Update the image in the deployment to match the new build (Windows compatible)
+                        def deployFile = 'k8s/gm-hms-deployment.yaml'
+                        def fileContent = readFile(deployFile)
+                        fileContent = fileContent.replaceAll(/image: gm_hms_dock:.*/, "image: ${IMAGE_NAME}:${BUILD_ID}")
+                        writeFile(file: deployFile, text: fileContent)
+                    }
+                    
+                    // Apply all Kubernetes manifests using Windows bat
+                    bat 'kubectl apply -f k8s/'
                 }
             }
         }
