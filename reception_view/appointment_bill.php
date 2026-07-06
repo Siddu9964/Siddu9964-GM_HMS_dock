@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Receptionist') {
+if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], ['Receptionist', 'admin', 'Admin'])) {
     header("Location: ../receptionist_login.php");
     exit();
 }
@@ -9,6 +9,8 @@ $pageTitle = 'Registration / Appointment Billing';
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="/GM_HMS/assets/css/gm-theme.css">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Appointment Billing — GM HMS</title>
@@ -21,10 +23,10 @@ $pageTitle = 'Registration / Appointment Billing';
            APPOINTMENT BILLING — Page Styles
            ═══════════════════════════════════════════════ */
         :root {
-            --primary:      #0FA4AF;
-            --primary-dark: #056674;
-            --primary-soft: rgba(15, 164, 175, 0.1);
-            --secondary:    #2EAFB9;
+            --primary:      #1f6b4a;
+            --primary-dark: #144d34;
+            --primary-soft: rgba(31, 107, 74, 0.1);
+            --secondary:    #2a8c62;
             --success:      #10b981;
             --warning:      #f59e0b;
             --danger:       #ef4444;
@@ -32,14 +34,14 @@ $pageTitle = 'Registration / Appointment Billing';
             --text-dark:    #1e293b;
             --text-muted:   #64748b;
             --glass-bg:     rgba(255, 255, 255, 0.95);
-            --glass-border: rgba(15, 164, 175, 0.1);
+            --glass-border: rgba(31, 107, 74, 0.1);
             --radius-xl:    20px;
             --radius-lg:    12px;
             --radius-md:    8px;
             --shadow-sm:    0 2px 4px rgba(0,0,0,0.02);
             --shadow-md:    0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
-            --shadow-lg:    0 10px 25px -3px rgba(15, 164, 175, 0.1), 0 4px 6px -2px rgba(15, 164, 175, 0.05);
-            --shadow-glow:  0 0 15px rgba(15, 164, 175, 0.2);
+            --shadow-lg:    0 10px 25px -3px rgba(31, 107, 74, 0.1), 0 4px 6px -2px rgba(31, 107, 74, 0.05);
+            --shadow-glow:  0 0 15px rgba(31, 107, 74, 0.2);
             --transition:   all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
@@ -204,7 +206,7 @@ $pageTitle = 'Registration / Appointment Billing';
             align-items: center;
             gap: 0.75rem;
             border-bottom: 1px solid var(--glass-border);
-            background: linear-gradient(to right, rgba(15, 164, 175, 0.05), transparent);
+            background: linear-gradient(to right, rgba(31, 107, 74, 0.05), transparent);
         }
 
         .card-header-premium i {
@@ -315,7 +317,7 @@ $pageTitle = 'Registration / Appointment Billing';
 
         .btn-search:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(15, 164, 175, 0.3);
+            box-shadow: 0 8px 20px rgba(31, 107, 74, 0.3);
             filter: brightness(1.05);
         }
 
@@ -515,7 +517,7 @@ $pageTitle = 'Registration / Appointment Billing';
         .btn-primary-premium {
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
-            box-shadow: 0 8px 20px rgba(15, 164, 175, 0.2);
+            box-shadow: 0 8px 20px rgba(31, 107, 74, 0.2);
         }
 
         .btn-success-premium {
@@ -549,7 +551,7 @@ $pageTitle = 'Registration / Appointment Billing';
         }
 
         .modern-table th {
-            background: rgba(15, 164, 175, 0.03);
+            background: rgba(31, 107, 74, 0.03);
             padding: 1rem;
             text-align: left;
             font-size: 0.75rem;
@@ -569,7 +571,7 @@ $pageTitle = 'Registration / Appointment Billing';
 
         .modern-table tr:last-child td { border-bottom: none; }
 
-        .modern-table tr:hover td { background: rgba(15, 164, 175, 0.01); }
+        .modern-table tr:hover td { background: rgba(31, 107, 74, 0.01); }
 
         /* Modal Preview */
         .modal {
@@ -774,7 +776,7 @@ include 'includes/reception_navbar.php';
                                     .bill-input-edit:focus {
                                         border-color: var(--primary);
                                         outline: none;
-                                        box-shadow: 0 0 0 2px rgba(15, 164, 175, 0.1);
+                                        box-shadow: 0 0 0 2px rgba(31, 107, 74, 0.1);
                                     }
                                 </style>
                                 <div class="billing-grid">

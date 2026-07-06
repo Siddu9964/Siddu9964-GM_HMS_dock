@@ -203,44 +203,29 @@ async function loadAvailableDoctors() {
         }
 
         const doctors = result.data;
-        const doctorCount = doctors ? doctors.length : 0;
+        window.allDoctors = doctors || [];
+        const doctorCount = window.allDoctors.length;
 
         // Update KPI Card
         if (kpiDoctors) {
             animateValue('kpi-doctors', 0, doctorCount, 1000);
         }
 
-        if (!doctors || doctors.length === 0) {
-            container.innerHTML = `
-                <div class="no-doctors">
-                    <i class="fas fa-user-md"></i>
-                    <p>No doctors available at the moment</p>
-                </div>
-            `;
-            return;
+        renderDoctorsList(window.allDoctors);
+
+        // Attach search listener
+        const searchInput = document.getElementById('doctor-search-input');
+        if (searchInput && !window.doctorSearchAttached) {
+            searchInput.addEventListener('input', function(e) {
+                const term = e.target.value.toLowerCase();
+                const filtered = window.allDoctors.filter(d => 
+                    (d.full_name && d.full_name.toLowerCase().includes(term)) ||
+                    (d.specialization && d.specialization.toLowerCase().includes(term))
+                );
+                renderDoctorsList(filtered);
+            });
+            window.doctorSearchAttached = true;
         }
-
-        // Render doctors list
-        let html = '';
-        doctors.forEach((doctor, index) => {
-            const initials = getInitials(doctor.full_name);
-            const animationDelay = index * 0.1;
-
-            html += `
-                <div class="doctor-item" style="animation-delay: ${animationDelay}s; cursor: pointer;" onclick="window.location.href='appointment_management.php'">
-                    <div class="doctor-avatar">${initials}</div>
-                    <div class="doctor-info">
-                        <div class="doctor-name">${escapeHtml(doctor.full_name)}</div>
-                        <div class="doctor-specialization">
-                            <i class="fas fa-stethoscope"></i>
-                            ${escapeHtml(doctor.specialization)}
-                        </div>
-                    </div>
-                </div>
-            `;
-        });
-
-        container.innerHTML = html;
 
     } catch (error) {
         console.error('Error loading available doctors:', error);
@@ -251,6 +236,44 @@ async function loadAvailableDoctors() {
             </div>
         `;
     }
+}
+
+// Render available doctors list
+function renderDoctorsList(doctors) {
+    const container = document.getElementById('available-doctors-list');
+    if (!container) return;
+
+    if (!doctors || doctors.length === 0) {
+        container.innerHTML = `
+            <div class="no-doctors" style="text-align: center; padding: 2.5rem 1rem; color: #94a3b8; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.5rem; background: #f8fafc; border-radius: 12px; border: 1px dashed rgba(0,0,0,0.1); margin-top: 0.5rem;">
+                <i class="fas fa-search" style="font-size: 1.5rem; color: #cbd5e1; margin-bottom: 0.2rem;"></i>
+                <p style="margin: 0; font-size: 0.875rem; font-weight: 500;">No doctors found matching search</p>
+            </div>
+        `;
+        return;
+    }
+
+    // Render doctors list
+    let html = '';
+    doctors.forEach((doctor, index) => {
+        const initials = getInitials(doctor.full_name);
+        const animationDelay = index * 0.05;
+
+        html += `
+            <div class="doctor-item" style="animation-delay: ${animationDelay}s; cursor: pointer; transition: all 0.2s; margin-bottom: 0.5rem; border-radius: 10px; background: #ffffff; border: 1px solid rgba(0,0,0,0.03);" onclick="window.location.href='appointment_management.php'">
+                <div class="doctor-avatar">${initials}</div>
+                <div class="doctor-info">
+                    <div class="doctor-name">${escapeHtml(doctor.full_name)}</div>
+                    <div class="doctor-specialization">
+                        <i class="fas fa-stethoscope"></i>
+                        ${escapeHtml(doctor.specialization)}
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+
+    container.innerHTML = html;
 }
 
 // Helper function to get initials from full name

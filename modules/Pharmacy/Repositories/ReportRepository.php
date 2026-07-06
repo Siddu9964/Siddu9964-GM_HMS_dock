@@ -25,7 +25,7 @@ class ReportRepository {
         $row = $this->db->fetchOne(
             "SELECT COUNT(*) as count FROM ph_product 
              WHERE quantity > 0 AND expiry_date IS NOT NULL 
-             AND expiry_date > '2000-01-01'
+             AND expiry_date != '0000-00-00'
              AND expiry_date <= DATE_ADD(CURDATE(), INTERVAL ? DAY) 
              AND expiry_date >= CURDATE()", 
             [$days]
@@ -115,7 +115,7 @@ class ReportRepository {
              FROM ph_product
              WHERE quantity > 0 
              AND expiry_date IS NOT NULL 
-             AND expiry_date > '2000-01-01'
+             AND expiry_date != '0000-00-00'
              AND expiry_date <= DATE_ADD(CURDATE(), INTERVAL ? DAY) 
              AND expiry_date >= CURDATE()
              
@@ -258,7 +258,7 @@ class ReportRepository {
                     batch_number, expiry_date, quantity
              FROM ph_product
              WHERE expiry_date IS NOT NULL 
-             AND expiry_date > '2000-01-01'
+             AND expiry_date != '0000-00-00'
              AND expiry_date <= DATE_ADD(CURDATE(), INTERVAL ? DAY)
              ORDER BY expiry_date ASC",
             [$days]

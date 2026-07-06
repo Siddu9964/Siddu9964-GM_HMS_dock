@@ -1,20 +1,19 @@
 <?php
-// Calculate base path relative to reception_view folder
+// Calculate base path relative to reception_view folder (case-insensitive for gm_HMS)
 $currentPath = $_SERVER['PHP_SELF'];
-$depth = substr_count(str_replace('/GM_HMS/reception_view/', '', $currentPath), '/');
+$depth = substr_count(str_ireplace('/GM_HMS/reception_view/', '', $currentPath), '/');
 $basePath = str_repeat('../', $depth);
 ?>
 <!-- Reception Sidebar Navigation -->
 <aside
     class="reception-sidebar fixed lg:relative z-50 h-full transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out"
     id="receptionSidebar">
-    <div style="padding: 1.5rem; height: 100%; display: flex; flex-direction: column;">
+    <div style="padding: 1.25rem 0.75rem; height: 100%; display: flex; flex-direction: column;">
         <!-- Logo & Branding -->
-        <div
-            style="display: flex; align-items: center; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1);">
-            <i class="fas fa-hospital-user" style="font-size: 2.5rem; color: #0FA4AF; margin-right: 1rem;"></i>
+        <div style="display: flex; align-items: center; margin-bottom: 2rem; padding: 0 0.5rem 1rem; border-bottom: 1px solid var(--gm-border);">
+            <img src="/GM_HMS/assets/images/gm_logoo.png" alt="GM Logo" style="width: 38px; height: auto; margin-right: 0.6rem;">
             <div>
-                <h1 style="color: white; font-weight: 700; font-size: 1.25rem; margin: 0;">GM hospital</h1>
+                <h1 style="color: #f3efe6; font-weight: 700; font-size: 1.05rem; margin: 0; white-space: nowrap;">GM hospital</h1>
                 <!-- <p style="color: #94a3b8; font-size: 0.75rem; margin: 0;">Reception Portal</p> -->
             </div>
         </div>
@@ -62,17 +61,13 @@ $basePath = str_repeat('../', $depth);
                 <div class="opd-drop-wrap">
                     <button class="opd-drop-btn" id="opdBtn" onclick="toggleOpd(this)" aria-expanded="false">
                         <span class="opd-btn-left">
-                            <i class="fas fa-receipt"></i>
+                            <i class="fas fa-file-invoice-dollar"></i>
                             <span>OPD Billing</span>
                         </span>
                         <i class="fas fa-chevron-right opd-arrow"></i>
                     </button>
                     <div class="opd-drop-panel" id="opdPanel">
-                        <a href="<?php echo $basePath; ?>appointment_bill.php" class="opd-item"
-                            data-pd="appointment_bill" style="--n:0">
-                            <i class="fas fa-calendar-check"></i>
-                            <span>Registration / Appointment</span>
-                        </a>
+                        <!-- Removed Registration / Appointment -->
                         <a href="<?php echo $basePath; ?>opd_billing.php" class="opd-item" data-pd="opd_billing"
                             style="--n:1">
                             <i class="fas fa-flask"></i>
@@ -91,7 +86,7 @@ $basePath = str_repeat('../', $depth);
             </div>
 
             <!-- Quick Actions -->
-            <!-- <div style="margin-top: auto; padding: 1rem; background: rgba(15, 164, 175, 0.1); border-radius: 0.5rem;">
+            <!-- <div style="margin-top: auto; padding: 1rem; background: rgba(31, 107, 74, 0.1); border-radius: 0.5rem;">
                 <button onclick="window.location.href='<?php echo $basePath; ?>patient_registration.php'" class="btn btn-primary" style="width: 100%; justify-content: center;">
                     <i class="fas fa-plus-circle"></i>
                     <span>New Patient</span>
@@ -116,36 +111,44 @@ $basePath = str_repeat('../', $depth);
     .sidebar-link {
         display: flex;
         align-items: center;
-        padding: 0.75rem 1rem;
-        color: #cbd5e1;
-        text-decoration: none;
-        border-radius: 0.5rem;
-        margin-bottom: 0.25rem;
-        transition: all 0.2s ease;
-        font-size: 0.875rem;
-        gap: 0.75rem;
+        gap: .75rem;
+        padding: .6rem .85rem;
+        border-radius: 10px;
+        color: rgba(255, 255, 255, 0.75);
+        text-decoration: none !important;
+        font-size: .81rem;
+        font-weight: 500;
+        transition: all .22s cubic-bezier(.4, 0, .2, 1);
+        margin-bottom: 2px;
     }
 
     .sidebar-link i {
-        width: 1.25rem;
+        font-size: 1.05rem;
+        width: 20px;
+        min-width: 20px;
         text-align: center;
-        font-size: 1rem;
+        color: rgba(255, 255, 255, 0.5);
+        transition: color 0.2s ease;
+        flex-shrink: 0;
     }
 
     .sidebar-link:hover {
-        background: rgba(255, 255, 255, 0.1);
-        color: white;
-        transform: translateX(4px);
+        background: rgba(255, 255, 255, 0.06);
+        color: #fff;
+    }
+
+    .sidebar-link:hover i {
+        color: #fff;
     }
 
     .sidebar-link.active {
-        background: var(--primary-gradient);
-        color: white;
-        box-shadow: 0 4px 15px rgba(15, 164, 175, 0.3);
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        font-weight: 600;
     }
 
     .sidebar-link.active i {
-        animation: pulse 2s ease-in-out infinite;
+        color: #fff;
     }
 
     /* Mobile Toggle */
@@ -183,8 +186,8 @@ $basePath = str_repeat('../', $depth);
             visibility: visible !important;
             pointer-events: auto !important;
             display: none !important;
-            background: rgba(15, 164, 175, 0.1) !important;
-            border: 1px solid rgba(15, 164, 175, 0.3) !important;
+            background: rgba(31, 107, 74, 0.1) !important;
+            border: 1px solid rgba(31, 107, 74, 0.3) !important;
             border-radius: 0.5rem !important;
             padding: 0.5rem !important;
             box-shadow: none !important;
@@ -216,27 +219,27 @@ $basePath = str_repeat('../', $depth);
             margin: 0.25rem 0 !important;
             padding: 0.75rem 1rem !important;
             background: transparent !important;
-            border: 1px solid rgba(15, 164, 175, 0.2) !important;
+            border: 1px solid rgba(31, 107, 74, 0.2) !important;
             border-radius: 0.375rem !important;
             color: #cbd5e1 !important;
             font-size: 0.875rem !important;
         }
         
         .opd-item:hover {
-            background: rgba(15, 164, 175, 0.2) !important;
-            color: white !important;
-            transform: none !important;
-            box-shadow: none !important;
-        }
+        background: rgba(255, 255, 255, 0.15);
+        color: #ffffff;
+        transform: translateX(5px);
+        border-radius: 8px;
+    }
         
         .opd-item i {
-            background: rgba(15, 164, 175, 0.2) !important;
-            color: #0FA4AF !important;
+            background: rgba(31, 107, 74, 0.2) !important;
+            color: #1f6b4a !important;
         }
         
         .opd-item:hover i {
-            background: rgba(15, 164, 175, 0.4) !important;
-            color: white !important;
+            background: rgba(31, 107, 74, 0.4) !important;
+            color: var(--gm-text) !important;
         }
     }
 
@@ -272,7 +275,7 @@ $basePath = str_repeat('../', $depth);
         width: 1.25rem;
         text-align: center;
         font-size: .95rem;
-        color: #0FA4AF;
+        color: #f3efe6; opacity: 0.8;
         transition: color .2s, filter .2s;
     }
 
@@ -280,41 +283,43 @@ $basePath = str_repeat('../', $depth);
         font-size: .875rem;
         font-weight: 500;
         font-family: inherit;
-        color: #cbd5e1;
+        color: #f3efe6; opacity: 0.8;
         transition: color .2s;
     }
 
     .opd-drop-btn:hover .opd-btn-left span,
     .opd-drop-btn[aria-expanded="true"] .opd-btn-left span {
-        color: #fff;
+        color: #f3efe6;
     }
 
     .opd-drop-btn:hover {
-        background: rgba(255, 255, 255, .07);
+        background: rgba(255, 255, 255, 0.15);
+        color: #ffffff;
+        border-radius: 8px;
     }
 
     .opd-drop-btn[aria-expanded="true"] {
-        background: rgba(15, 164, 175, .12);
+        background: rgba(255, 255, 255, 0.2);
     }
 
     .opd-drop-btn[aria-expanded="true"] .opd-btn-left i {
-        color: #2EAFB9;
-        filter: drop-shadow(0 0 5px rgba(15, 164, 175, .6));
+        color: #ffffff;
+        filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.3));
     }
 
     /* Caret — always points right, nudges on open */
     .opd-arrow {
         font-size: .62rem;
-        color: #475569;
+        color: #f3efe6; opacity: 0.8;
         transition: color .25s, transform .25s cubic-bezier(.34, 1.56, .64, 1),
             filter .25s;
         flex-shrink: 0;
     }
 
     .opd-drop-btn[aria-expanded="true"] .opd-arrow {
-        color: #0FA4AF;
+        color: #ffffff;
         transform: translateX(3px);
-        filter: drop-shadow(0 0 4px rgba(15, 164, 175, .7));
+        filter: drop-shadow(0 0 4px rgba(255, 255, 255, .3));
     }
 
     /* ══ DROP-RIGHT PANEL ══════════════════════════════════
@@ -330,14 +335,12 @@ $basePath = str_repeat('../', $depth);
         min-width: 220px;
         padding: .55rem .5rem;
         border-radius: .75rem;
-        background: linear-gradient(135deg,
-                rgba(10, 22, 35, 0.98) 0%,
-                rgba(5, 102, 116, 0.20) 100%);
+        background: #1f6b4a; /* Pine green background */
         backdrop-filter: blur(16px);
         -webkit-backdrop-filter: blur(16px);
-        border: 1px solid rgba(15, 164, 175, .28);
+        border: 1px solid rgba(255, 255, 255, 0.2);
         box-shadow: 0 10px 40px rgba(0, 0, 0, .55),
-            0 0 0 1px rgba(15, 164, 175, .1),
+            0 0 0 1px rgba(255, 255, 255, .1),
             inset 0 1px 0 rgba(255, 255, 255, .07);
         opacity: 0;
         visibility: hidden;
@@ -358,7 +361,7 @@ $basePath = str_repeat('../', $depth);
         transform: translateY(-50%);
         border-top: 6px solid transparent;
         border-bottom: 6px solid transparent;
-        border-right: 6px solid rgba(15, 164, 175, .3);
+        border-right: 6px solid #1f6b4a;
     }
 
     /* Section label */
@@ -370,9 +373,9 @@ $basePath = str_repeat('../', $depth);
         font-family: inherit;
         letter-spacing: .08em;
         text-transform: uppercase;
-        color: #0FA4AF;
+        color: #f3efe6;
         padding: 0 .55rem .35rem .55rem;
-        border-bottom: 1px solid rgba(15, 164, 175, .15);
+        border-bottom: 1px solid rgba(255, 255, 255, .15);
         margin-bottom: .3rem;
         opacity: .8;
     }
@@ -428,48 +431,47 @@ $basePath = str_repeat('../', $depth);
         height: 1.5rem;
         border-radius: 50%;
         font-size: .65rem;
-        background: rgba(15, 164, 175, .15);
-        color: #0FA4AF;
+        background: rgba(255, 255, 255, 0.15);
+        color: #ffffff;
         flex-shrink: 0;
         transition: background .18s, color .18s, box-shadow .18s;
     }
 
     .opd-item:hover {
-        background: rgba(15, 164, 175, .14);
-        color: #e2fbfc;
-        border-color: rgba(15, 164, 175, .3);
-        transform: translateX(3px) scale(1.01);
-        box-shadow: 0 2px 10px rgba(15, 164, 175, .12);
+        background: rgba(255, 255, 255, 0.15);
+        color: #ffffff;
+        transform: translateX(5px);
+        border-radius: 8px;
     }
 
     .opd-item:hover i {
-        background: rgba(15, 164, 175, .3);
-        color: #fff;
-        box-shadow: 0 0 8px rgba(15, 164, 175, .5);
+        background: rgba(255, 255, 255, 0.3);
+        color: #f3efe6;
+        box-shadow: 0 0 8px rgba(255, 255, 255, .3);
     }
 
     .opd-item.active {
-        background: linear-gradient(90deg, rgba(15, 164, 175, .22), rgba(15, 164, 175, .09));
-        color: #fff;
-        border-color: rgba(15, 164, 175, .38);
+        background: linear-gradient(90deg, rgba(31, 107, 74, .22), rgba(31, 107, 74, .09));
+        color: #f3efe6;
+        border-color: rgba(31, 107, 74, .38);
         animation: drChipIn .22s ease forwards, chipGlow 2.5s 1s ease-in-out infinite;
     }
 
     .opd-item.active i {
-        background: #0FA4AF;
-        color: #fff;
-        box-shadow: 0 0 8px rgba(15, 164, 175, .5);
+        background: #1f6b4a;
+        color: #f3efe6;
+        box-shadow: 0 0 8px rgba(31, 107, 74, .5);
     }
 
     @keyframes chipGlow {
 
         0%,
         100% {
-            box-shadow: 0 0 0 1px rgba(15, 164, 175, .18);
+            box-shadow: 0 0 0 1px rgba(31, 107, 74, .18);
         }
 
         50% {
-            box-shadow: 0 0 0 3px rgba(15, 164, 175, .12), 0 0 12px rgba(15, 164, 175, .1);
+            box-shadow: 0 0 0 3px rgba(31, 107, 74, .12), 0 0 12px rgba(31, 107, 74, .1);
         }
     }
 

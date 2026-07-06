@@ -13,7 +13,7 @@
 }
 
 .bill-stat-card {
-    background: white;
+    background: #FDFBF7;
     padding: 1.5rem;
     border-radius: 1rem;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
@@ -32,7 +32,7 @@
 }
 
 .bill-stat-card.total {
-    border-left-color: #0FA4AF;
+    border-left-color: #1f6b4a;
 }
 
 .bill-stat-icon {
@@ -57,12 +57,12 @@
 
 .total .bill-stat-icon {
     background: #E6FAFA;
-    color: #0FA4AF;
+    color: #1f6b4a;
 }
 
 /* Invoices Table */
 .invoice-table-container {
-    background: white;
+    background: #FDFBF7;
     border-radius: 1rem;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     overflow: hidden;

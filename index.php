@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="/GM_HMS/assets/css/gm-theme.css">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GM Hospital Management System - Home</title>
@@ -9,15 +11,15 @@
     <link href="https://unpkg.com/lucide-static@0.321.0/font/lucide.css" rel="stylesheet">
     <style>
         :root {
-            --primary: #0FA4AF;
-            --primary-dark: #056674;
-            --accent: #2EAFB9;
+            --primary: #1f6b4a;
+            --primary-dark: #144d34;
+            --accent: #2a8c62;
             --text-dark: #1a202c;
             --text-gray: #718096;
-            --bg-gradient: linear-gradient(135deg, #0FA4AF 0%, #056674 100%);
+            --bg-gradient: linear-gradient(135deg, #1f6b4a 0%, #144d34 100%);
             --admin-gradient: linear-gradient(135deg, #0891b2 0%, #0e7490 100%);
             --receptionist-gradient: linear-gradient(135deg, #059669 0%, #047857 100%);
-            --doctor-gradient: linear-gradient(135deg, #0FA4AF 0%, #056674 100%);
+            --doctor-gradient: linear-gradient(135deg, #1f6b4a 0%, #144d34 100%);
         }
 
         * {
@@ -154,12 +156,12 @@
             font-weight: 600;
             font-size: 14px;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(15, 164, 175, 0.2);
+            box-shadow: 0 4px 15px rgba(31, 107, 74, 0.2);
         }
 
         .get-started-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(15, 164, 175, 0.3);
+            box-shadow: 0 6px 20px rgba(31, 107, 74, 0.3);
         }
 
         .hero-section {
@@ -249,7 +251,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(135deg, rgba(15, 164, 175, 0.3) 0%, rgba(5, 102, 116, 0.1) 100%);
+            background: linear-gradient(135deg, rgba(31, 107, 74, 0.3) 0%, rgba(20, 77, 52, 0.1) 100%);
             border-radius: 20px;
             z-index: 3;
         }

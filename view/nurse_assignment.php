@@ -11,6 +11,8 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
 <html lang="en">
 
 <head>
+    <link rel="stylesheet" href="/GM_HMS/assets/css/gm-theme.css">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nurse Assignment Management - GM HMS</title>
@@ -33,7 +35,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
         }
 
         .sidebar-item.active {
-            background: linear-gradient(135deg, #0FA4AF 0%, #056674 100%);
+            background: linear-gradient(135deg, #1f6b4a 0%, #144d34 100%);
         }
 
         .glass-card {

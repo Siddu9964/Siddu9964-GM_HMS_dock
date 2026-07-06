@@ -1,4 +1,20 @@
 <?php
+/**
+ * ============================================================
+ * PharmacySettingsController — API Reference
+ * ============================================================
+ * Base URL : http://localhost/GM_HMS/api/pharmacy/settings
+ * Auth     : All endpoints require Auth
+ * ------------------------------------------------------------
+ *
+ * 1. GET /api/pharmacy/settings
+ *    Returns pharmacy configuration settings
+ *
+ * 2. POST /api/pharmacy/settings
+ *    Body: { "pharmacy_name":"GM Pharmacy", "gst_number":"27XXXXX1234Z1Z5",
+ *            "default_tax_rate":18, "enable_expiry_alerts":true, "alert_days_before":90 }
+ * ------------------------------------------------------------
+ */
 namespace GM_HMS\Controllers\api;
 
 use Exception;
@@ -7,8 +23,8 @@ use GM_HMS\Controllers\BaseController;
 /**
  * PharmacySettingsController
  * Routes:
- *   GET  /api/pharmacy/settings       → get all settings
- *   POST /api/pharmacy/settings       → save settings
+ *   GET  /api/pharmacy/settings       â†’ get all settings
+ *   POST /api/pharmacy/settings       â†’ save settings
  */
 class PharmacySettingsController extends BaseController {
     public function __construct() { parent::__construct(); }
@@ -47,3 +63,4 @@ class PharmacySettingsController extends BaseController {
         } catch (Exception $e) { $this->handleException($e); }
     }
 }
+

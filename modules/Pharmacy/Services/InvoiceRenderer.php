@@ -59,7 +59,7 @@ class InvoiceRenderer {
         
         $t    = date('d M Y, h:i A');
         $bLbl = $bal < 0 ? 'Balance Due' : 'Change';
-        $bClr = $bal < 0 ? '#e53e3e'    : '#0FA4AF';
+        $bClr = $bal < 0 ? '#e53e3e'    : '#1f6b4a';
         $wrds = $this->numToWords((float)$grand) . ' Rupees Only';
 
         $rows = '';
@@ -105,10 +105,12 @@ class InvoiceRenderer {
             </tr>";
         }
 
-        return "<!DOCTYPE html><html><head><meta charset='UTF-8'><title>Invoice {$inv}</title>
+        return "<!DOCTYPE html><html><head>
+    <link rel='stylesheet' href='/GM_HMS/assets/css/gm-theme.css'>
+<meta charset='UTF-8'><title>Invoice {$inv}</title>
 <link href='https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap' rel='stylesheet'>
 <style>
-:root { --primary: #0FA4AF; --primary-dark: #096b6b; --text-main: #1e293b; --text-muted: #64748b; --bg-light: #f8fafc; --border: #e2e8f0; }
+:root { --primary: #1f6b4a; --primary-dark: #096b6b; --text-main: #1e293b; --text-muted: #64748b; --bg-light: #f8fafc; --border: #e2e8f0; }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Inter',sans-serif;color:var(--text-main);font-size:10px;line-height:1.4}
 @media screen {
@@ -116,8 +118,8 @@ body{font-family:'Inter',sans-serif;color:var(--text-main);font-size:10px;line-h
   .invoice-wrapper { width: 100%; max-width: 850px; }
   .action-bar { display: flex; justify-content: flex-end; margin-bottom: 20px; gap: 12px; }
   .btn { padding: 8px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; border: none; font-size: 12px; display: flex; align-items: center; gap: 8px; transition: all 0.2s ease; font-family: 'Inter', sans-serif; }
-  .btn-print { background: var(--primary); color: #fff; box-shadow: 0 4px 12px rgba(15,164,175,0.25); }
-  .btn-print:hover { background: var(--primary-dark); transform: translateY(-1px); box-shadow: 0 6px 15px rgba(15,164,175,0.3); }
+  .btn-print { background: var(--primary); color: #fff; box-shadow: 0 4px 12px rgba(31, 107, 74,0.25); }
+  .btn-print:hover { background: var(--primary-dark); transform: translateY(-1px); box-shadow: 0 6px 15px rgba(31, 107, 74,0.3); }
   .btn-a5 { background: #334155; color: #fff; }
   .btn-close { background: #fff; color: var(--text-muted); border: 1px solid var(--border); }
   .btn-close:hover { background: #f1f5f9; color: var(--text-main); }
@@ -141,14 +143,14 @@ body.is-a5 @media print {
   transform: translate(-50%, -50%) rotate(-35deg);
   font-size: 100px;
   font-weight: 900;
-  color: rgba(15, 164, 175, 0.08);
+  color: rgba(31, 107, 74, 0.08);
   z-index: 9999;
   pointer-events: none;
   white-space: nowrap;
   user-select: none;
 }
 @media print {
-  .watermark { color: rgba(15, 164, 175, 0.15) !important; }
+  .watermark { color: rgba(31, 107, 74, 0.15) !important; }
 }
 
 .hdr{text-align:center;padding-bottom:4px;border-bottom:1px dashed var(--border);margin-bottom:6px}

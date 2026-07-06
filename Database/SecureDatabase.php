@@ -46,6 +46,12 @@ class SecureDatabase
         try {
             $dbConfig = $this->config->getDatabase();
 
+            if (isset($_SERVER['HTTP_X_HOSPITAL_BRANCH'])) {
+                if (strtolower($_SERVER['HTTP_X_HOSPITAL_BRANCH']) === 'basaveshwaranagar') {
+                    $dbConfig['name'] = 'hmsc_basaveshwranagara';
+                }
+            }
+
             mysqli_report(MYSQLI_REPORT_OFF);
 
             $this->connection = new mysqli(

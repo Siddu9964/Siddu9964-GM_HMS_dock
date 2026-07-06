@@ -9,6 +9,8 @@ if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], ['Receptionist'
 <html lang="en">
 
 <head>
+    <link rel="stylesheet" href="/GM_HMS/assets/css/gm-theme.css">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Appointment Management - GM HMS</title>
@@ -92,9 +94,9 @@ if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], ['Receptionist'
         }
 
         .professional-input:focus {
-            border-color: #0fa4af !important;
+            border-color: #1f6b4a !important;
             background: #fff;
-            box-shadow: 0 0 0 4px rgba(15, 164, 175, 0.1);
+            box-shadow: 0 0 0 4px rgba(31, 107, 74, 0.1);
         }
 
         .professional-select {
@@ -118,6 +120,148 @@ if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], ['Receptionist'
             color: #94a3b8;
             font-size: 0.7rem;
             pointer-events: none;
+        }
+
+        /* Premium Modal Form Styles */
+        .modal-body {
+            padding: 2rem;
+            background: #FDFBF7;
+            border-radius: 0 0 1.25rem 1.25rem;
+        }
+
+        .modal-body label {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .modal-body .required {
+            color: #ef4444;
+            font-weight: bold;
+        }
+
+        .modal-body input[type="text"],
+        .modal-body input[type="date"],
+        .modal-body input[type="time"],
+        .modal-body select,
+        .modal-body textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 0.75rem;
+            font-size: 0.95rem;
+            background: #ffffff;
+            color: #1e293b;
+            transition: all 0.3s ease;
+        }
+
+        .modal-body input:focus,
+        .modal-body select:focus,
+        .modal-body textarea:focus {
+            border-color: #1f6b4a;
+            box-shadow: 0 0 0 4px rgba(31, 107, 74, 0.1);
+            outline: none;
+        }
+
+        .modal-body .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 640px) {
+            .modal-body .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Advanced Button Animations */
+        .adv-btn-save {
+            background: #1f6b4a !important;
+            color: #ffffff !important;
+            border: none !important;
+            padding: 0.875rem 2rem !important;
+            border-radius: 0.75rem !important;
+            font-weight: 700 !important;
+            font-size: 1rem !important;
+            box-shadow: 0 4px 15px rgba(31, 107, 74, 0.3) !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            opacity: 1 !important;
+        }
+        .adv-btn-save:disabled {
+            background: #1f6b4a !important;
+            opacity: 1 !important;
+            cursor: not-allowed;
+            box-shadow: none !important;
+            filter: none !important;
+        }
+        .adv-btn-save:hover {
+            transform: translateY(-3px) scale(1.02) !important;
+            box-shadow: 0 8px 25px rgba(31, 107, 74, 0.4) !important;
+        }
+        
+        .adv-btn-cancel {
+            background: #ffffff !important;
+            color: #ef4444 !important;
+            border: 2px solid #fee2e2 !important;
+            padding: 0.875rem 2rem !important;
+            border-radius: 0.75rem !important;
+            font-weight: 600 !important;
+            font-size: 1rem !important;
+            transition: all 0.3s ease !important;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .adv-btn-cancel:hover {
+            background: #fef2f2 !important;
+            border-color: #ef4444 !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.15) !important;
+        }
+        
+        .adv-btn-back {
+            background: transparent;
+            border: none;
+            color: #64748b;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.5rem 0;
+            margin-bottom: 1.25rem;
+            transition: all 0.3s ease;
+        }
+        .adv-btn-back:hover {
+            color: #1f6b4a;
+            transform: translateX(-5px);
+        }
+        
+        .adv-btn-next {
+            background: linear-gradient(135deg, #1f6b4a 0%, #144d34 100%) !important;
+            color: white !important;
+            border: none !important;
+            padding: 0.875rem 2.5rem !important;
+            border-radius: 0.75rem !important;
+            font-weight: 700 !important;
+            font-size: 1rem !important;
+            box-shadow: 0 4px 15px rgba(31, 107, 74, 0.3) !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            justify-content: center;
+            width: 100%;
+        }
+        .adv-btn-next:hover {
+            transform: translateY(-3px) scale(1.01) !important;
+            box-shadow: 0 8px 25px rgba(31, 107, 74, 0.4) !important;
         }
     </style>
 </head>
@@ -145,7 +289,7 @@ if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], ['Receptionist'
                 <div class="mb-6">
                     <div class="flex items-center justify-between">
                         <div>
-                            <h1 class="text-3xl font-bold text-gray-800" style="color: #056674;">Appointment Management
+                            <h1 class="text-3xl font-bold text-gray-800" style="color: #144d34;">Appointment Management
                             </h1>
                             <p class="text-gray-600 mt-1">Schedule and manage doctor appointments</p>
                         </div>
@@ -237,11 +381,13 @@ if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], ['Receptionist'
 
     <!-- Appointment Modal -->
     <div id="appointmentModal" class="modal-overlay hidden">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <div class="modal-header" style="background: var(--primary-gradient); color: white;">
-                <h2 id="modalTitle">New Appointment</h2>
+        <div class="modal-content" onclick="event.stopPropagation()" style="background: #ffffff; border-radius: 1.25rem; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); max-width: 800px; width: 95%; animation: slideUp 0.3s ease-out; border: 1px solid rgba(0,0,0,0.05);">
+            <div class="modal-header" style="background: #ffffff; color: #1f6b4a; padding: 1.5rem 2rem; border-bottom: 2px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; border-radius: 1.25rem 1.25rem 0 0;">
+                <h2 id="modalTitle" style="margin: 0; font-size: 1.75rem; font-weight: 800; display: flex; align-items: center; gap: 0.75rem; color: #1f6b4a !important;">
+                    <i class="fas fa-calendar-plus" style="color: #f59e0b;"></i> New Appointment
+                </h2>
                 <button onclick="appointmentManager.closeModal()" class="modal-close"
-                    style="color: white; opacity: 0.8;">
+                    style="background: #f1f5f9; border: none; color: #64748b; padding: 0.5rem 0.75rem; border-radius: 0.5rem; cursor: pointer; transition: all 0.2s; font-size: 1.25rem;" onmouseover="this.style.background='#e2e8f0'; this.style.color='#ef4444';" onmouseout="this.style.background='#f1f5f9'; this.style.color='#64748b';">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
@@ -251,29 +397,36 @@ if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], ['Receptionist'
                     <input type="hidden" id="editAppointmentId" name="appointment_id">
                     <input type="hidden" id="patientPhone" name="phone">
 
-                    <div class="form-grid cols-2">
-                        <!-- Patient ID -->
+                    <h6 style="color: #1f6b4a; font-size: 1.1rem; font-weight: 700; margin-bottom: 1.25rem; margin-top: 0; display: flex; align-items: center; gap: 8px; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.5rem;"><i class="fas fa-user-circle"></i> Patient Details</h6>
+                    
+                    <div class="form-grid cols-2" style="margin-bottom: 2rem;">
                         <div class="input-group" style="grid-column: span 2;">
                             <label>Patient <span class="required">*</span></label>
-                            <select id="patientSelect" name="patient_id" style="width: 100%;" required>
+                            <select id="patientSelect" name="patient_id" style="width: 100%;" required tabindex="1">
                                 <option value="">Search by ID or Name...</option>
                             </select>
                         </div>
+                        <div class="input-group" style="grid-column: span 2;">
+                            <label>Reason</label>
+                            <input type="text" name="reason" placeholder="Main complaint or reason for visit" tabindex="2">
+                        </div>
+                    </div>
 
-                        <!-- Department -->
+                    <h6 style="color: #1f6b4a; font-size: 1.1rem; font-weight: 700; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 8px; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.5rem;"><i class="fas fa-calendar-alt"></i> Schedule & Doctor</h6>
+                    
+                    <div class="form-grid cols-2">
                         <div class="input-group">
                             <label>Department <span class="required">*</span></label>
-                            <select id="departmentSelect" name="department_id" required>
+                            <select id="departmentSelect" name="department_id" required tabindex="3">
                                 <option value="">Select Department</option>
                                 <!-- Populated via JS -->
                             </select>
                         </div>
 
-                        <!-- Doctor & Availability -->
                         <div class="input-group">
                             <label>Doctor <span class="required">*</span></label>
                             <div style="display: flex; align-items: center; gap: 10px;">
-                                <select id="doctorSelect" name="doctor_id" required disabled style="flex: 1;">
+                                <select id="doctorSelect" name="doctor_id" required disabled style="flex: 1;" tabindex="4">
                                     <option value="">Select Department First</option>
                                     <!-- Populated via JS -->
                                 </select>
@@ -282,51 +435,71 @@ if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], ['Receptionist'
                                 </div>
                             </div>
                             <div id="doctorAvailabilityMsg" class="hidden"></div>
-                            <!-- Legacy msg container, keeping hidden or removing -->
                         </div>
 
-                        <!-- Date -->
                         <div class="input-group">
                             <label>Date <span class="required">*</span></label>
-                            <input type="date" name="appointment_date" required>
+                            <input type="date" name="appointment_date" required tabindex="5">
                         </div>
 
-                        <!-- Time -->
                         <div class="input-group">
                             <label>Time <span class="required">*</span></label>
-                            <input type="time" name="appointment_time" required>
+                            <input type="time" name="appointment_time" required tabindex="6">
                         </div>
 
-                        <!-- Status -->
-
-
-
-
-                        <!-- Reason -->
-                        <div class="input-group" style="grid-column: span 2;">
-                            <label>Reason</label>
-                            <input type="text" name="reason" placeholder="Main complaint or reason for visit">
-                        </div>
-
-                        <!-- Notes -->
                         <div class="input-group" style="grid-column: span 2;">
                             <label>Notes</label>
-                            <textarea name="notes" rows="2" placeholder="Additional notes..."></textarea>
+                            <textarea name="notes" rows="2" placeholder="Additional notes..." tabindex="7"></textarea>
                         </div>
-
-
                     </div>
 
-                    <div class="flex justify-end gap-3 pt-4 border-t mt-4">
-                        <button type="button" onclick="appointmentManager.closeModal()" class="btn btn-secondary"
-                            style="background: white; border: 1px solid #ccc;">
-                            Cancel
-                        </button>
-                        <button type="submit" class="btn btn-primary" id="btnSaveOnly">
-                            <i class="fas fa-save"></i> Save
-                        </button>
+                    <div class="flex justify-end gap-4 pt-4 border-t mt-6">
+                        <button type="button" onclick="appointmentManager.closeModal()" class="adv-btn-cancel" tabindex="8"><i class="fas fa-times"></i> Cancel</button>
+                        <button type="submit" id="btnSaveOnly" class="adv-btn-save" tabindex="9"><i class="fas fa-save"></i> Save Appointment</button>
                     </div>
                 </form>
+
+                <script>
+                    // Keyboard navigation and Focus Trap
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const modal = document.getElementById('appointmentModal');
+                        if (modal) {
+                            modal.addEventListener('keydown', function(e) {
+                                const focusableElements = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+                                const elements = Array.from(modal.querySelectorAll(focusableElements)).filter(el => !el.disabled && el.offsetParent !== null);
+                                
+                                // Tab key focus trap
+                                if (e.key === 'Tab') {
+                                    if(elements.length > 0) {
+                                        const firstElement = elements[0];
+                                        const lastElement = elements[elements.length - 1];
+                                        
+                                        if (e.shiftKey) { // Shift + Tab
+                                            if (document.activeElement === firstElement) {
+                                                lastElement.focus();
+                                                e.preventDefault();
+                                            }
+                                        } else { // Tab
+                                            if (document.activeElement === lastElement) {
+                                                firstElement.focus();
+                                                e.preventDefault();
+                                            }
+                                        }
+                                    }
+                                }
+                                
+                                // Enter key acts like Tab (skip textareas and buttons)
+                                if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA' && e.target.tagName !== 'BUTTON') {
+                                    e.preventDefault();
+                                    const index = elements.indexOf(document.activeElement);
+                                    if (index > -1 && index < elements.length - 1) {
+                                        elements[index + 1].focus();
+                                    }
+                                }
+                            });
+                        }
+                    });
+                </script>
             </div>
         </div>
     </div>

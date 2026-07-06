@@ -1,4 +1,19 @@
 <?php
+/**
+ * ============================================================
+ * PharmacyNotificationsController — API Reference
+ * ============================================================
+ * Base URL : http://localhost/GM_HMS/api/pharmacy/notifications
+ * Auth     : All endpoints require Auth — All GET, no body
+ * ------------------------------------------------------------
+ *
+ * 1. GET /api/pharmacy/notifications/counts
+ *    Response: { low_stock:12, expiry_alerts:5, pending_orders:3 }
+ *
+ * 2. GET /api/pharmacy/notifications/list
+ *    Response: Full notification list with details
+ * ------------------------------------------------------------
+ */
 namespace GM_HMS\Controllers\api;
 
 use Exception;
@@ -102,3 +117,4 @@ class PharmacyNotificationsController extends BaseController {
         } catch (Exception $e) { $this->handleException($e); }
     }
 }
+

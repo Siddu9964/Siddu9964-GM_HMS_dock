@@ -80,7 +80,7 @@ include 'includes/ph_head.php';
 </div>
 
 <!-- Summary Stats -->
-<div id="statRow" class="ph-stat-grid mb-4"></div>
+<div id="statRow" class="ph-stat-grid mb-4" style="grid-template-columns: repeat(4, 1fr); gap: 1rem;"></div>
 
 <!-- Chart -->
 <div class="row g-4 mb-4" id="chartRow" style="display:none!important;">
@@ -168,13 +168,15 @@ async function generateReport() {
 
 function renderStats(stats) {
     if (!Object.keys(stats).length) { document.getElementById('statRow').innerHTML = ''; return; }
-    const statColors = ['#0FA4AF','#22C55E','#F59E0B','#8B5CF6'];
+    const statColors = ['#1f6b4a','#22C55E','#F59E0B','#8B5CF6'];
     const icons      = ['fa-chart-line','fa-receipt','fa-percent','fa-tag'];
     const els = Object.entries(stats).map(([k, v], i) => `
-        <div class="ph-stat" style="border-left:4px solid ${statColors[i%4]};">
-            <div class="ph-stat-icon" style="background:${statColors[i%4]}20;color:${statColors[i%4]};"><i class="fas ${icons[i%4]}"></i></div>
-            <div class="ph-stat-val">${typeof v === 'number' && !Number.isInteger(v) ? '₹'+v.toLocaleString('en-IN',{minimumFractionDigits:2}) : v.toLocaleString('en-IN')}</div>
-            <div class="ph-stat-lbl">${k.replace(/_/g,' ').replace(/\b\w/g, l => l.toUpperCase())}</div>
+        <div class="ph-stat d-flex align-items-center" style="border-left:4px solid ${statColors[i%4]}; padding: 1rem 1.25rem; gap: 1rem;">
+            <div class="ph-stat-icon m-0" style="background:${statColors[i%4]}20;color:${statColors[i%4]};width:42px;height:42px;flex-shrink:0;"><i class="fas ${icons[i%4]}"></i></div>
+            <div class="flex-grow-1">
+                <div class="ph-stat-val" style="font-size:1.5rem;margin-bottom:0;">${typeof v === 'number' && !Number.isInteger(v) ? '₹'+v.toLocaleString('en-IN',{minimumFractionDigits:2}) : v.toLocaleString('en-IN')}</div>
+                <div class="ph-stat-lbl" style="font-size:0.7rem;margin-top:0;">${k.replace(/_/g,' ').replace(/\b\w/g, l => l.toUpperCase())}</div>
+            </div>
         </div>`);
     document.getElementById('statRow').innerHTML = els.join('');
 }
@@ -214,8 +216,8 @@ function renderChart(chartData) {
             labels: chartData.labels,
             datasets: chartData.datasets.map((ds, i) => ({
                 ...ds,
-                backgroundColor: ds.type === 'line' ? 'rgba(15,164,175,.15)' : ['#0FA4AF','#22C55E','#F59E0B','#8B5CF6','#EF4444'][i % 5],
-                borderColor: ['#0FA4AF','#22C55E','#F59E0B','#8B5CF6','#EF4444'][i % 5],
+                backgroundColor: ds.type === 'line' ? 'rgba(31, 107, 74,.15)' : ['#1f6b4a','#22C55E','#F59E0B','#8B5CF6','#EF4444'][i % 5],
+                borderColor: ['#1f6b4a','#22C55E','#F59E0B','#8B5CF6','#EF4444'][i % 5],
                 borderWidth: 2
             }))
         },

@@ -1,4 +1,24 @@
 <?php
+/**
+ * ============================================================
+ * PharmacyPurchaseOrderController — API Reference
+ * ============================================================
+ * Base URL : http://localhost/GM_HMS/api/pharmacy/purchase-orders
+ * Auth     : All endpoints require Auth
+ * ------------------------------------------------------------
+ *
+ * 1. GET /api/pharmacy/purchase-orders
+ *    Query: status, supplier_id, date_from, date_to
+ *
+ * 2. GET /api/pharmacy/purchase-orders/{id}
+ *
+ * 3. POST /api/pharmacy/purchase-orders
+ *    Body: { "supplier_id":3, "expected_date":"2026-07-05", "notes":"Urgent",
+ *            "items":[{"product_id":15,"qty":200,"rate":4.50}] }
+ *
+ * 4. DELETE /api/pharmacy/purchase-orders/{id}
+ * ------------------------------------------------------------
+ */
 namespace GM_HMS\Controllers\api;
 
 use Exception;
@@ -210,3 +230,4 @@ class PharmacyPurchaseOrderController extends BaseController {
         }
     }
 }
+

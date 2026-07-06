@@ -1,4 +1,34 @@
 <?php
+/**
+ * ============================================================
+ * PharmacyIndentController — API Reference (Internal Stock Requests)
+ * ============================================================
+ * Base URL : http://localhost/GM_HMS/api/pharmacy/indents
+ * Auth     : All endpoints require Auth
+ * ------------------------------------------------------------
+ *
+ * 1. GET /api/pharmacy/indents
+ *    Query: status (Pending|Approved|Rejected), date_from, date_to
+ *
+ * 2. POST /api/pharmacy/indents
+ *    Body: { "requested_by":"Ward-3", "notes":"Running low",
+ *            "items":[{"product_id":15,"requested_qty":50}] }
+ *
+ * 3. DELETE /api/pharmacy/indents/{id}
+ *
+ * 4. POST /api/pharmacy/indents/auto-generate
+ *    Auto-generates indents for low-stock items
+ *
+ * 5. POST /api/pharmacy/indents/update-qty
+ *    Body: { "indent_id":8, "product_id":15, "qty":60 }
+ *
+ * 6. POST /api/pharmacy/indents/bulk-status
+ *    Body: { "ids":[1,2,3], "status":"Approved" }
+ *
+ * 7. POST /api/pharmacy/indents/bulk-delete
+ *    Body: { "ids":[4,5,6] }
+ * ------------------------------------------------------------
+ */
 namespace GM_HMS\Controllers\api;
 
 use Exception;
@@ -7,20 +37,20 @@ use GM_HMS\Controllers\BaseController;
 /**
  * PharmacyIndentController
  * Routes:
- *   GET    /api/pharmacy/indents                  → index()      list all indents
- *   POST   /api/pharmacy/indents                  → save()       create / update
- *   POST   /api/pharmacy/indents/auto-generate    → autoGenerate()
- *   POST   /api/pharmacy/indents/update-qty       → updateQty()
- *   POST   /api/pharmacy/indents/bulk-status      → bulkStatus()
- *   POST   /api/pharmacy/indents/bulk-delete      → bulkDelete()
- *   DELETE /api/pharmacy/indents/{id}             → delete()
+ *   GET    /api/pharmacy/indents                  â†’ index()      list all indents
+ *   POST   /api/pharmacy/indents                  â†’ save()       create / update
+ *   POST   /api/pharmacy/indents/auto-generate    â†’ autoGenerate()
+ *   POST   /api/pharmacy/indents/update-qty       â†’ updateQty()
+ *   POST   /api/pharmacy/indents/bulk-status      â†’ bulkStatus()
+ *   POST   /api/pharmacy/indents/bulk-delete      â†’ bulkDelete()
+ *   DELETE /api/pharmacy/indents/{id}             â†’ delete()
  */
 class PharmacyIndentController extends BaseController {
     public function __construct() { parent::__construct(); }
 
-    // ──────────────────────────────────────────────────────────────────────────
-    /** GET /api/pharmacy/indents — Fetch all indent requests */
-    // ──────────────────────────────────────────────────────────────────────────
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    /** GET /api/pharmacy/indents â€” Fetch all indent requests */
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     public function index(): void {
         $this->restrictMethod('GET');
         $this->requireAuth();
@@ -34,9 +64,9 @@ class PharmacyIndentController extends BaseController {
         }
     }
 
-    // ──────────────────────────────────────────────────────────────────────────
-    /** POST /api/pharmacy/indents — Create or update an indent request */
-    // ──────────────────────────────────────────────────────────────────────────
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    /** POST /api/pharmacy/indents â€” Create or update an indent request */
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     public function save(): void {
         $this->restrictMethod('POST');
         $this->requireAuth();
@@ -99,9 +129,9 @@ class PharmacyIndentController extends BaseController {
         }
     }
 
-    // ──────────────────────────────────────────────────────────────────────────
-    /** POST /api/pharmacy/indents/update-qty — Update qty of a single indent */
-    // ──────────────────────────────────────────────────────────────────────────
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    /** POST /api/pharmacy/indents/update-qty â€” Update qty of a single indent */
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     public function updateQty(): void {
         $this->restrictMethod('POST');
         $this->requireAuth();
@@ -125,9 +155,9 @@ class PharmacyIndentController extends BaseController {
         }
     }
 
-    // ──────────────────────────────────────────────────────────────────────────
-    /** POST /api/pharmacy/indents/bulk-status — Batch update status */
-    // ──────────────────────────────────────────────────────────────────────────
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    /** POST /api/pharmacy/indents/bulk-status â€” Batch update status */
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     public function bulkStatus(): void {
         $this->restrictMethod('POST');
         $this->requireAuth();
@@ -157,9 +187,9 @@ class PharmacyIndentController extends BaseController {
         }
     }
 
-    // ──────────────────────────────────────────────────────────────────────────
-    /** POST /api/pharmacy/indents/bulk-delete — Batch delete */
-    // ──────────────────────────────────────────────────────────────────────────
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    /** POST /api/pharmacy/indents/bulk-delete â€” Batch delete */
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     public function bulkDelete(): void {
         $this->restrictMethod('POST');
         $this->requireAuth();
@@ -183,9 +213,9 @@ class PharmacyIndentController extends BaseController {
         }
     }
 
-    // ──────────────────────────────────────────────────────────────────────────
-    /** POST /api/pharmacy/indents/auto-generate — Draft indents for low-stock items */
-    // ──────────────────────────────────────────────────────────────────────────
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    /** POST /api/pharmacy/indents/auto-generate â€” Draft indents for low-stock items */
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     public function autoGenerate(): void {
         $this->restrictMethod('POST');
         $this->requireAuth();
@@ -243,9 +273,9 @@ class PharmacyIndentController extends BaseController {
         }
     }
 
-    // ──────────────────────────────────────────────────────────────────────────
-    /** DELETE /api/pharmacy/indents/{id} — Delete single indent */
-    // ──────────────────────────────────────────────────────────────────────────
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    /** DELETE /api/pharmacy/indents/{id} â€” Delete single indent */
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     public function delete(string $id): void {
         $this->restrictMethod('DELETE');
         $this->requireAuth();
@@ -257,3 +287,4 @@ class PharmacyIndentController extends BaseController {
         }
     }
 }
+

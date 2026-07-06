@@ -1,4 +1,29 @@
 <?php
+/**
+ * ============================================================
+ * DepartmentController — API Reference
+ * ============================================================
+ * Base URL : http://localhost/GM_HMS/api
+ * Auth     : All endpoints require Auth (Session or Bearer token)
+ * ------------------------------------------------------------
+ *
+ * 1. GET /api/departments
+ *    Query: search (string) - optional
+ *    Response: [ { department_id, department_name, head_doctor, status } ]
+ *
+ * 2. GET /api/departments/{id}
+ *    Response: Full department object
+ *
+ * 3. POST /api/departments
+ *    Body: { "department_name":"Cardiology", "head_doctor":"Dr. Mehta", "status":"Active" }
+ *    Response 201: { department_id, ... }
+ *
+ * 4. PUT /api/departments/{id}
+ *    Body: Send only fields to update
+ *
+ * 5. DELETE /api/departments/{id}
+ * ------------------------------------------------------------
+ */
 namespace GM_HMS\Controllers\api;
 
 use Exception;
@@ -225,3 +250,4 @@ class DepartmentController extends BaseController {
         }
     }
 }
+

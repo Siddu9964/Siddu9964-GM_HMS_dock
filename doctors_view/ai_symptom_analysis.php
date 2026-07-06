@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Doctor') {
+if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], ['Doctor', 'admin', 'Admin'])) {
     header("Location: ../doctor_login.php");
     exit();
 }
@@ -8,6 +8,8 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Doctor') {
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="/GM_HMS/assets/css/gm-theme.css">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Symptom Analysis - GM HMS</title>
@@ -16,7 +18,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Doctor') {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="assets/css/doctor_dashboard.css">
+    <link rel="stylesheet" href="assets/css/doctor_dashboard.css?v=<?= time() ?>">
 </head>
 <body>
     <div class="doctor-layout">
@@ -31,17 +33,19 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Doctor') {
             <!-- Page Content -->
             <div class="doctor-content">
                 <!-- Page Header -->
-                <div style="margin-bottom: 2rem;">
-                    <h1 class="main-page-title">
-                        <i class="fas fa-brain"></i>
-                        AI Symptom Analysis
-                    </h1>
-                    <p style="color: var(--gray-500);">AI-powered symptom extraction and diagnosis prediction</p>
+                <div class="welcome-banner fade-in-up" style="display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 2; margin-bottom: 2rem;">
+                    <div>
+                        <h1 class="welcome-title">
+                            <i class="fas fa-brain"></i> AI Symptom Analysis
+                        </h1>
+                        <p class="welcome-subtitle">AI-powered symptom extraction and diagnosis prediction</p>
+                    </div>
+                    <i class="fas fa-robot welcome-icon-bg"></i>
                 </div>
                 
                 <!-- Patient Issues List -->
-                <div class="card">
-                    <div class="card-header" style="background: linear-gradient(135deg, #0FA4AF 0%, #056674 100%); color: white;">
+                <div class="bento-card fade-in-up delay-1">
+                    <div class="card-header" style="background: linear-gradient(135deg, #1f6b4a 0%, #144d34 100%); color: white;">
                         <div class="card-title">
                             <i class="fas fa-list"></i>
                             Patient Symptom Descriptions
@@ -92,8 +96,8 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Doctor') {
         
         function displayIssues(issues) {
             const html = issues.map(issue => `
-                <div class="card mb-3" style="border-left: 4px solid ${getRiskColor(issue.ai_risk_level)};">
-                    <div class="card-body">
+                <div class="bento-card mb-3" style="border-left: 4px solid ${getRiskColor(issue.ai_risk_level)}; padding: 1rem;">
+                    <div class="card-body" style="padding: 0;">
                         <div class="d-flex" style="justify-content: space-between; align-items: start; margin-bottom: 1rem;">
                             <div>
                                 <h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 0.5rem;">
@@ -144,7 +148,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Doctor') {
                                 <div>
                                     <strong>AI Confidence:</strong> 
                                     <div style="background: var(--gray-200); height: 8px; border-radius: 4px; overflow: hidden; margin-top: 0.25rem;">
-                                        <div style="background: #056674; height: 100%; width: ${issue.ai_confidence_score}%;"></div>
+                                        <div style="background: #144d34; height: 100%; width: ${issue.ai_confidence_score}%;"></div>
                                     </div>
                                     <span style="font-size: 0.75rem; color: var(--gray-500);">${issue.ai_confidence_score}%</span>
                                 </div>

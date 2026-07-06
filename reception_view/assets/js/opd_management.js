@@ -17,33 +17,30 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Vitals Form Submit
-    document.getElementById('vitals-form').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        await saveVitals(new FormData(e.target));
-    });
-
-
-
-    // Lab Form Submit
-    document.getElementById('lab-form').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        await saveLabRequest(new FormData(e.target));
-    });
-
-    // Follow-up Form Submit
-    document.getElementById('followup-form').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        await saveFollowUp(new FormData(e.target));
-    });
+    const vitalsForm = document.getElementById('vitals-form');
+    if (vitalsForm) {
+        vitalsForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const sys = formData.get('bp_sys');
+            const dia = formData.get('bp_dia');
+            if (sys || dia) {
+                formData.set('bp', `${sys}/${dia}`);
+            }
+            formData.delete('bp_sys');
+            formData.delete('bp_dia');
+            await saveVitals(formData);
+        });
+    }
 });
 
 // --- API Calls ---
 
-const API_BASE = '/GM_HMS';
+const OPD_API_BASE = '/GM_HMS';
 
 async function loadStats() {
     try {
-        const res = await fetch(`${API_BASE}/api/opd/stats`);
+        const res = await fetch(`${OPD_API_BASE}/api/opd/stats`);
         const data = await res.json();
 
         if (data.success) {
@@ -66,7 +63,7 @@ async function loadQueue(filter) {
     empty.style.display = 'none';
 
     try {
-        const res = await fetch(`${API_BASE}/api/opd/queue`);
+        const res = await fetch(`${OPD_API_BASE}/api/opd/queue`);
         const json = await res.json();
 
         loader.style.display = 'none';
@@ -88,6 +85,13 @@ async function loadQueue(filter) {
             patients = patients.filter(p => p.appointment_status === filter);
         }
 
+        // Sort by appointment time (FIFO)
+        patients.sort((a, b) => {
+            const timeA = a.appointment_time || '23:59:59';
+            const timeB = b.appointment_time || '23:59:59';
+            return timeA.localeCompare(timeB);
+        });
+
         if (patients.length === 0) {
             empty.style.display = 'block';
             return;
@@ -103,41 +107,53 @@ async function loadQueue(filter) {
     }
 }
 
+function formatApptTime(timeString) {
+    if(!timeString) return 'Time Not Set';
+    try {
+        const [h, m] = timeString.split(':');
+        let hours = parseInt(h, 10);
+        let ampm = hours >= 12 ? 'PM' : 'AM';
+        hours = hours % 12;
+        hours = hours ? hours : 12; 
+        return hours + ':' + m + ' ' + ampm;
+    } catch(e) {
+        return timeString;
+    }
+}
+
 function createPatientCard(p) {
     const statusLower = (p.appointment_status || 'waiting').toLowerCase().replace(' ', '-');
-    const statusClass = `status-${statusLower}`; // e.g., status-waiting, status-in-progress
-
-    // Determine badge color
-    let badgeClass = 'secondary';
-    if (statusLower === 'waiting' || statusLower === 'pending') badgeClass = 'warning';
-    if (statusLower === 'in-progress') badgeClass = 'primary';
-    if (statusLower === 'completed') badgeClass = 'success';
+    const statusClass = `status-${statusLower}`;
 
     return `
         <div class="patient-card ${statusClass}" onclick="openEncounter('${p.appointment_id}')">
-            <div class="card-status-bar"></div>
-            
-            <div class="patient-header">
-                <span class="token-badge">Token #${p.token_number || '---'}</span>
-                <span class="badge ${badgeClass}">${p.appointment_status}</span>
+            <div class="card-glass-header">
+                <span class="token-badge"><i class="fas fa-ticket-alt"></i> #${p.token_number || '---'}</span>
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <span class="status-text">${p.appointment_status}</span>
+                    <span class="status-dot"></span>
+                </div>
             </div>
             
             <div class="patient-info">
                 <h4>${p.first_name} ${p.last_name}</h4>
-                <div class="patient-detail">
-                    <i class="fas fa-id-card-alt w-5"></i> ${p.patient_id}
+                <div class="patient-detail id-tag">
+                    <i class="fas fa-id-badge"></i> ${p.patient_id}
+                </div>
+                <div class="patient-detail" style="color: #1f6b4a; font-weight: 700;">
+                    <i class="fas fa-clock"></i> ${formatApptTime(p.appointment_time)}
                 </div>
                 <div class="patient-detail">
-                    <i class="fas fa-user-clock w-5"></i> ${p.age} Y / ${p.sex}
+                    <i class="fas fa-user-clock"></i> ${p.age} Y / ${p.sex}
                 </div>
                 <div class="patient-detail">
-                    <i class="fas fa-user-md w-5"></i> ${p.doctor_name || 'Not Assigned'}
+                    <i class="fas fa-stethoscope"></i> ${p.doctor_name || 'Not Assigned'}
                 </div>
             </div>
 
             <div class="card-actions">
-                <button class="action-btn" onclick="event.stopPropagation(); openEncounter('${p.appointment_id}', 'clinical')">
-                    <i class="fas fa-notes-medical"></i> Vitals
+                <button class="vitals-btn" onclick="event.stopPropagation(); openEncounter('${p.appointment_id}', 'clinical')">
+                    <i class="fas fa-heartbeat"></i> Vitals
                 </button>
             </div>
         </div>
@@ -152,13 +168,12 @@ async function openEncounter(appointmentId, tab = 'clinical') {
     // Reset and Load Data
     document.getElementById('modal-patient-name').textContent = 'Loading...';
     document.getElementById('vitals-form').reset();
-    document.getElementById('rx-list').innerHTML = '<div class="spinner mx-auto"></div>';
 
     modal.classList.remove('hidden');
     switchTab(tab);
 
     try {
-        const res = await fetch(`${API_BASE}/api/opd/encounter/${appointmentId}`);
+        const res = await fetch(`${OPD_API_BASE}/api/opd/encounter/${appointmentId}`);
         const json = await res.json();
 
         if (json.success) {
@@ -181,170 +196,67 @@ function populateEncounterData(data) {
     const pt = data.appointment;
 
     // Header
-    document.getElementById('modal-patient-name').textContent = `${pt.first_name} ${pt.last_name}`;
-    document.getElementById('modal-patient-id').textContent = pt.patient_id;
-    document.getElementById('modal-patient-details').textContent = `${pt.age} Y / ${pt.sex} / ${pt.blood_group || '-'}`;
-    document.getElementById('modal-doctor-name').textContent = pt.doctor_name || 'Not assigned';
+    const nameEl = document.getElementById('modal-patient-name');
+    if(nameEl) nameEl.textContent = `${pt.first_name} ${pt.last_name}`;
+    
+    const idEl = document.getElementById('modal-patient-id');
+    if(idEl) idEl.textContent = pt.patient_id;
+    
+    const detailsEl = document.getElementById('modal-patient-details');
+    if(detailsEl) detailsEl.textContent = `${pt.age} Y / ${pt.sex} / ${pt.blood_group || '-'}`;
+    
+    const doctorEl = document.getElementById('modal-doctor-name');
+    if(doctorEl) doctorEl.textContent = pt.doctor_name || 'Not assigned';
 
     // Vitals Form Hidden Fields
-    document.getElementById('vitals-appt-id').value = pt.appointment_id;
-    document.getElementById('vitals-patient-id').value = pt.patient_id;
-    document.getElementById('vitals-doctor-id').value = pt.doctor_id;
+    const apptInput = document.getElementById('vitals-appt-id');
+    if(apptInput) apptInput.value = pt.appointment_id;
+    
+    const ptInput = document.getElementById('vitals-patient-id');
+    if(ptInput) ptInput.value = pt.patient_id;
+    
+    const docInput = document.getElementById('vitals-doctor-id');
+    if(docInput) docInput.value = pt.doctor_id;
 
     // Fill Vitals if exist
     if (data.consultation && data.consultation.vital_signs) {
         try {
             const vitals = JSON.parse(data.consultation.vital_signs);
             const form = document.getElementById('vitals-form');
-            form.querySelector('[name="bp"]').value = vitals.bp || '';
+            if (vitals.bp) {
+                const parts = vitals.bp.split('/');
+                if (parts.length === 2) {
+                    form.querySelector('[name="bp_sys"]').value = parts[0] || '';
+                    form.querySelector('[name="bp_dia"]').value = parts[1] || '';
+                } else {
+                    form.querySelector('[name="bp_sys"]').value = vitals.bp;
+                }
+            } else {
+                form.querySelector('[name="bp_sys"]').value = '';
+                form.querySelector('[name="bp_dia"]').value = '';
+            }
             form.querySelector('[name="pulse"]').value = vitals.pulse || '';
             form.querySelector('[name="temp"]').value = vitals.temp || '';
             form.querySelector('[name="weight"]').value = vitals.weight || '';
             form.querySelector('[name="spo2"]').value = vitals.spo2 || '';
 
-            form.querySelector('[name="chief_complaint"]').value = data.consultation.soap_subjective || '';
+            form.querySelector('[name="chief_complaint"]').value = data.consultation.complaint || data.consultation.soap_subjective || '';
         } catch (e) {
             console.error('Error parsing vitals', e);
         }
-    }
-
-    // Prescriptions
-    const rxList = document.getElementById('rx-list');
-    let rxHtml = '';
-
-
-
-    // 2. Prescription Logic (Split Complex vs Standard)
-    if (data.prescriptions && data.prescriptions.length > 0) {
-        let standardRx = [];
-        let complexHtml = '';
-
-        data.prescriptions.forEach(rx => {
-            // Check if this is a complex text block (contains DIAGNOSIS or MEDICATIONS keyword)
-            if (rx.name && (rx.name.includes('DIAGNOSIS:') || rx.name.includes('MEDICATIONS:'))) {
-                // Parse Complex Text
-                let diagnosis = '';
-                let medications = '';
-
-                // Simple text parsing
-                const parts = rx.name.split('MEDICATIONS:');
-                if (parts.length > 0) {
-                    diagnosis = parts[0].replace('DIAGNOSIS:', '').trim();
-                }
-                if (parts.length > 1) {
-                    medications = parts[1].trim();
-                } else if (rx.name.includes('MEDICATIONS:')) {
-                    // Case where only medications might be present without diagnosis keyword
-                    medications = rx.name.replace('MEDICATIONS:', '').trim();
-                }
-
-                if (diagnosis) {
-                    complexHtml += `
-                        <div class="diagnosis-section">
-                            <div class="section-title"><i class="fas fa-stethoscope"></i> Diagnosis & Findings</div>
-                            <div class="section-content">${diagnosis}</div>
-                        </div>
-                     `;
-                }
-
-                if (medications) {
-                    complexHtml += `
-                        <div class="medication-section">
-                            <div class="section-title"><i class="fas fa-pills"></i> Prescribed Protocol</div>
-                            <div class="section-content">${medications}</div>
-                        </div>
-                     `;
-                }
-
-            } else {
-                standardRx.push(rx);
-            }
-        });
-
-        // Add Complex Blocks first
-        rxHtml += complexHtml;
-
-        // Add Standard Table if items exist
-        if (standardRx.length > 0) {
-            rxHtml += `
-                <div class="rx-table-container">
-                    <table class="rx-table">
-                        <thead>
-                            <tr>
-                                <th>Medicine Name</th>
-                                <th>Dosage</th>
-                                <th>Frequency</th>
-                                <th>Duration</th>
-                                <th>Instructions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-            `;
-
-            rxHtml += standardRx.map(rx => `
-                <tr>
-                    <td class="med-name">${rx.name}</td>
-                    <td>${rx.dosage || '-'}</td>
-                    <td><span class="badge secondary">${rx.frequency || '-'}</span></td>
-                    <td>${rx.duration || '-'}</td>
-                    <td class="med-instructions">${rx.instructions || '-'}</td>
-                </tr>
-            `).join('');
-
-            rxHtml += `
-                        </tbody>
-                    </table>
-                </div>
-            `;
-        }
-
-        // If we processed items but produced no HTML (shouldn't happen), show empty
-        if (!complexHtml && standardRx.length === 0) {
-            rxHtml = '<p class="text-center text-gray-500 py-4">No active prescriptions.</p>';
-        }
-
-    } else {
-        rxHtml = '<p class="text-center text-gray-500 py-4">No active prescriptions.</p>';
-    }
-
-    rxList.innerHTML = rxHtml;
-
-
-
-    // Labs (New Section)
-    const labList = document.getElementById('lab-list');
-    if (data.lab_orders && data.lab_orders.length > 0) {
-        labList.innerHTML = data.lab_orders.map(lab => `
-            <div class="d-flex justify-content-between border-bottom py-2">
-                <div>
-                    <div class="font-weight-bold">${lab.test_name}</div>
-                    <div class="text-xs text-secondary">${lab.order_date} | ${lab.status}</div>
-                </div>
-                <div class="badge badge-${lab.priority === 'Urgent' ? 'danger' : 'info'} h-auto my-auto">${lab.priority}</div>
-            </div>
-        `).join('');
-    } else {
-        labList.innerHTML = '<p class="text-center text-gray-500 py-4">No lab orders found.</p>';
-    }
-
-    // Follow-up Display
-    const followupAlert = document.getElementById('current-followup');
-    if (data.consultation && data.consultation.follow_up_date) {
-        followupAlert.style.display = 'block';
-        document.getElementById('followup-display').textContent = data.consultation.follow_up_date;
-        // Pre-fill form
-        document.querySelector('[name="follow_up_date"]').value = data.consultation.follow_up_date;
-    } else {
-        followupAlert.style.display = 'none';
-        document.querySelector('[name="follow_up_date"]').value = '';
     }
 }
 
 async function saveVitals(formData) {
     const data = Object.fromEntries(formData.entries());
+    
+    // Explicitly add these in case FormData misses them
+    if (!data.patient_id) data.patient_id = document.getElementById('vitals-patient-id').value;
+    if (!data.appointment_id) data.appointment_id = document.getElementById('vitals-appt-id').value;
+    if (!data.doctor_id) data.doctor_id = document.getElementById('vitals-doctor-id').value;
 
     try {
-        const res = await fetch(`${API_BASE}/api/opd/vitals`, {
+        const res = await fetch(`${OPD_API_BASE}/api/opd/vitals`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
@@ -352,9 +264,22 @@ async function saveVitals(formData) {
         const json = await res.json();
 
         if (json.success) {
-            showToast('Vitals saved successfully', 'success');
+            Swal.fire({
+                title: 'Success!',
+                text: 'Vitals saved successfully',
+                icon: 'success',
+                confirmButtonColor: '#1f6b4a'
+            }).then(() => {
+                closeModal();
+                loadQueue('all');
+            });
         } else {
-            showToast('Failed to save vitals', 'error');
+            Swal.fire({
+                title: 'Error!',
+                text: 'Failed to save vitals',
+                icon: 'error',
+                confirmButtonColor: '#d33'
+            });
         }
     } catch (error) {
         console.error('Error saving vitals', error);
@@ -368,7 +293,7 @@ async function saveLabRequest(formData) {
     data.doctor_id = document.getElementById('vitals-doctor-id').value; // Assuming doctor ID is available
 
     try {
-        const res = await fetch(`${API_BASE}/api/opd/lab-request`, {
+        const res = await fetch(`${OPD_API_BASE}/api/opd/lab-request`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
@@ -392,7 +317,7 @@ async function saveFollowUp(formData) {
     data.appointment_id = document.getElementById('vitals-appt-id').value;
 
     try {
-        const res = await fetch(`${API_BASE}/api/opd/follow-up`, {
+        const res = await fetch(`${OPD_API_BASE}/api/opd/follow-up`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
@@ -480,8 +405,8 @@ async function loadReports() {
     document.getElementById('report-doctor-wise').innerHTML = '<tr><td colspan="2" class="text-center">Loading...</td></tr>';
 
     try {
-        console.log('Fetching reports from:', `${API_BASE}/api/opd/reports`);
-        const res = await fetch(`${API_BASE}/api/opd/reports`);
+        console.log('Fetching reports from:', `${OPD_API_BASE}/api/opd/reports`);
+        const res = await fetch(`${OPD_API_BASE}/api/opd/reports`);
         console.log('Response status:', res.status);
         console.log('Response headers:', res.headers);
 
@@ -602,11 +527,13 @@ function closeModal() {
 function switchTab(tabId) {
     // Update Buttons
     document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-    event.target.classList.add('active'); // Warning: this relies on the click event
+    const activeBtn = document.querySelector(`.tab-btn[onclick="switchTab('${tabId}')"]`);
+    if (activeBtn) activeBtn.classList.add('active');
 
     // Update Content
     document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-    document.getElementById(`tab-${tabId}`).classList.add('active');
+    const targetContent = document.getElementById(`tab-${tabId}`);
+    if (targetContent) targetContent.classList.add('active');
 }
 
 // Global click to close modal

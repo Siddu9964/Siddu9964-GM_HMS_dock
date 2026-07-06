@@ -515,12 +515,14 @@ function printReturn(x) {
     <!DOCTYPE html>
     <html>
     <head>
+    <link rel="stylesheet" href="/GM_HMS/assets/css/gm-theme.css">
+
         <title>Patient Return Receipt - ${x.return_no}</title>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
         <style>
             body { font-family: 'Inter', sans-serif; color: #1e293b; line-height: 1.5; padding: 40px; max-width: 800px; margin: 0 auto; }
             .header { text-align: center; margin-bottom: 30px; border-bottom: 2px dashed #e2e8f0; padding-bottom: 20px; }
-            .header h1 { margin: 0; color: #0FA4AF; font-size: 24px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
+            .header h1 { margin: 0; color: #1f6b4a; font-size: 24px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
             .header p { margin: 5px 0 0; color: #64748b; font-weight: 600; font-size: 14px; }
             .details { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px; background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; }
             .detail-item { margin-bottom: 12px; display: flex; align-items: center; }

@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="/GM_HMS/assets/css/gm-theme.css">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Patient Management - GM Hospital</title>
@@ -38,7 +40,7 @@
             position: sticky;
             top: 0;
             z-index: 10;
-            background: linear-gradient(135deg, #0FA4AF 0%, #056674 100%);
+            background: linear-gradient(135deg, #1f6b4a 0%, #144d34 100%);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
         
@@ -263,7 +265,7 @@
         .radio-option input[type="radio"]:checked + label {
             border-color: #6366f1;
             background: #E6FAFA;
-            color: #056674;
+            color: #144d34;
         }
         
         .radio-option label:hover {
@@ -285,7 +287,7 @@
         }
         
         .btn-primary {
-            background: linear-gradient(135deg, #0FA4AF 0%, #056674 100%);
+            background: linear-gradient(135deg, #1f6b4a 0%, #144d34 100%);
             color: white;
             box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
         }
@@ -470,7 +472,7 @@
         
         .loader {
             border: 3px solid #f3f4f6;
-            border-top: 3px solid #0FA4AF;
+            border-top: 3px solid #1f6b4a;
             border-radius: 50%;
             width: 20px;
             height: 20px;
@@ -497,7 +499,7 @@
             <?php include 'includes/navbar.php'; ?>
             
             <!-- Page Content -->
-            <main class="flex-1 overflow-y-auto p-8" style="background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);">
+            <main class="flex-1 overflow-y-auto p-8">
                 
                 <!-- Page Header -->
                 <div class="mb-6">
@@ -905,12 +907,14 @@
         // Load patients from API
         async function loadPatients() {
             try {
-                const response = await fetch('/GM_HMS/api/patients');
+                // Fetch with a high limit so local pagination and filtering works correctly
+                const response = await fetch('/GM_HMS/api/patients?limit=1000');
                 
                 const result = await response.json();
                 
                 if (result.success) {
-                    allPatients = result.data || [];
+                    // Extract data array from the paginated response object, or fallback to the object itself if it is an array
+                    allPatients = (result.data && Array.isArray(result.data.data)) ? result.data.data : (Array.isArray(result.data) ? result.data : []);
                     filteredPatients = [...allPatients];
                     renderTable();
                 } else {

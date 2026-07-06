@@ -26,7 +26,7 @@
 }
 
 .page-title i {
-    color: #056674;
+    color: #144d34;
 }
 
 .page-subtitle {
@@ -46,7 +46,7 @@
 }
 
 .stat-card {
-    background: white;
+    background: #FDFBF7;
     border-radius: 12px;
     padding: 1.5rem;
     display: flex;
@@ -63,7 +63,7 @@
 }
 
 .stat-card.primary {
-    border-left-color: #056674;
+    border-left-color: #144d34;
 }
 
 .stat-card.success {
@@ -90,7 +90,7 @@
 }
 
 .stat-card.primary .stat-icon {
-    background: linear-gradient(135deg, #056674 0%, #078799 100%);
+    background: linear-gradient(135deg, #144d34 0%, #078799 100%);
 }
 
 .stat-card.success .stat-icon {
@@ -143,14 +143,14 @@
 }
 
 .billing-form-card {
-    background: white;
+    background: #FDFBF7;
     border-radius: 12px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     overflow: hidden;
 }
 
 .form-header {
-    background: linear-gradient(135deg, #056674 0%, #078799 100%);
+    background: linear-gradient(135deg, #144d34 0%, #078799 100%);
     color: white;
     padding: 1.5rem;
     display: flex;
@@ -241,8 +241,8 @@
 
 .form-control:focus {
     outline: none;
-    border-color: #056674;
-    box-shadow: 0 0 0 3px rgba(5, 102, 116, 0.1);
+    border-color: #144d34;
+    box-shadow: 0 0 0 3px rgba(20, 77, 52, 0.1);
 }
 
 /* =====================================================
@@ -321,7 +321,7 @@
 .billing-items-table input:focus,
 .billing-items-table select:focus {
     outline: none;
-    border-color: #056674;
+    border-color: #144d34;
 }
 
 .btn-remove-item {
@@ -367,10 +367,10 @@
 .summary-row.total {
     font-size: 1.25rem;
     font-weight: 700;
-    color: #056674;
+    color: #144d34;
     padding-top: 1rem;
     margin-top: 0.5rem;
-    border-top: 2px solid #056674;
+    border-top: 2px solid #144d34;
 }
 
 .discount-input-group {
@@ -402,7 +402,7 @@
    TABLE CONTAINER
    ===================================================== */
 .table-container {
-    background: white;
+    background: #FDFBF7;
     border-radius: 12px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     overflow: hidden;
@@ -527,13 +527,13 @@
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, #056674 0%, #078799 100%);
+    background: linear-gradient(135deg, #144d34 0%, #078799 100%);
     color: white;
 }
 
 .btn-primary:hover {
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(5, 102, 116, 0.3);
+    box-shadow: 0 4px 12px rgba(20, 77, 52, 0.3);
 }
 
 .btn-secondary {

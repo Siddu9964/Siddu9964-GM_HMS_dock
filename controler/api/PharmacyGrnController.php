@@ -1,4 +1,39 @@
 <?php
+/**
+ * ============================================================
+ * PharmacyGrnController — API Reference (Goods Receipt Notes)
+ * ============================================================
+ * Base URL : http://localhost/GM_HMS/api/pharmacy/grn
+ * Auth     : All endpoints require Auth
+ * ------------------------------------------------------------
+ *
+ * 1. GET /api/pharmacy/grn
+ *    Query: supplier_id, date_from, date_to, status
+ *
+ * 2. GET /api/pharmacy/grn/{id}
+ *    Returns GRN with all line items
+ *
+ * 3. POST /api/pharmacy/grn
+ *    Body:
+ *      { "supplier_id":3, "invoice_no":"INV-SUP-001", "invoice_date":"2026-06-26",
+ *        "items":[{ "product_id":15, "batch_no":"B2026A", "expiry_date":"2028-12-31",
+ *                   "qty":500, "purchase_price":4.50, "selling_price":6.00 }] }
+ *
+ * 4. DELETE /api/pharmacy/grn/{id}
+ *
+ * 5. DELETE /api/pharmacy/grn-item/{id}
+ *    Deletes individual GRN line item
+ *
+ * 6. GET /api/pharmacy/grn/{id}/check-delete
+ *    Checks if GRN can be safely deleted
+ *
+ * 7. GET /api/pharmacy/grn-item/{id}/check-delete
+ *    Checks if line item can be safely deleted
+ *
+ * 8. POST /api/pharmacy/grn/bulk-submit
+ *    Body: { "grn_ids":[1,2,3] }  — bulk confirm GRNs
+ * ------------------------------------------------------------
+ */
 namespace GM_HMS\Controllers\api;
 
 use Exception;
@@ -619,3 +654,4 @@ class PharmacyGrnController extends BaseController {
         }
     }
 }
+

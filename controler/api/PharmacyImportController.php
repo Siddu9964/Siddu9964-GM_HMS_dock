@@ -1,4 +1,18 @@
 <?php
+/**
+ * ============================================================
+ * PharmacyImportController — API Reference
+ * ============================================================
+ * Base URL : http://localhost/GM_HMS/api/pharmacy
+ * Auth     : All endpoints require Auth
+ * ------------------------------------------------------------
+ *
+ * 1. POST /api/pharmacy/import/products    [multipart/form-data]
+ *    File field: file (CSV format)
+ *    Expected CSV columns: product_name, category, unit, reorder_level, selling_price
+ *    Response: { imported:45, skipped:2, errors:[...] }
+ * ------------------------------------------------------------
+ */
 namespace GM_HMS\Controllers\api;
 
 use Exception;
@@ -7,7 +21,7 @@ use GM_HMS\Controllers\BaseController;
 /**
  * PharmacyImportController
  * Routes:
- *   POST /api/pharmacy/import/products  → Import products from JSON data
+ *   POST /api/pharmacy/import/products  â†’ Import products from JSON data
  */
 class PharmacyImportController extends BaseController {
     public function __construct() { parent::__construct(); }
@@ -84,7 +98,7 @@ class PharmacyImportController extends BaseController {
                 // Required fields check: Product Name is MANDATORY
                 if (empty($data['product_name'])) {
                     $errors++;
-                    $error_details[] = "Row $rowNum: Missing product name — skipped.";
+                    $error_details[] = "Row $rowNum: Missing product name â€” skipped.";
                     continue;
                 }
 
@@ -219,3 +233,4 @@ class PharmacyImportController extends BaseController {
         } catch (Exception $e) { $this->handleException($e); }
     }
 }
+

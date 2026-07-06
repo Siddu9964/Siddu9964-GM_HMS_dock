@@ -1,5 +1,45 @@
 <?php
 /**
+ * ============================================================
+ * BillingController — API Reference (Pharmacy POS Billing)
+ * ============================================================
+ * Base URL : http://localhost/GM_HMS/api/pharmacy/billing
+ * Auth     : All endpoints require Auth
+ * Note     : This is the Pharmacy Module Billing (not OPD Billing)
+ * ------------------------------------------------------------
+ *
+ * 1. GET /api/pharmacy/billing/patients?q=Anita
+ *    Search patients for POS. Min 2 chars.
+ *
+ * 2. GET /api/pharmacy/billing/products?q=Para
+ *    Search products for POS. Returns: id, product_name, selling_price, stock_qty
+ *
+ * 3. GET /api/pharmacy/billing/prescriptions?patient_id=PID-001
+ *    Returns pending prescriptions for a patient
+ *
+ * 4. GET /api/pharmacy/billing/sponsors
+ *    Returns available sponsors/insurance schemes
+ *
+ * 5. POST /api/pharmacy/billing/checkout
+ *    Body:
+ *      {
+ *        "patient_id":    "PID-20260626-001",
+ *        "prescription_id": "PRE-001",
+ *        "sub_total":     55,
+ *        "discount":      5,
+ *        "net_amount":    50,
+ *        "payment_mode":  "Cash",
+ *        "payment_status":"Paid",
+ *        "items": [
+ *          { "product_id":15, "qty":10, "unit_price":5.50, "total":55 }
+ *        ]
+ *      }
+ *
+ * 6. GET /api/pharmacy/billing/print?sale_id=55
+ *    Returns printable invoice data
+ * ------------------------------------------------------------
+ */
+/**
  * Billing Controller
  * 
  * Handles all billing related operations for the reception view.
@@ -162,3 +202,4 @@ class BillingController extends BaseController {
 
 $controller = new BillingController();
 $controller->route();
+

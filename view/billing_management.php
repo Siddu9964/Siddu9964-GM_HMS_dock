@@ -9,6 +9,8 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
 <html lang="en">
 
 <head>
+    <link rel="stylesheet" href="/GM_HMS/assets/css/gm-theme.css">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Billing Management - GM HMS</title>
@@ -171,79 +173,50 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
             <!-- Navbar -->
             <?php include 'includes/navbar.php'; ?>
 
-            <main class="flex-1 overflow-y-auto p-4 md:p-8">
+            <main class="flex-1 overflow-y-auto p-4 md:p-6">
 
                 <!-- Page Header -->
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
                     <div>
                         <h1 class="text-3xl font-black tracking-tight text-slate-900 flex items-center gap-3">
-                            <span class="p-2 bg-blue-600 rounded-lg">
+                            <span class="p-2 rounded-lg" style="background: var(--gm-accent);">
                                 <i class="fas fa-file-invoice-dollar text-white"></i>
                             </span>
                             Billing Management
                         </h1>
                         <p class="text-slate-500 mt-1 font-medium">Streamlined financial operations for OPD/IPD</p>
                     </div>
-                    <button onclick="toggleBillingForm()"
-                        class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl shadow-lg shadow-blue-200 transition-all transform hover:-translate-y-1 active:scale-95 flex items-center gap-2 font-bold">
-                        <i class="fas fa-plus"></i>
-                        New Invoice
-                    </button>
                 </div>
 
                 <!-- Quick Stats -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                        <div class="flex items-center gap-4">
-                            <div class="p-3 bg-blue-50 text-blue-600 rounded-xl">
-                                <i class="fas fa-rupee-sign text-xl"></i>
-                            </div>
-                            <div>
-                                <p class="text-slate-500 text-xs font-bold uppercase tracking-wider">Today's Revenue</p>
-                                <h3 class="text-2xl font-black text-slate-900" id="stat-today-revenue">₹0.00</h3>
-                            </div>
-                        </div>
+                    <div class="bento-card">
+                        <div class="bento-title">Today's Revenue</div>
+                        <h3 class="bento-value" id="stat-today-revenue">₹0.00</h3>
+                        <i class="fas fa-rupee-sign bento-icon"></i>
                     </div>
 
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                        <div class="flex items-center gap-4">
-                            <div class="p-3 bg-emerald-50 text-emerald-600 rounded-xl">
-                                <i class="fas fa-chart-line text-xl"></i>
-                            </div>
-                            <div>
-                                <p class="text-slate-500 text-xs font-bold uppercase tracking-wider">Month to Date</p>
-                                <h3 class="text-2xl font-black text-slate-900" id="stat-month-revenue">₹0.00</h3>
-                            </div>
-                        </div>
+                    <div class="bento-card">
+                        <div class="bento-title">Month to Date</div>
+                        <h3 class="bento-value" id="stat-month-revenue">₹0.00</h3>
+                        <i class="fas fa-chart-line bento-icon"></i>
                     </div>
 
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                        <div class="flex items-center gap-4">
-                            <div class="p-3 bg-amber-50 text-amber-600 rounded-xl">
-                                <i class="fas fa-clock text-xl"></i>
-                            </div>
-                            <div>
-                                <p class="text-slate-500 text-xs font-bold uppercase tracking-wider">Pending Bills</p>
-                                <h3 class="text-2xl font-black text-slate-900" id="stat-pending-bills">0</h3>
-                            </div>
-                        </div>
+                    <div class="bento-card">
+                        <div class="bento-title">Pending Bills</div>
+                        <h3 class="bento-value" id="stat-pending-bills">0</h3>
+                        <i class="fas fa-clock bento-icon"></i>
                     </div>
 
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                        <div class="flex items-center gap-4">
-                            <div class="p-3 bg-rose-50 text-rose-600 rounded-xl">
-                                <i class="fas fa-exclamation-triangle text-xl"></i>
-                            </div>
-                            <div>
-                                <p class="text-slate-500 text-xs font-bold uppercase tracking-wider">Outstanding</p>
-                                <h3 class="text-2xl font-black text-slate-900" id="stat-outstanding">₹0.00</h3>
-                            </div>
-                        </div>
+                    <div class="bento-card">
+                        <div class="bento-title">Outstanding</div>
+                        <h3 class="bento-value" id="stat-outstanding">₹0.00</h3>
+                        <i class="fas fa-exclamation-triangle bento-icon"></i>
                     </div>
                 </div>
 
                 <!-- Tabs Container -->
-                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 mb-8 overflow-hidden">
+                <div class="table-container mb-8">
                     <div class="flex border-b border-slate-100 overflow-x-auto">
                         <div class="billing-tab active" onclick="switchTab('opd')">
                             <i class="fas fa-stethoscope mr-2"></i> OPD Billing
@@ -323,7 +296,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
             <div class="p-6 bg-slate-50 border-b border-slate-200 flex justify-between items-center">
                 <div>
                     <h3 id="form-mode-title" class="text-xl font-black text-slate-900 flex items-center gap-2">
-                        <i class="fas fa-file-circle-plus text-blue-600"></i>
+                        <i class="fas fa-file-circle-plus" style="color: var(--gm-accent);"></i>
                         New OPD Invoice
                     </h3>
                     <p class="text-xs text-slate-500 font-bold uppercase tracking-widest mt-0.5">Patient Billing Portal
@@ -341,7 +314,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
                     <!-- Section: Patient Selection -->
                     <div>
                         <div class="flex items-center gap-2 mb-4">
-                            <div class="h-6 w-1 bg-blue-600 rounded-full"></div>
+                            <div class="h-6 w-1 rounded-full" style="background: var(--gm-accent);"></div>
                             <h4 class="text-sm font-black uppercase tracking-widest text-slate-400">Step 1: Patient
                                 Selection</h4>
                         </div>
@@ -360,8 +333,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
                             <div id="patient-info"
                                 class="hidden md:col-span-2 mt-4 p-4 bg-white rounded-xl border border-blue-100 flex items-center justify-between">
                                 <div class="flex items-center gap-4">
-                                    <div
-                                        class="h-12 w-12 bg-blue-600 rounded-full flex items-center justify-center text-white text-xl">
+                                        class="h-12 w-12 rounded-full flex items-center justify-center text-white text-xl" style="background: var(--gm-accent);">
                                         <i class="fas fa-user-injured"></i>
                                     </div>
                                     <div>
@@ -389,7 +361,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
                     <div>
                         <div class="flex justify-between items-center mb-4">
                             <div class="flex items-center gap-2">
-                                <div class="h-6 w-1 bg-blue-600 rounded-full"></div>
+                                <div class="h-6 w-1 rounded-full" style="background: var(--gm-accent);"></div>
                                 <h4 class="text-sm font-black uppercase tracking-widest text-slate-400">Step 2: Pricing
                                     & Services</h4>
                             </div>
@@ -424,7 +396,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
                         <!-- Left: Payment Method -->
                         <div class="space-y-6">
                             <div class="flex items-center gap-2">
-                                <div class="h-6 w-1 bg-blue-600 rounded-full"></div>
+                                <div class="h-6 w-1 rounded-full" style="background: var(--gm-accent);"></div>
                                 <h4 class="text-sm font-black uppercase tracking-widest text-slate-400">Step 3: Payment
                                 </h4>
                             </div>
@@ -491,7 +463,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
                         Cancel
                     </button>
                     <button type="submit" id="btn-submit-bill"
-                        class="px-10 py-3 bg-blue-600 hover:bg-blue-700 text-white font-black rounded-xl shadow-lg shadow-blue-200 transition-all transform hover:-translate-y-1 active:scale-95 flex items-center gap-2">
+                        class="px-10 py-3 text-white font-black rounded-xl shadow-lg transition-all transform hover:-translate-y-1 active:scale-95 flex items-center gap-2" style="background: var(--gm-accent);">
                         <i class="fas fa-check-double"></i>
                         Confirm & Generate
                     </button>
@@ -527,7 +499,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
                 <!-- Top Section: Patient & Doctor Card -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
                     <!-- Patient & Appointment Card -->
-                    <div class="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-3xl p-6 text-white shadow-xl">
+                    <div class="rounded-3xl p-6 text-white shadow-xl" style="background: var(--gm-accent);">
                         <div class="flex items-center gap-4 mb-6">
                             <div
                                 class="h-16 w-16 bg-white/20 rounded-2xl backdrop-blur-md flex items-center justify-center text-3xl">
@@ -614,7 +586,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
                 <div class="mb-8">
                     <h4
                         class="text-sm font-black uppercase tracking-widest text-slate-400 mb-4 flex items-center gap-2">
-                        <div class="h-4 w-1 bg-blue-600 rounded-full"></div>
+                        <div class="h-4 w-1 rounded-full" style="background: var(--gm-accent);"></div>
                         Invoice Line Items
                     </h4>
                     <div class="border border-slate-100 rounded-2xl overflow-hidden shadow-sm overflow-x-auto">
@@ -692,7 +664,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
                     <i class="fas fa-print"></i> Print Invoice
                 </button>
                 <button id="btn-pay-modal" onclick="alert('Proceed to payment...')"
-                    class="px-10 py-3 bg-blue-600 hover:bg-blue-700 text-white font-black rounded-xl shadow-lg shadow-blue-200 transition-all transform hover:-translate-y-1 flex items-center gap-2">
+                    class="px-10 py-3 text-white font-black rounded-xl shadow-lg transition-all transform hover:-translate-y-1 flex items-center gap-2" style="background: var(--gm-accent);">
                     <i class="fas fa-hand-holding-dollar"></i>
                     Collect Due Payment
                 </button>

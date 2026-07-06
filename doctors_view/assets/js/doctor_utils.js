@@ -636,7 +636,9 @@ const PatientDetail = {
             document.body.appendChild(modal);
         }
 
-        const initials = `${patient.first_name[0]}${patient.last_name[0]}`.toUpperCase();
+        const fName = patient.first_name || '';
+        const lName = patient.last_name || '';
+        const initials = `${fName.charAt(0) || ''}${lName.charAt(0) || ''}`.toUpperCase() || 'P';
         const age = patient.age || DateUtils.calculateAge(patient.birth_date);
 
         modal.innerHTML = `

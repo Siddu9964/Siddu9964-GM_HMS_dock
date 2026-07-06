@@ -1,4 +1,21 @@
 <?php
+/**
+ * ============================================================
+ * PharmacyExportController — API Reference
+ * ============================================================
+ * Base URL : http://localhost/GM_HMS/api/pharmacy
+ * Auth     : All endpoints require Auth
+ * ------------------------------------------------------------
+ *
+ * 1. GET /api/pharmacy/export/csv
+ *    Query: type (products|sales|grn|suppliers)
+ *    Returns: CSV file download
+ *
+ * 2. GET /api/pharmacy/export/print
+ *    Query: type, date_from, date_to
+ *    Returns: HTML printable view
+ * ------------------------------------------------------------
+ */
 namespace GM_HMS\Controllers\api;
 
 use Exception;
@@ -7,8 +24,8 @@ use GM_HMS\Controllers\BaseController;
 /**
  * PharmacyExportController
  * Routes:
- *   GET /api/pharmacy/export/csv?type=      → Export products to CSV
- *   GET /api/pharmacy/export/print?type=    → Get HTML for printing
+ *   GET /api/pharmacy/export/csv?type=      â†’ Export products to CSV
+ *   GET /api/pharmacy/export/print?type=    â†’ Get HTML for printing
  */
 class PharmacyExportController extends BaseController {
     public function __construct() { parent::__construct(); }
@@ -61,10 +78,10 @@ class PharmacyExportController extends BaseController {
                 'therapeutic'    => 'Therapeutic Category',
                 'hsn_code'       => 'HSN Code',
                 'manufacturer'   => 'Manufacturer',
-                'purchase_rate'  => 'Purchase Rate (₹)',
-                'pack_rate'      => 'Pack Rate (₹)',
-                'individual_rate'=> 'Individual Rate (₹)',
-                'mrp'            => 'MRP (₹)',
+                'purchase_rate'  => 'Purchase Rate (â‚¹)',
+                'pack_rate'      => 'Pack Rate (â‚¹)',
+                'individual_rate'=> 'Individual Rate (â‚¹)',
+                'mrp'            => 'MRP (â‚¹)',
                 'tax_percent'    => 'Tax %',
                 'quantity'       => 'Stock Quantity',
                 'pack'           => 'Pack Description',
@@ -109,7 +126,9 @@ class PharmacyExportController extends BaseController {
             $co = $row_co['setting_value'] ?? 'GM Pharmacy';
 
             header('Content-Type: text/html; charset=UTF-8');
-            echo '<!DOCTYPE html><html><head><meta charset="UTF-8">
+            echo '<!DOCTYPE html><html><head>
+    <link rel="stylesheet" href="/GM_HMS/assets/css/gm-theme.css">
+<meta charset="UTF-8">
             <title>Product Catalogue</title>
             <style>
             body{font-family:Arial,sans-serif;font-size:11px;margin:20px;}
@@ -123,16 +142,16 @@ class PharmacyExportController extends BaseController {
             .badge-warn{background:#fef9c3;color:#b45309;padding:1px 5px;border-radius:4px;}
             @media print{button{display:none!important;}}
             </style></head><body>
-            <button onclick="window.print()" style="float:right;margin-bottom:10px;padding:6px 14px;background:#024D55;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:11px;">🖨️ Print</button>
-            <h2>' . htmlspecialchars($co) . ' — Product Catalogue</h2>
+            <button onclick="window.print()" style="float:right;margin-bottom:10px;padding:6px 14px;background:#024D55;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:11px;">ðŸ–¨ï¸ Print</button>
+            <h2>' . htmlspecialchars($co) . ' â€” Product Catalogue</h2>
             <p class="sub">Generated: ' . date('d M Y, h:i A') . ' &nbsp;|&nbsp; Total: ' . count($rows) . ' products</p>
             <table><thead><tr>
             <th>#</th><th>Product ID</th><th>Name</th><th>Form</th><th>Strength</th>
             <th>Manufacturer</th><th>Batch</th><th>Expiry</th><th>Qty</th>
-            <th>MRP (₹)</th><th>Pack Rate (₹)</th><th>Location</th>
+            <th>MRP (â‚¹)</th><th>Pack Rate (â‚¹)</th><th>Location</th>
             </tr></thead><tbody>';
             foreach ($rows as $i => $r) {
-                $exp = $r['expiry_date'] && $r['expiry_date'] !== '0000-00-00' ? date('d/m/y', strtotime($r['expiry_date'])) : '—';
+                $exp = $r['expiry_date'] && $r['expiry_date'] !== '0000-00-00' ? date('d/m/y', strtotime($r['expiry_date'])) : 'â€”';
                 $qty = (int)$r['quantity'];
                 $qtyHtml = $qty === 0
                     ? '<span class="badge-danger">Out of Stock</span>'
@@ -141,15 +160,15 @@ class PharmacyExportController extends BaseController {
                     <td>' . ($i+1) . '</td>
                     <td>' . htmlspecialchars($r['product_id']) . '</td>
                     <td><strong>' . htmlspecialchars($r['product_name']) . '</strong></td>
-                    <td>' . htmlspecialchars($r['form'] ?? '—') . '</td>
-                    <td>' . htmlspecialchars($r['strength'] ?? '—') . '</td>
-                    <td>' . htmlspecialchars($r['manufacturer'] ?? '—') . '</td>
-                    <td>' . htmlspecialchars($r['batch_number'] ?? '—') . '</td>
+                    <td>' . htmlspecialchars($r['form'] ?? 'â€”') . '</td>
+                    <td>' . htmlspecialchars($r['strength'] ?? 'â€”') . '</td>
+                    <td>' . htmlspecialchars($r['manufacturer'] ?? 'â€”') . '</td>
+                    <td>' . htmlspecialchars($r['batch_number'] ?? 'â€”') . '</td>
                     <td>' . $exp . '</td>
                     <td>' . $qtyHtml . '</td>
-                    <td>' . (isset($r['mrp']) ? '₹'.number_format($r['mrp'],2) : '—') . '</td>
-                    <td>' . (isset($r['pack_rate']) ? '₹'.number_format($r['pack_rate'],2) : '—') . '</td>
-                    <td>' . htmlspecialchars($r['rack_location'] ?? '—') . '</td>
+                    <td>' . (isset($r['mrp']) ? 'â‚¹'.number_format($r['mrp'],2) : 'â€”') . '</td>
+                    <td>' . (isset($r['pack_rate']) ? 'â‚¹'.number_format($r['pack_rate'],2) : 'â€”') . '</td>
+                    <td>' . htmlspecialchars($r['rack_location'] ?? 'â€”') . '</td>
                 </tr>';
             }
             echo '</tbody></table></body></html>';
@@ -157,3 +176,4 @@ class PharmacyExportController extends BaseController {
         } catch (Exception $e) { $this->handleException($e); }
     }
 }
+

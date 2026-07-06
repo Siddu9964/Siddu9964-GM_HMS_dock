@@ -30,10 +30,10 @@ include 'includes/ph_head.php';
    Color: Medical Teal & Pure Slate
    ========================================== */
 :root {
-  --med-primary: #0D9488;    /* Teal 600 */
-  --med-primary-dark: #0F766E;
-  --med-primary-light: #CCFBF1;
-  --med-bg: #F8FAFC;
+  --med-primary: #1f6b4a;    /* Deep Forest Green */
+  --med-primary-dark: #12402c;
+  --med-primary-light: rgba(31, 107, 74, 0.1);
+  --med-bg: #f3efe6;
   --med-surface: rgba(255, 255, 255, 0.8);
   --med-border: rgba(226, 232, 240, 0.8);
   --med-text-main: #1E293B;
@@ -42,45 +42,46 @@ include 'includes/ph_head.php';
   --glass-border: 1px solid rgba(255, 255, 255, 0.4);
 }
 
-.ph-page-body { background: var(--med-bg); font-family: 'Plus Jakarta Sans', 'Inter', sans-serif; padding: 2rem !important; }
+.ph-page-body { background: var(--med-bg); font-family: 'Plus Jakarta Sans', 'Inter', sans-serif; padding: 1.75rem !important; }
 
 /* ===== BENTO KPI GRID ===== */
 .bento-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 1.5rem;
-  margin-bottom: 2.5rem;
+  gap: 1rem;
+  margin-bottom: 2rem;
 }
 .bento-card {
   background: var(--med-surface);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: var(--glass-border);
-  border-radius: 24px;
-  padding: 1.5rem;
+  border-radius: 16px;
+  padding: 1rem 1.25rem;
   box-shadow: var(--glass-shadow);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
 }
-.bento-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.08); }
+.bento-card:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(0,0,0,0.06); }
 .bento-card::after {
-  content: ''; position: absolute; top: -10%; right: -10%; width: 100px; height: 100px;
+  content: ''; position: absolute; top: -20%; right: -10%; width: 60px; height: 60px;
   background: radial-gradient(circle, var(--med-primary-light) 0%, transparent 70%);
-  opacity: 0.4; border-radius: 50%;
+  opacity: 0.3; border-radius: 50%;
 }
 
 .bento-icon {
-  width: 48px; height: 48px; border-radius: 14px;
+  width: 42px; height: 42px; border-radius: 10px;
   display: flex; align-items: center; justify-content: center;
-  font-size: 1.25rem; margin-bottom: 1rem;
+  font-size: 1.15rem; flex-shrink: 0;
 }
-.bento-val { font-size: 2.25rem; font-weight: 800; color: var(--med-text-main); line-height: 1; margin-bottom: 0.25rem; }
-.bento-lbl { font-size: 0.875rem; font-weight: 600; color: var(--med-text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
-.bento-trend { font-size: 0.75rem; font-weight: 700; padding: 2px 8px; border-radius: 20px; display: inline-block; margin-top: 0.5rem; }
+.bento-val { font-size: 1.5rem; font-weight: 800; color: var(--med-text-main); line-height: 1; margin-bottom: 0.15rem; }
+.bento-lbl { font-size: 0.7rem; font-weight: 700; color: var(--med-text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0; }
+.bento-trend { font-size: 0.65rem; font-weight: 700; padding: 2px 6px; border-radius: 6px; display: inline-block; margin-top: 0.25rem; }
 
 /* Colors for cards */
 .bc-total   { border-left: 6px solid var(--med-primary); }
@@ -191,7 +192,7 @@ include 'includes/ph_head.php';
   <!-- Header Section -->
   <div class="d-flex justify-content-between align-items-center mb-5">
     <div>
-      <h1 class="ph-page-title" style="font-weight: 900; letter-spacing: -0.5px; color: var(--med-text-main);">Product Inventory</h1>
+      <h1 class="ph-page-title" style="font-size: 2.5rem; font-weight: 900; letter-spacing: -0.5px; color: var(--med-text-main);">Product Inventory — GM HMS</h1>
       <p class="ph-page-subtitle" style="font-weight: 600; color: var(--med-text-muted);">Manage medicines, stock levels, and procurement rates</p>
     </div>
     <button class="ph-btn" style="background: var(--med-primary); color: white; padding: 0.75rem 1.5rem; border-radius: 14px; font-weight: 700; box-shadow: 0 10px 20px rgba(13, 148, 136, 0.25);" onclick="openProductModal()">
@@ -226,42 +227,34 @@ include 'includes/ph_head.php';
   <!-- Bento KPI Grid -->
   <div class="bento-grid">
     <div class="bento-card bc-total">
-      <div>
-        <div class="bento-icon" style="background: var(--med-primary-light); color: var(--med-primary);"><i class="fas fa-pills"></i></div>
-        <div class="bento-lbl">Master Products</div>
-      </div>
-      <div>
+      <div class="bento-icon" style="background: var(--med-primary-light); color: var(--med-primary);"><i class="fas fa-pills"></i></div>
+      <div style="flex: 1;">
         <div class="bento-val"><?= $totalProducts ?></div>
+        <div class="bento-lbl">Master Products</div>
         <div class="bento-trend" style="background: #E0F2FE; color: #0369A1;">Active Inventory</div>
       </div>
     </div>
     <div class="bento-card bc-low">
-      <div>
-        <div class="bento-icon" style="background: #FEF3C7; color: #D97706; text-shadow: 0 0 20px rgba(217, 119, 6, 0.4);"><i class="fas fa-exclamation-triangle"></i></div>
-        <div class="bento-lbl">Low Stock Alerts</div>
-      </div>
-      <div>
+      <div class="bento-icon" style="background: #FEF3C7; color: #D97706;"><i class="fas fa-exclamation-triangle"></i></div>
+      <div style="flex: 1;">
         <div class="bento-val" style="color: #D97706;"><?= $lowStockCount ?></div>
+        <div class="bento-lbl">Low Stock Alerts</div>
         <div class="bento-trend" style="background: #FEF3C7; color: #92400E;">Refill Required</div>
       </div>
     </div>
     <div class="bento-card bc-out">
-      <div>
-        <div class="bento-icon" style="background: #E0E7FF; color: #4F46E5;"><i class="fas fa-times-circle"></i></div>
-        <div class="bento-lbl">Out of Stock</div>
-      </div>
-      <div>
+      <div class="bento-icon" style="background: #E0E7FF; color: #4F46E5;"><i class="fas fa-times-circle"></i></div>
+      <div style="flex: 1;">
         <div class="bento-val" style="color: #4F46E5;"><?= $outOfStockCount ?></div>
+        <div class="bento-lbl">Out of Stock</div>
         <div class="bento-trend" style="background: #E0E7FF; color: #3730A3;">Critical Action</div>
       </div>
     </div>
     <div class="bento-card bc-expired">
-      <div>
-        <div class="bento-icon" style="background: #FEE2E2; color: #DC2626;"><i class="fas fa-history"></i></div>
-        <div class="bento-lbl">Near Expiry</div>
-      </div>
-      <div>
+      <div class="bento-icon" style="background: #FEE2E2; color: #DC2626;"><i class="fas fa-history"></i></div>
+      <div style="flex: 1;">
         <div class="bento-val" style="color: #DC2626;"><?= $expiredSoonCount ?></div>
+        <div class="bento-lbl">Near Expiry</div>
         <div class="bento-trend" style="background: #FEE2E2; color: #991B1B;">< 90 Days left</div>
       </div>
     </div>

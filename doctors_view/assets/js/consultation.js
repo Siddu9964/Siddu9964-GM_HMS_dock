@@ -1585,13 +1585,13 @@ function showMedicalHistoryModal(data) {
     // Build HTML
     content.innerHTML = `
         <div style="
-            background: linear-gradient(135deg, #0FA4AF 0%, #056674 100%);
+            background: linear-gradient(135deg, #1f6b4a 0%, #144d34 100%);
             color: white;
             padding: 1.5rem 2rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            border-bottom: 3px solid #0FA4AF;
+            border-bottom: 3px solid #1f6b4a;
         ">
             <div>
                 <h2 style="margin: 0; font-size: 1.5rem; font-weight: 700;">
@@ -1759,11 +1759,11 @@ function buildHistoryContent(consultations, prescriptions, vitals) {
         html += `
             <div style="margin-bottom: 2rem;">
                 <h3 style="font-size: 1.25rem; font-weight: 700; color: #0F172A; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-                    <i class="fas fa-clipboard-list" style="color: #0FA4AF;"></i>
+                    <i class="fas fa-clipboard-list" style="color: #1f6b4a;"></i>
                     Consultation History
                 </h3>
                 <div style="position: relative; padding-left: 2rem;">
-                    <div style="position: absolute; left: 0.5rem; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, #0FA4AF, #e2e8f0);"></div>
+                    <div style="position: absolute; left: 0.5rem; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, #1f6b4a, #e2e8f0);"></div>
                     ${consultations.map((consult, index) => {
             // Find matching prescription for this consultation
             const relatedPrescription = prescriptions.find(rx =>
@@ -1774,7 +1774,7 @@ function buildHistoryContent(consultations, prescriptions, vitals) {
 
             return `
                         <div style="position: relative; margin-bottom: 1.5rem;">
-                            <div style="position: absolute; left: -1.5rem; top: 0.5rem; width: 12px; height: 12px; background: #0FA4AF; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 0 2px #0FA4AF;"></div>
+                            <div style="position: absolute; left: -1.5rem; top: 0.5rem; width: 12px; height: 12px; background: #1f6b4a; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 0 2px #1f6b4a;"></div>
                             <div style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.25rem; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);">
                                 <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
                                     <div>
@@ -2010,7 +2010,7 @@ animation: slideUp 0.3s ease;
             </div>
             
             <button onclick="this.closest('.access-denied-modal').remove()" style="
-                background: linear-gradient(135deg, #0FA4AF 0%, #056674 100%);
+                background: linear-gradient(135deg, #1f6b4a 0%, #144d34 100%);
                 color: white;
                 border: none;
                 padding: 0.75rem 2rem;
@@ -2019,9 +2019,9 @@ animation: slideUp 0.3s ease;
                 font-weight: 600;
                 cursor: pointer;
                 transition: all 0.2s ease;
-                box-shadow: 0 4px 12px rgba(15, 164, 175, 0.3);
-            " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 16px rgba(15, 164, 175, 0.4)';" 
-               onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(15, 164, 175, 0.3)';">
+                box-shadow: 0 4px 12px rgba(31, 107, 74, 0.3);
+            " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 16px rgba(31, 107, 74, 0.4)';" 
+               onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(31, 107, 74, 0.3)';">
                 <i class="fas fa-check"></i> Understood
             </button>
         </div >
@@ -2123,7 +2123,7 @@ async function performAdvancedSearch() {
                 } else {
                     // Flash the dropdown
                     select.focus();
-                    select.style.borderColor = '#0FA4AF';
+                    select.style.borderColor = '#1f6b4a';
                     setTimeout(() => select.style.borderColor = '', 2000);
                 }
             } else {

@@ -1,4 +1,22 @@
 <?php
+/**
+ * ============================================================
+ * PharmacyQuotationController — API Reference
+ * ============================================================
+ * Base URL : http://localhost/GM_HMS/api/pharmacy/quotations
+ * Auth     : All endpoints require Auth
+ * ------------------------------------------------------------
+ *
+ * 1. GET /api/pharmacy/quotations
+ *    Query: indent_id, vendor_id, status
+ *
+ * 2. POST /api/pharmacy/quotations
+ *    Body: { "indent_id":8, "vendor_id":2, "total_value":2100, "validity_days":7,
+ *            "items":[{"product_id":15,"unit_price":4.20,"qty_available":500}] }
+ *
+ * 3. DELETE /api/pharmacy/quotations/{id}
+ * ------------------------------------------------------------
+ */
 namespace GM_HMS\Controllers\api;
 
 use Exception;
@@ -127,3 +145,4 @@ class PharmacyQuotationController extends BaseController {
         } catch (Exception $e) { $this->handleException($e); }
     }
 }
+

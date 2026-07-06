@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Receptionist') {
+if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], ['Receptionist', 'admin', 'Admin'])) {
     header("Location: /GM_HMS/login.php");
     exit();
 }
@@ -9,6 +9,8 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Receptionist') {
 <html lang="en">
 
 <head>
+    <link rel="stylesheet" href="/GM_HMS/assets/css/gm-theme.css">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registered Patients - GM HMS</title>
@@ -53,7 +55,7 @@ include 'includes/reception_navbar.php';
                 <div class="mb-6">
                     <div class="flex items-center justify-between">
                         <div>
-                            <h1 class="text-3xl font-bold text-gray-800" style="color: #056674;">Patient Records</h1>
+                            <h1 class="text-3xl font-bold text-gray-800" style="color: #144d34;">Patient Records</h1>
                             <p class="text-gray-600 mt-1">Manage all patient records and information</p>
                         </div>
                         <button onclick="openAddPatientModal()" class="btn btn-primary">
@@ -179,7 +181,7 @@ include 'includes/reception_navbar.php';
                     <!-- Personal Information -->
                     <div class="mb-6">
                         <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                            <i class="fas fa-user-circle" style="color: #0FA4AF;"></i>
+                            <i class="fas fa-user-circle" style="color: #1f6b4a;"></i>
                             Personal Information
                         </h3>
 
@@ -395,13 +397,13 @@ include 'includes/reception_navbar.php';
                                     top:calc(100% - 2px);
                                     left:0; right:0;
                                     background:#fff;
-                                    border:1px solid #0FA4AF;
+                                    border:1px solid #1f6b4a;
                                     border-top:none;
                                     border-radius:0 0 10px 10px;
                                     max-height:200px;
                                     overflow-y:auto;
                                     z-index:999;
-                                    box-shadow:0 8px 20px rgba(15,164,175,0.15);">
+                                    box-shadow:0 8px 20px rgba(31, 107, 74,0.15);">
                                 </div>
                             </div>
 

@@ -3,7 +3,7 @@ header('Content-Type: application/json');
 session_start();
 
 // Authentication check
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Doctor') {
+if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], ['Doctor', 'admin', 'Admin'])) {
     echo json_encode(['success' => false, 'message' => 'Unauthorized']);
     exit();
 }

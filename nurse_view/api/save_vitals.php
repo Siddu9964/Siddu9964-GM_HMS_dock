@@ -18,7 +18,7 @@ header('Content-Type: application/json');
 session_start();
 
 // Authentication
-if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'Nurse') {
+if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], ['Nurse', 'admin', 'Admin'])) {
     http_response_code(401);
     echo json_encode(['success' => false, 'message' => 'Unauthorized']);
     exit();

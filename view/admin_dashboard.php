@@ -8,6 +8,8 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="/GM_HMS/assets/css/gm-theme.css">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - GM Hospital Management System</title>
@@ -33,7 +35,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
         }
         
         body {
-            background: #f8fafc;
+            /* Handled by gm-theme.css */
         }
         
         .sidebar {
@@ -51,7 +53,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
         }
         
         .sidebar-item.active {
-            background: linear-gradient(135deg, #0FA4AF 0%, #056674 100%);
+            background: linear-gradient(135deg, #1f6b4a 0%, #144d34 100%);
         }
         
         .stat-card {
@@ -68,27 +70,27 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
         }
         
         .gradient-bg-1 {
-            background: linear-gradient(135deg, #0FA4AF 0%, #056674 100%);
+            background: linear-gradient(135deg, #1f6b4a 0%, #144d34 100%);
         }
         
         .gradient-bg-2 {
-            background: linear-gradient(135deg, #0FA4AF 0%, #056674 100%);
+            background: linear-gradient(135deg, #1f6b4a 0%, #144d34 100%);
         }
         
         .gradient-bg-3 {
-            background: linear-gradient(135deg, #2EAFB9 0%, #0FA4AF 100%);
+            background: linear-gradient(135deg, #2a8c62 0%, #1f6b4a 100%);
         }
         
         .gradient-bg-4 {
-            background: linear-gradient(135deg, #0FA4AF 0%, #056674 100%);
+            background: linear-gradient(135deg, #1f6b4a 0%, #144d34 100%);
         }
         
         .gradient-bg-5 {
-            background: linear-gradient(135deg, #2EAFB9 0%, #056674 100%);
+            background: linear-gradient(135deg, #2a8c62 0%, #144d34 100%);
         }
         
         .gradient-bg-6 {
-            background: linear-gradient(135deg, #0FA4AF 0%, #2EAFB9 100%);
+            background: linear-gradient(135deg, #1f6b4a 0%, #2a8c62 100%);
         }
         
         .notification-badge {
@@ -124,7 +126,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
         }
         
         .activity-item {
-            border-left: 3px solid #0FA4AF;
+            border-left: 3px solid #1f6b4a;
             padding-left: 16px;
             margin-bottom: 16px;
         }
@@ -177,13 +179,13 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
             <?php include 'includes/navbar.php'; ?>
             
             <!-- Dashboard Content -->
-            <main class="flex-1 overflow-y-auto p-8">
+            <main class="flex-1 overflow-y-auto p-4 md:p-6">
                 
                 <!-- Welcome Section -->
                 <div class="mb-8">
-                    <div class="rounded-xl shadow-sm border border-gray-100 p-4" style="background: #1e293b;">
-                        <h1 class="text-3xl font-bold text-white mb-1">Welcome back, <?php echo htmlspecialchars(explode(' ', $_SESSION['full_name'])[0]); ?>! 👋</h1>
-                        <p class="text-gray-300">Here's what's happening in your hospital today</p>
+                    <div class="rounded-xl shadow-sm border border-gray-200 p-4" style="background: #f3efe6;">
+                        <h1 class="text-3xl font-bold mb-1" style="color: #1f6b4a;">Welcome back, <?php echo htmlspecialchars(explode(' ', $_SESSION['full_name'])[0]); ?>! 👋</h1>
+                        <p class="text-gray-600">Here's what's happening in your hospital today</p>
                     </div>
                 </div>
                 
@@ -629,13 +631,13 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
                     datasets: [{
                         label: 'OPD',
                         data: [0, 0, 0, 0, 0, 0, 0],
-                        borderColor: '#0FA4AF',
+                        borderColor: '#1f6b4a',
                         backgroundColor: 'rgba(102, 126, 234, 0.1)',
                         tension: 0.4
                     }, {
                         label: 'IPD',
                         data: [0, 0, 0, 0, 0, 0, 0],
-                        borderColor: '#0FA4AF',
+                        borderColor: '#1f6b4a',
                         backgroundColor: 'rgba(240, 147, 251, 0.1)',
                         tension: 0.4
                     }]
@@ -733,7 +735,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
                         departmentChart.data.labels = data.departments.labels;
                         departmentChart.data.datasets[0].data = data.departments.values;
                         departmentChart.data.datasets[0].backgroundColor = [
-                            '#0FA4AF', '#056674', '#4facfe', '#43e97b', '#fa709a'
+                            '#1f6b4a', '#144d34', '#4facfe', '#43e97b', '#fa709a'
                         ];
                     } else {
                         departmentChart.data.labels = ['No Data'];
@@ -991,7 +993,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
                                  return `
                                     <div class="flex flex-col items-center flex-1 group">
                                         <div class="relative w-full bg-blue-100 hover:bg-blue-200 rounded-t transition-all duration-300" style="height: ${height}%">
-                                             <div class="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+                                             <div class="absolute -top-4 md:p-6 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity">
                                                 ${d.count}
                                              </div>
                                         </div>

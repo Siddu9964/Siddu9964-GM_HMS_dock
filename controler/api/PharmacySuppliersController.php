@@ -1,4 +1,22 @@
 <?php
+/**
+ * ============================================================
+ * PharmacySuppliersController — API Reference
+ * ============================================================
+ * Base URL : http://localhost/GM_HMS/api/pharmacy/suppliers
+ * Auth     : All endpoints require Auth
+ * ------------------------------------------------------------
+ *
+ * 1. GET /api/pharmacy/suppliers
+ *    Response: [ { id, supplier_name, contact_person, phone, email, address } ]
+ *
+ * 2. POST /api/pharmacy/suppliers
+ *    Body: { "supplier_name":"MedCo Ltd", "contact_person":"Ravi Sharma",
+ *            "phone":"9876540000", "email":"medco@example.com", "address":"Mumbai" }
+ *
+ * 3. DELETE /api/pharmacy/suppliers/{id}
+ * ------------------------------------------------------------
+ */
 namespace GM_HMS\Controllers\api;
 
 use Exception;
@@ -133,3 +151,4 @@ class PharmacySuppliersController extends BaseController {
         } catch (Exception $e) { $this->handleException($e); }
     }
 }
+

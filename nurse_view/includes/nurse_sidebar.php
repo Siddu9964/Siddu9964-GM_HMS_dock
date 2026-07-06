@@ -4,12 +4,11 @@
     id="nurseSidebar">
     <div style="padding: 1.5rem; height: 100%; display: flex; flex-direction: column;">
         <!-- Logo & Branding -->
-        <div
-            style="display: flex; align-items: center; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1);">
-            <i class="fas fa-user-nurse" style="font-size: 2.5rem; color: #4A90E2; margin-right: 1rem;"></i>
+        <div style="display: flex; align-items: center; margin-bottom: 2rem; padding: 0 0.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.1);">
+            <img src="/GM_HMS/assets/images/gm_logoo.png" alt="GM Logo" style="width: 38px; height: auto; margin-right: 0.6rem;">
             <div>
-                <h1 style="color: white; font-weight: 700; font-size: 1.25rem; margin: 0;">GM Hospital</h1>
-                <p style="color: #94a3b8; font-size: 0.75rem; margin: 0;">Nursing Portal</p>
+                <h1 style="color: #f3efe6; font-weight: 700; font-size: 1.05rem; margin: 0; white-space: nowrap;">GM hospital</h1>
+                <p style="color: rgba(255, 255, 255, 0.55); font-size: 0.75rem; margin: 0;">Nursing Portal</p>
             </div>
         </div>
 
@@ -25,16 +24,16 @@
                 <!-- Patient Care Section -->
                 <div style="margin-top: 1.5rem; margin-bottom: 0.5rem;">
                     <p
-                        style="color: #64748b; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; padding: 0 1rem;">
+                        style="color: rgba(255, 255, 255, 0.6); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px; padding: 0 1rem; white-space: nowrap;">
                         <i class="fas fa-user-injured" style="margin-right: 0.5rem;"></i>Patient Care
                     </p>
                 </div>
 
                 <a href="patient_care.php" class="sidebar-link" data-page="patient_care">
                     <i class="fas fa-users"></i>
-                    <span>My Patients</span>
+                    <span style="font-size: 0.8rem; letter-spacing: -0.2px;">My Patients</span>
                     <span class="badge badge-info" id="patient-count"
-                        style="margin-left: auto; font-size: 0.7rem;">0</span>
+                        style="margin-left: auto; font-size: 0.65rem; padding: 2px 6px;">0</span>
                 </a>
 
                 <a href="vitals.php" class="sidebar-link" data-page="vitals">
@@ -44,9 +43,9 @@
 
                 <a href="medication.php" class="sidebar-link" data-page="medication">
                     <i class="fas fa-pills"></i>
-                    <span>Medications (MAR)</span>
+                    <span style="font-size: 0.8rem; letter-spacing: -0.2px;">Medications</span>
                     <span class="badge badge-warning" id="pending-meds"
-                        style="margin-left: auto; font-size: 0.7rem;">0</span>
+                        style="margin-left: auto; font-size: 0.65rem; padding: 2px 6px;">0</span>
                 </a>
 
                 <a href="nurse_notes.php" class="sidebar-link" data-page="nurse_notes">
@@ -62,16 +61,16 @@
                 <!-- Tasks & Schedule Section -->
                 <div style="margin-top: 1.5rem; margin-bottom: 0.5rem;">
                     <p
-                        style="color: #64748b; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; padding: 0 1rem;">
+                        style="color: rgba(255, 255, 255, 0.6); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px; padding: 0 1rem; white-space: nowrap;">
                         <i class="fas fa-calendar-check" style="margin-right: 0.5rem;"></i>Tasks & Schedule
                     </p>
                 </div>
 
                 <a href="tasks.php" class="sidebar-link" data-page="tasks">
                     <i class="fas fa-tasks"></i>
-                    <span>My Tasks</span>
+                    <span style="font-size: 0.8rem; letter-spacing: -0.2px;">My Tasks</span>
                     <span class="badge badge-danger" id="pending-tasks"
-                        style="margin-left: auto; font-size: 0.7rem;">0</span>
+                        style="margin-left: auto; font-size: 0.65rem; padding: 2px 6px;">0</span>
                 </a>
 
                 <a href="my_shift.php" class="sidebar-link" data-page="my_shift">
@@ -82,7 +81,7 @@
                 <!-- Ward Management Section -->
                 <div style="margin-top: 1.5rem; margin-bottom: 0.5rem;">
                     <p
-                        style="color: #64748b; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; padding: 0 1rem;">
+                        style="color: rgba(255, 255, 255, 0.6); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px; padding: 0 1rem; white-space: nowrap;">
                         <i class="fas fa-hospital" style="margin-right: 0.5rem;"></i>Ward Management
                     </p>
                 </div>
@@ -113,41 +112,79 @@
 </aside>
 
 <style>
+    /* Scoped Reset to protect Sidebar from Bootstrap */
+    :root {
+        --gm-sidebar-w: 185px; /* Restored to compact size */
+    }
+
     .nurse-sidebar {
-        width: 280px;
-        background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
-        box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
+        font-family: 'Inter', sans-serif !important;
+        box-sizing: border-box;
+        width: var(--gm-sidebar-w, 220px);
+        background: #1f6b4a !important; /* Medical Teal */
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        min-height: 100vh;
+        overflow-y: auto;
+        z-index: 1000;
+        border-right: 1px solid rgba(255,255,255,0.1);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .nurse-sidebar *:not(i) {
+        font-family: 'Inter', sans-serif !important;
+        box-sizing: border-box;
     }
 
     .sidebar-link {
         display: flex;
         align-items: center;
-        padding: 0.875rem 1.125rem;
-        color: #cbd5e1;
-        text-decoration: none;
-        border-radius: 12px;
-        margin-bottom: 0.375rem;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        font-size: 0.9375rem;
-        gap: 1rem;
+        gap: .75rem;
+        padding: .6rem .85rem;
+        border-radius: 10px;
+        color: rgba(255, 255, 255, 0.75);
+        text-decoration: none !important;
+        font-size: .81rem;
+        font-weight: 500;
+        transition: all .22s cubic-bezier(.4, 0, .2, 1);
+        margin-bottom: 2px;
+    }
+
+    .sidebar-link span:not(.badge) {
+        flex: 1;
+        white-space: nowrap;
     }
 
     .sidebar-link i {
-        width: 1.5rem;
+        font-size: 1.05rem;
+        width: 20px;
+        min-width: 20px;
         text-align: center;
-        font-size: 1.125rem;
+        color: rgba(255, 255, 255, 0.5);
+        transition: color 0.2s ease;
+        flex-shrink: 0;
     }
 
     .sidebar-link:hover {
-        background: rgba(255, 255, 255, 0.08);
-        color: white;
-        transform: translateX(6px);
+        background: rgba(255, 255, 255, 0.06);
+        color: #fff;
+    }
+
+    .sidebar-link:hover i {
+        color: #fff;
     }
 
     .sidebar-link.active {
-        background: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%);
-        color: white;
-        box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .sidebar-link.active i {
+        color: #fff;
     }
 
     .badge {
@@ -157,31 +194,21 @@
         font-weight: 700;
     }
 
-    .badge-info {
-        background: #17A2B8;
-        color: white;
-    }
-
-    .badge-warning {
-        background: #FFC107;
-        color: #000;
-    }
-
-    .badge-danger {
-        background: #DC3545;
-        color: white;
-    }
+    .badge-info { background: rgba(56, 189, 248, 0.2); color: #38bdf8; }
+    .badge-warning { background: rgba(251, 191, 36, 0.2); color: #fbbf24; }
+    .badge-danger { background: rgba(248, 113, 113, 0.2); color: #f87171; }
 
     @media (max-width: 1024px) {
         .nurse-sidebar {
             position: fixed;
             top: 0;
             left: 0;
-            height: 100vh;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
         }
-
         .nurse-sidebar.open {
-            transform: translateX(0);
+            transform: translateX(0) !important;
+            left: 0 !important;
         }
     }
 </style>
@@ -221,14 +248,14 @@
                 const medsBadge = document.getElementById('pending-meds');
                 if (medsBadge) {
                     medsBadge.textContent = stats.medications.pending || 0;
-                    medsBadge.style.display = (stats.medications.pending > 0) ? 'inline-block' : 'none';
+                    medsBadge.style.display = 'inline-block';
                 }
 
                 // Update pending tasks
                 const tasksBadge = document.getElementById('pending-tasks');
                 if (tasksBadge) {
                     tasksBadge.textContent = stats.tasks.pending || 0;
-                    tasksBadge.style.display = (stats.tasks.pending > 0) ? 'inline-block' : 'none';
+                    tasksBadge.style.display = 'inline-block';
                 }
             }
         } catch (error) {

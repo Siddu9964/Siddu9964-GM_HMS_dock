@@ -3,13 +3,7 @@
    Optimized for Medical Grade A4 Printing
 */
 
-:root {
-    --medical-primary: #0D9488;
-    --medical-dark: #134E4A;
-    --text-main: #0F172A;
-    --text-muted: #64748B;
-    --border-light: #E2E8F0;
-}
+/* :root removed and centralized to gm-theme.css */
 
 .modal-overlay {
     position: fixed;
@@ -28,7 +22,7 @@
 }
 
 .modal-container {
-    background: white;
+    background: #FDFBF7;
     width: 210mm;
     /* A4 Width */
     border-radius: 12px;
@@ -63,7 +57,7 @@
     width: 100%;
     min-height: 148.5mm;
     padding: 6mm;
-    background: white;
+    background: #FDFBF7;
     color: var(--text-main);
     font-family: 'Inter', sans-serif;
     position: relative;
@@ -302,7 +296,7 @@
     }
 
     body {
-        background: white;
+        background: #FDFBF7;
     }
 
     body * {
@@ -338,7 +332,7 @@
     }
 
     .modal-overlay {
-        background: white;
+        background: #FDFBF7;
         padding: 0;
         overflow: visible;
         display: block;

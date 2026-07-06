@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="/GM_HMS/assets/css/gm-theme.css">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OPD Management - GM HMS</title>
@@ -17,7 +19,6 @@
     
     <style>
         /* Fallback for Tailwind 2 vs 3 discrepancies and custom styles */
-        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
         .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border: 1px solid rgba(241, 245, 249, 1); }
         .stat-card { transition: all 0.2s; border-radius: 12px; }
         .stat-card:hover { transform: translateY(-4px); }
@@ -41,43 +42,35 @@
                 <!-- KPI Section -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                     <!-- Today's Visits -->
-                    <div class="stat-card glass-card p-6 shadow-sm border-l-4 border-blue-500">
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="text-sm font-medium text-gray-500 uppercase">Today's Visits</span>
-                            <div class="p-2 bg-blue-50 rounded-lg"><i class="fas fa-users text-blue-500"></i></div>
-                        </div>
-                        <h2 id="kpi-today-visits" class="text-3xl font-bold text-gray-800">0</h2>
-                        <p class="text-xs text-green-600 mt-2 font-medium"><i class="fas fa-arrow-up mr-1"></i> +8% from yesterday</p>
+                    <div class="bento-card">
+                        <div class="bento-title">Today's Visits</div>
+                        <h2 id="kpi-today-visits" class="bento-value">0</h2>
+                        <i class="fas fa-users bento-icon"></i>
+                        <p class="text-xs text-green-600 mt-2 font-medium z-10"><i class="fas fa-arrow-up mr-1"></i> +8% from yesterday</p>
                     </div>
 
                     <!-- Revenue -->
-                    <div class="stat-card glass-card p-6 shadow-sm border-l-4 border-green-500">
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="text-sm font-medium text-gray-500 uppercase">Total Revenue</span>
-                            <div class="p-2 bg-green-50 rounded-lg"><i class="fas fa-rupee-sign text-green-500"></i></div>
-                        </div>
-                        <h2 id="kpi-revenue" class="text-3xl font-bold text-gray-800">₹0</h2>
-                        <p class="text-xs text-gray-500 mt-2">Current Month Billing</p>
+                    <div class="bento-card">
+                        <div class="bento-title">Total Revenue</div>
+                        <h2 id="kpi-revenue" class="bento-value">₹0</h2>
+                        <i class="fas fa-rupee-sign bento-icon"></i>
+                        <p class="text-xs text-gray-500 mt-2 z-10">Current Month Billing</p>
                     </div>
 
                     <!-- Pending Appointments -->
-                    <div class="stat-card glass-card p-6 shadow-sm border-l-4 border-orange-500">
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="text-sm font-medium text-gray-500 uppercase">Pending</span>
-                            <div class="p-2 bg-orange-50 rounded-lg"><i class="fas fa-clock text-orange-500"></i></div>
-                        </div>
-                        <h2 id="kpi-pending" class="text-3xl font-bold text-gray-800">0</h2>
-                        <p class="text-xs text-orange-600 mt-2">Require Confirmation</p>
+                    <div class="bento-card">
+                        <div class="bento-title">Pending</div>
+                        <h2 id="kpi-pending" class="bento-value">0</h2>
+                        <i class="fas fa-clock bento-icon"></i>
+                        <p class="text-xs text-orange-600 mt-2 z-10">Require Confirmation</p>
                     </div>
 
                     <!-- Avg Waiting Time -->
-                    <div class="stat-card glass-card p-6 shadow-sm border-l-4 border-purple-500">
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="text-sm font-medium text-gray-500 uppercase">Avg Wait Time</span>
-                            <div class="p-2 bg-purple-50 rounded-lg"><i class="fas fa-hourglass-half text-purple-500"></i></div>
-                        </div>
-                        <h2 class="text-3xl font-bold text-gray-800">18m</h2>
-                        <p class="text-xs text-red-600 mt-2"><i class="fas fa-arrow-up mr-1"></i> High Traffic</p>
+                    <div class="bento-card">
+                        <div class="bento-title">Avg Wait Time</div>
+                        <h2 class="bento-value">18m</h2>
+                        <i class="fas fa-hourglass-half bento-icon"></i>
+                        <p class="text-xs text-red-600 mt-2 z-10"><i class="fas fa-arrow-up mr-1"></i> High Traffic</p>
                     </div>
                 </div>
 

@@ -1,12 +1,65 @@
 <?php
 /**
- * IPD Clinical API Controller
- * 
- * Handles doctor visits, medications, and investigations for IPD patients
- * Tables: ipd_doctor_visits, ipd_medications, ipd_investigations
- * 
- * @package GM_HMS\Controllers\API
- * @version 1.0.0
+ * ============================================================
+ * IpdClinicalController — API Reference
+ * ============================================================
+ * Base URL : http://localhost/GM_HMS/api
+ * Auth     : All endpoints require Auth (Session or Bearer token)
+ * Tables   : ipd_doctor_visits, ipd_medications, ipd_investigations
+ * Key Param: ipd_no (required for all GET endpoints)
+ * ------------------------------------------------------------
+ *
+ * ── DOCTOR VISITS ──────────────────────────────────────────
+ *
+ * 1. GET /api/ipd-clinical/visits?ipd_no=IPD-001
+ *    Required: ipd_no
+ *    Response: [ { id, ipd_no, doctor_id, doctor_name, visit_date, clinical_notes, treatment_plan } ]
+ *
+ * 2. POST /api/ipd-clinical/visits      [Required: ipd_no, doctor_id, visit_date]
+ *    Body:
+ *      {
+ *        "ipd_no":         "IPD-20260626-001",
+ *        "doctor_id":      "DOC-001",
+ *        "visit_date":     "2026-06-26",
+ *        "clinical_notes": "Patient improving. BP stable.",
+ *        "treatment_plan": "Continue current medications"
+ *      }
+ *
+ * ── MEDICATIONS ────────────────────────────────────────────
+ *
+ * 3. GET /api/ipd-clinical/medications?ipd_no=IPD-001
+ *    Required: ipd_no
+ *    Response: [ { id, ipd_no, medicine_name, dosage, frequency, route, start_date, end_date } ]
+ *
+ * 4. POST /api/ipd-clinical/medications [Required: ipd_no, medicine_name]
+ *    Body:
+ *      {
+ *        "ipd_no":        "IPD-20260626-001",
+ *        "medicine_name": "Aspirin",
+ *        "dosage":        "75mg",
+ *        "frequency":     "Once Daily",
+ *        "route":         "Oral",
+ *        "start_date":    "2026-06-26",
+ *        "end_date":      "2026-07-10",
+ *        "instructions":  "After food"
+ *      }
+ *
+ * ── INVESTIGATIONS ─────────────────────────────────────────
+ *
+ * 5. GET /api/ipd-clinical/investigations?ipd_no=IPD-001
+ *    Required: ipd_no
+ *    Response: [ { id, ipd_no, test_name, test_date, result_summary, doctor_remarks } ]
+ *
+ * 6. POST /api/ipd-clinical/investigations [Required: ipd_no, test_name]
+ *    Body:
+ *      {
+ *        "ipd_no":          "IPD-20260626-001",
+ *        "test_name":       "2D Echocardiography",
+ *        "test_date":       "2026-06-26",
+ *        "result_summary":  "EF 55%, No regional wall motion abnormality",
+ *        "doctor_remarks":  "Normal study"
+ *      }
+ * ------------------------------------------------------------
  */
 
 namespace GM_HMS\Controllers\api;

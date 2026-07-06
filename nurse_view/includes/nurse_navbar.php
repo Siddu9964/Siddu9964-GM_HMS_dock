@@ -61,9 +61,9 @@
         <div style="position: relative;">
             <button onclick="toggleProfileMenu()" class="profile-button">
                 <img id="nurse-photo"
-                    src="https://ui-avatars.com/api/?name=<?php echo urlencode($_SESSION['full_name'] ?? $_SESSION['username'] ?? 'Nurse'); ?>&background=4A90E2&color=fff&size=128"
+                    src="https://ui-avatars.com/api/?name=<?php echo urlencode($_SESSION['full_name'] ?? $_SESSION['username'] ?? 'Nurse'); ?>&background=1f6b4a&color=fff&size=128"
                     alt="<?php echo htmlspecialchars($_SESSION['full_name'] ?? $_SESSION['username'] ?? 'Nurse'); ?>"
-                    style="width: 42px; height: 42px; border-radius: 12px; object-fit: cover; border: 2px solid #4A90E2; box-shadow: 0 4px 10px rgba(74, 144, 226, 0.2);">
+                    style="width: 42px; height: 42px; border-radius: 12px; object-fit: cover; border: 2px solid #1f6b4a; box-shadow: 0 4px 10px rgba(31, 107, 74, 0.2);">
                 <div class="hide-mobile" style="text-align: left; margin-left: 0.75rem;">
                     <div id="nurse-name" style="font-weight: 700; font-size: 0.9375rem; color: #1e293b;">
                         <?php echo htmlspecialchars($_SESSION['full_name'] ?? $_SESSION['username'] ?? 'Nurse'); ?>
@@ -108,7 +108,7 @@
         </div>
         <div class="profile-card-content">
             <div class="profile-card-avatar">
-                <img src="https://ui-avatars.com/api/?name=<?php echo urlencode($_SESSION['full_name'] ?? $_SESSION['username'] ?? 'Nurse'); ?>&background=4A90E2&color=fff&size=128"
+                <img src="https://ui-avatars.com/api/?name=<?php echo urlencode($_SESSION['full_name'] ?? $_SESSION['username'] ?? 'Nurse'); ?>&background=1f6b4a&color=fff&size=128"
                     alt="Avatar">
             </div>
             <h3 class="profile-card-name">
@@ -208,7 +208,7 @@
 
 <style>
     :root {
-        --primary-blue: #4A90E2;
+        --primary-blue: #1f6b4a;
         --gray-900: #1a202c;
         --gray-500: #718096;
         --gray-200: #e2e8f0;
@@ -218,9 +218,13 @@
     }
 
     .nurse-navbar {
-        background: white;
-        padding: 1rem 1.5rem;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        background: rgba(255, 255, 255, .9) !important;
+        backdrop-filter: blur(12px) !important;
+        -webkit-backdrop-filter: blur(12px) !important;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
+        padding: 0 1.5rem !important;
+        height: 60px !important;
+        box-shadow: 0 1px 0 rgba(0, 0, 0, .06) !important;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -243,12 +247,16 @@
     }
 
     .btn-primary {
-        background: #4A90E2;
-        color: white;
+        background: #1f6b4a !important;
+        border-color: #1f6b4a !important;
+        color: white !important;
+        box-shadow: none !important;
     }
 
     .btn-primary:hover {
-        background: #357ABD;
+        background: #144d34 !important;
+        border-color: #144d34 !important;
+        transform: translateY(-1px);
     }
 
     .btn-success {
@@ -261,13 +269,14 @@
     }
 
     .btn-outline {
-        background: white;
-        border: 1px solid #e2e8f0;
-        color: #4a5568;
+        background: transparent !important;
+        border: 2px solid #1f6b4a !important;
+        color: #1f6b4a !important;
     }
 
     .btn-outline:hover {
-        background: #f7fafc;
+        background: #1f6b4a !important;
+        color: white !important;
     }
 
     .notification-badge {
@@ -298,7 +307,7 @@
     .profile-button:hover {
         background: #fff;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-        border-color: #4A90E2;
+        border-color: #1f6b4a;
     }
 
     .dropdown-menu {
@@ -383,7 +392,7 @@
 
     .profile-card-header {
         height: 100px;
-        background: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%);
+        background: linear-gradient(135deg, #1f6b4a 0%, #144d34 100%);
         position: relative;
     }
 
@@ -430,7 +439,7 @@
     }
 
     .profile-card-role {
-        color: #4A90E2;
+        color: #1f6b4a;
         font-weight: 700;
         font-size: 15px;
         margin-bottom: 25px;
@@ -553,7 +562,7 @@
     }
 
     input:checked+.slider {
-        background-color: #4A90E2;
+        background-color: #1f6b4a;
     }
 
     input:checked+.slider:before {

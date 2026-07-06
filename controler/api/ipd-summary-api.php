@@ -1,11 +1,44 @@
 <?php
 /**
- * IPD Summary API Router
- * 
- * Routes all IPD Summary API requests to appropriate controller methods
- * 
- * @package GM_HMS\API
- * @version 1.0.0
+ * ============================================================
+ * ipd-summary-api.php — IPD Summary API Reference (Standalone Router)
+ * ============================================================
+ * Base URL : http://localhost/GM_HMS/controler/api/ipd-summary-api.php
+ * Auth     : Session or Bearer token
+ * Note     : This is a standalone router (not via central /api/index.php)
+ *            It delegates to IpdSummaryController
+ * ------------------------------------------------------------
+ *
+ * 1. GET /ipd-summary-api.php?ipd_no=IPD-001
+ *    Returns complete IPD summary for a patient admission
+ *
+ * 2. PUT /ipd-summary-api.php
+ *    Body: { "ipd_no":"IPD-001", ...fields to update... }
+ *    Updates IPD summary header info
+ *
+ * 3. GET /ipd-summary-api.php/daily-reports?ipd_no=IPD-001
+ *    Returns all daily progress reports for this IPD
+ *
+ * 4. POST /ipd-summary-api.php/daily-reports
+ *    Body: { "ipd_no":"IPD-001", "report_date":"2026-06-26",
+ *            "clinical_notes":"Stable condition", "vitals":{...} }
+ *
+ * 5. PUT /ipd-summary-api.php/daily-reports
+ *    Body: { "id":12, "clinical_notes":"Updated notes" }
+ *
+ * 6. DELETE /ipd-summary-api.php/daily-reports?ipd_no=IPD-001&date=2026-06-26
+ *
+ * 7. GET /ipd-summary-api.php/discharge?ipd_no=IPD-001
+ *    Returns discharge summary
+ *
+ * 8. POST /ipd-summary-api.php/discharge  OR  PUT /ipd-summary-api.php/discharge
+ *    Body: { "ipd_no":"IPD-001", "condition_at_discharge":"Stable",
+ *            "discharge_date":"2026-06-30", "discharge_instructions":"...",
+ *            "follow_up_date":"2026-07-07" }
+ *
+ * 9. GET /ipd-summary-api.php/admissions
+ *    Returns all active IPD admissions (for dropdown/search)
+ * ------------------------------------------------------------
  */
 
 // Enable error reporting for development

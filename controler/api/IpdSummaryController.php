@@ -1,5 +1,41 @@
 <?php
 /**
+ * ============================================================
+ * IpdSummaryController — API Reference
+ * ============================================================
+ * Base URL : http://localhost/GM_HMS/api
+ * Auth     : All endpoints require Auth (Session or Bearer token)
+ * ------------------------------------------------------------
+ *
+ * 1. GET /api/ipd-summary
+ *    Query: patient_id, admission_id (optional filters)
+ *    Response: List of IPD summaries
+ *
+ * 2. GET /api/ipd-summary/draft
+ *    Returns draft/in-progress summary for current active IPD patient
+ *
+ * 3. POST /api/ipd-summary
+ *    Body:
+ *      {
+ *        "patient_id":            "PID-20260626-001",
+ *        "admission_id":          "ADM-20260620-001",
+ *        "chief_complaint":       "Chest pain",
+ *        "history_of_illness":    "Sudden onset chest pain...",
+ *        "diagnosis":             "Acute MI",
+ *        "treatment":             "Aspirin 75mg, Heparin drip",
+ *        "operative_procedure":   null,
+ *        "condition_at_discharge":"Stable",
+ *        "discharge_date":        "2026-06-30",
+ *        "discharge_instructions":"Follow up in 1 week. Avoid exertion.",
+ *        "follow_up_date":        "2026-07-07",
+ *        "status":                "Final"
+ *      }
+ *
+ * 4. DELETE /api/ipd-summary
+ *    Body: { "summary_id": 12 }
+ * ------------------------------------------------------------
+ */
+/**
  * IPD Summary API Controller
  * 
  * Professional IPD Daily Report Management System
@@ -858,3 +894,4 @@ class IpdSummaryController extends BaseController {
         return $d && $d->format('Y-m-d') === $date;
     }
 }
+

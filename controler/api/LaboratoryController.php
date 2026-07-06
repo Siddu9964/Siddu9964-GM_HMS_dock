@@ -1,4 +1,24 @@
 <?php
+/**
+ * ============================================================
+ * LaboratoryController — API Reference
+ * ============================================================
+ * Base URL : http://localhost/GM_HMS/api
+ * Auth     : All endpoints require Auth (Session or Bearer token)
+ * ------------------------------------------------------------
+ *
+ * 1. GET /api/laboratory/services
+ *    Response: All lab test categories and services with rates
+ *
+ * 2. POST /api/laboratory/services
+ *    Body: { "category":"Haematology", "test_name":"HbA1C", "rate":350, "description":"Glycated haemoglobin" }
+ *
+ * 3. PUT /api/laboratory/services/{category}/{id}
+ *    Body: { "rate":400, "test_name":"HbA1C Updated" }
+ *
+ * 4. DELETE /api/laboratory/services/{category}/{id}
+ * ------------------------------------------------------------
+ */
 namespace GM_HMS\Controllers\api;
 
 use GM_HMS\Controllers\BaseController;
@@ -152,3 +172,4 @@ class LaboratoryController extends BaseController
         }
     }
 }
+

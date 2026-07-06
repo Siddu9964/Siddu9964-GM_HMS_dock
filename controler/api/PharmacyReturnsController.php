@@ -1,4 +1,22 @@
 <?php
+/**
+ * ============================================================
+ * PharmacyReturnsController — API Reference (Supplier Returns)
+ * ============================================================
+ * Base URL : http://localhost/GM_HMS/api/pharmacy/returns
+ * Auth     : All endpoints require Auth
+ * ------------------------------------------------------------
+ *
+ * 1. GET /api/pharmacy/returns
+ *    Query: supplier_id, date_from, date_to
+ *
+ * 2. POST /api/pharmacy/returns
+ *    Body: { "supplier_id":3, "return_date":"2026-06-26", "reason":"Damaged",
+ *            "items":[{"product_id":15,"batch_no":"B2026A","qty":20}] }
+ *
+ * 3. DELETE /api/pharmacy/returns/{id}
+ * ------------------------------------------------------------
+ */
 namespace GM_HMS\Controllers\api;
 
 use Exception;
@@ -166,3 +184,4 @@ class PharmacyReturnsController extends BaseController {
         } catch (Exception $e) { $this->handleException($e); }
     }
 }
+

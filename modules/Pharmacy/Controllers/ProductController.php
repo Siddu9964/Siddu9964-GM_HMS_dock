@@ -38,22 +38,6 @@ class ProductController extends BaseController {
         $this->requireAuth();
         try {
             $data = $this->getJsonInput();
-            unset($data['sl_no'], $data['action']);
-            
-            // Sanitize inputs for strict MySQL modes
-            $numericFields = ['purchase_rate', 'mrp', 'sales_price', 'quantity', 'tax_percent'];
-            foreach ($numericFields as $field) {
-                if (isset($data[$field]) && $data[$field] === '') {
-                    $data[$field] = 0;
-                }
-            }
-            if (isset($data['expiry_date']) && $data['expiry_date'] === '') {
-                $data['expiry_date'] = null;
-            }
-            if (!isset($data['attachment'])) {
-                $data['attachment'] = '';
-            }
-
             // TODO: Add Request Validation
             $id = $this->repository->create($data);
             $this->respondCreated(['sl_no' => $id]);
@@ -66,22 +50,6 @@ class ProductController extends BaseController {
         $this->requireAuth();
         try {
             $data = $this->getJsonInput();
-            unset($data['sl_no'], $data['action']);
-            
-            // Sanitize inputs for strict MySQL modes
-            $numericFields = ['purchase_rate', 'mrp', 'sales_price', 'quantity', 'tax_percent'];
-            foreach ($numericFields as $field) {
-                if (isset($data[$field]) && $data[$field] === '') {
-                    $data[$field] = 0;
-                }
-            }
-            if (isset($data['expiry_date']) && $data['expiry_date'] === '') {
-                $data['expiry_date'] = null;
-            }
-            if (isset($data['attachment']) && $data['attachment'] === '') {
-                $data['attachment'] = '';
-            }
-
             $this->repository->update((int)$slNo, $data);
             $this->respondSuccess(null, "Product updated.");
         } catch (Exception $e) { $this->handleException($e); }

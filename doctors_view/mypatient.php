@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Doctor') {
+if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], ['Doctor', 'admin', 'Admin'])) {
     header("Location: ../doctor_login.php");
     exit();
 }
@@ -8,6 +8,8 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Doctor') {
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="/GM_HMS/assets/css/gm-theme.css">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Patients - GM HMS</title>
@@ -19,7 +21,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Doctor') {
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
     
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="assets/css/doctor_dashboard.css">
+    <link rel="stylesheet" href="assets/css/doctor_dashboard.css?v=<?= time() ?>">
 </head>
 <body>
     <div class="doctor-layout">
@@ -32,33 +34,31 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Doctor') {
             <?php include 'includes/doctor_navbar.php'; ?>
             
             <!-- Page Content -->
-            <div class="doctor-content-elite" style="padding: 2rem; background: #f8fafc; min-height: 100vh;">
-                <!-- Page Header: Elite Style -->
-                <div class="header-glass-mini" style="background: transparent; padding: 2rem; color: #1e293b; display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-                    <div>
-                        <h1 class="main-page-title">
-                            <i class="fas fa-id-card-clip"></i>
-                            Patient Master List
-                        </h1>
-                        <p style="font-size: 0.9rem; opacity: 0.7; margin-top: 4px; display: flex; align-items: center; gap: 8px;">
-                            <span style="width: 8px; height: 8px; background: #10B981; border-radius: 50%; display: inline-block;"></span>
-                            Manage your clinical follow-ups and records
-                        </p>
-                    </div>
-                    <div class="d-flex gap-2">
-                        <button onclick="toggleView('table')" id="btn-table-view" class="btn btn-primary" style="background: #0FA4AF; border: none; border-radius: 10px;">
+            <div class="doctor-content">
+                <!-- Page Header -->
+                <div class="welcome-banner fade-in-up">
+                    <h1 class="welcome-title">
+                        <i class="fas fa-id-card-clip"></i> Patient Master List
+                    </h1>
+                    <p class="welcome-subtitle">
+                        Manage your clinical follow-ups and records
+                    </p>
+                    <i class="fas fa-users welcome-icon-bg"></i>
+                </div>
+                
+                <div class="d-flex gap-2" style="margin-bottom: 1rem;">
+                        <button onclick="toggleView('table')" id="btn-table-view" class="btn btn-primary" style="background: #1f6b4a; border: none; border-radius: 10px;">
                             <i class="fas fa-table"></i>
                         </button>
                         <button onclick="toggleView('cards')" id="btn-cards-view" class="btn btn-outline" style="border-radius: 10px; border-color: rgba(255,255,255,0.2); color: white;">
                             <i class="fas fa-th-large"></i>
                         </button>
                     </div>
-                </div>
                 
-                <!-- Filters Card: Elite Design -->
-                <div class="card mb-4 elite-filter-card" style="border: none; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); overflow: hidden;">
-                    <div class="card-body" style="padding: 1.5rem;">
-                        <div class="filter-group-elite" style="display: flex; gap: 1.5rem; align-items: flex-end;">
+                <!-- Filters Card -->
+                <div class="bento-card mb-4 fade-in-up delay-1">
+                    <div class="card-body" style="padding: 0.5rem;">
+                        <div class="filter-group-elite" style="display: flex; gap: 1rem; align-items: flex-end;">
                             <div style="flex: 2;">
                                 <label style="font-size: 0.65rem; font-weight: 800; color: #94A3B8; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px;">Quick Search</label>
                                 <div style="position: relative;">
@@ -71,12 +71,12 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Doctor') {
                                 <select id="filter-status" class="form-control form-select" style="border-radius: 12px; height: 44px; border: 2px solid #F1F5F9;">
                                     <option value="">All Status</option>
                                     <option value="Active">Active</option>
-                                    <option value="Discharged">Discharged</option>
-                                    <option value="Follow-up">Follow-up</option>
+                                    <option value="Inactive">Inactive</option>
+                                    <option value="Completed">Completed</option>
                                 </select>
                             </div>
                             <div style="flex: 1; display: flex; gap: 0.5rem;">
-                                <button onclick="applyFilters()" class="btn btn-primary" style="flex: 2; height: 44px; border-radius: 12px; background: #056674; border: none; font-weight: 700;">
+                                <button onclick="applyFilters()" class="btn btn-primary" style="flex: 2; height: 44px; border-radius: 12px; background: #144d34; border: none; font-weight: 700;">
                                     <i class="fas fa-filter"></i> Apply
                                 </button>
                                 <button onclick="Modal.show('advanced-search-modal')" class="btn btn-outline" style="flex: 1; height: 44px; border-radius: 12px; border: 2px solid #E2E8F0; color: #64748B;" title="Advanced Search">
@@ -88,47 +88,43 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Doctor') {
                 </div>
                 
                 <!-- Statistics -->
-                <div class="d-grid grid-cols-4 gap-3 mb-4">
-                    <div class="stat-card-elite" style="background: white; padding: 1.5rem; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid #F1F5F9; display: flex; align-items: center; gap: 1rem;">
-                        <div style="width: 50px; height: 50px; border-radius: 14px; background: #F0F9FF; color: #0EA5E9; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
-                            <i class="fas fa-users"></i>
-                        </div>
+                <div class="bento-grid">
+                    <div class="bento-card gm-kpi-card col-span-3 fade-in-up delay-1">
                         <div>
-                            <p style="font-size: 0.75rem; color: #64748B; font-weight: 700; text-transform: uppercase;">Total</p>
-                            <h2 style="margin: 0; font-size: 1.5rem; font-weight: 800; color: #1E293B;" id="stat-total">0</h2>
+                            <div class="gm-kpi-icon-wrap icon-teal"><i class="fas fa-users"></i></div>
+                            <div class="gm-kpi-value" id="stat-total">0</div>
+                            <div class="gm-kpi-label">Total</div>
                         </div>
+                        <i class="fas fa-hospital-user bg-icon"></i>
                     </div>
-                    <div class="stat-card-elite" style="background: white; padding: 1.5rem; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid #F1F5F9; display: flex; align-items: center; gap: 1rem;">
-                        <div style="width: 50px; height: 50px; border-radius: 14px; background: #F0FDF4; color: #10B981; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
-                            <i class="fas fa-user-check"></i>
-                        </div>
+                    <div class="bento-card gm-kpi-card col-span-3 fade-in-up delay-1">
                         <div>
-                            <p style="font-size: 0.75rem; color: #64748B; font-weight: 700; text-transform: uppercase;">Active</p>
-                            <h2 style="margin: 0; font-size: 1.5rem; font-weight: 800; color: #1E293B;" id="stat-active">0</h2>
+                            <div class="gm-kpi-icon-wrap icon-teal" style="background: rgba(16,185,129,0.1); color: #10B981;"><i class="fas fa-user-check"></i></div>
+                            <div class="gm-kpi-value" id="stat-active">0</div>
+                            <div class="gm-kpi-label">Active</div>
                         </div>
+                        <i class="fas fa-check-circle bg-icon"></i>
                     </div>
-                    <div class="stat-card-elite" style="background: white; padding: 1.5rem; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid #F1F5F9; display: flex; align-items: center; gap: 1rem;">
-                        <div style="width: 50px; height: 50px; border-radius: 14px; background: #FFFBEB; color: #F59E0B; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
-                            <i class="fas fa-clock-rotate-left"></i>
-                        </div>
+                    <div class="bento-card gm-kpi-card col-span-3 fade-in-up delay-2">
                         <div>
-                            <p style="font-size: 0.75rem; color: #64748B; font-weight: 700; text-transform: uppercase;">Follow-up</p>
-                            <h2 style="margin: 0; font-size: 1.5rem; font-weight: 800; color: #1E293B;" id="stat-followup">0</h2>
+                            <div class="gm-kpi-icon-wrap icon-orange"><i class="fas fa-clock-rotate-left"></i></div>
+                            <div class="gm-kpi-value" id="stat-followup">0</div>
+                            <div class="gm-kpi-label">Follow-up</div>
                         </div>
+                        <i class="fas fa-calendar-alt bg-icon"></i>
                     </div>
-                    <div class="stat-card-elite" style="background: white; padding: 1.5rem; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid #F1F5F9; display: flex; align-items: center; gap: 1rem;">
-                        <div style="width: 50px; height: 50px; border-radius: 14px; background: #FEF2F2; color: #EF4444; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
-                            <i class="fas fa-triangle-exclamation"></i>
-                        </div>
+                    <div class="bento-card gm-kpi-card col-span-3 fade-in-up delay-2">
                         <div>
-                            <p style="font-size: 0.75rem; color: #64748B; font-weight: 700; text-transform: uppercase;">Review</p>
-                            <h2 style="margin: 0; font-size: 1.5rem; font-weight: 800; color: #1E293B;" id="stat-critical">0</h2>
+                            <div class="gm-kpi-icon-wrap icon-red"><i class="fas fa-triangle-exclamation"></i></div>
+                            <div class="gm-kpi-value" id="stat-critical">0</div>
+                            <div class="gm-kpi-label">Review</div>
                         </div>
+                        <i class="fas fa-exclamation-circle bg-icon"></i>
                     </div>
                 </div>
                 
                 <!-- Table View -->
-                <div id="table-view" class="card">
+                <div id="table-view" class="bento-card col-span-12 fade-in-up delay-3">
                     <div class="card-header">
                         <div class="card-title">
                             <i class="fas fa-list"></i>
@@ -161,7 +157,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Doctor') {
                 </div>
                 
                 <!-- Cards View -->
-                <div id="cards-view" class="d-grid grid-cols-3 gap-3" style="display: none;">
+                <div id="cards-view" class="bento-grid" style="display: none;">
                     <!-- Cards loaded via AJAX -->
                 </div>
             </div>
@@ -187,7 +183,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Doctor') {
     <div id="advanced-search-modal" class="modal" style="display: none;">
         <div class="modal-content" style="max-width: 600px;">
             <div class="modal-header">
-                <h2><i class="fas fa-search-plus" style="color: #0FA4AF; margin-right: 10px;"></i>Advanced Search</h2>
+                <h2><i class="fas fa-search-plus" style="color: #1f6b4a; margin-right: 10px;"></i>Advanced Search</h2>
                 <button onclick="Modal.hide('advanced-search-modal')" class="btn btn-sm">
                     <i class="fas fa-times"></i>
                 </button>
@@ -252,7 +248,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Doctor') {
                     
                     <div class="d-flex gap-2">
                         <button type="button" onclick="Modal.hide('advanced-search-modal')" class="btn btn-outline" style="flex: 1; border-radius: 10px;">Cancel</button>
-                        <button type="submit" class="btn btn-primary" style="flex: 2; border-radius: 10px; background: #0FA4AF; border: none;">
+                        <button type="submit" class="btn btn-primary" style="flex: 2; border-radius: 10px; background: #1f6b4a; border: none;">
                             <i class="fas fa-search"></i> Search Patients
                         </button>
                     </div>

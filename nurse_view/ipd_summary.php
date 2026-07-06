@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Nurse') {
+if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], ['Nurse', 'admin', 'Admin'])) {
     header("Location: ../login.php");
     exit();
 }
@@ -9,6 +9,8 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Nurse') {
 <html lang="en">
 
 <head>
+    <link rel="stylesheet" href="/GM_HMS/assets/css/gm-theme.css">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IPD Summary Dashboard - GM HMS</title>

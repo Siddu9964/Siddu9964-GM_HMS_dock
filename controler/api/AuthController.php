@@ -1,4 +1,43 @@
 <?php
+/**
+ * ============================================================
+ * AuthController — API Reference
+ * ============================================================
+ * Base URL : http://localhost/GM_HMS/api
+ * Auth     : No auth required for login. Bearer token or Session for others.
+ * ------------------------------------------------------------
+ *
+ * 1. POST /api/auth/login
+ *    Request Body:
+ *      { "username": "admin", "password": "Admin@1234" }
+ *    Response:
+ *      { "status":"success", "role":"Admin",
+ *        "user": { "id":1, "username":"admin", "full_name":"Admin User" },
+ *        "redirect_url": "view/admin_dashboard.php" }
+ *    Role → Redirect:
+ *      Doctor       → doctors_view/dashboard.php
+ *      Receptionist → reception_view/index.php
+ *      Nurse        → nurse_view/dashboard.php
+ *      Pharmacist   → pharmacy_view/dashboard.php
+ *      Admin        → view/admin_dashboard.php
+ *
+ * 2. POST /api/auth/logout          [Auth Required]
+ *    Body: (empty)
+ *    Response: { "success": true, "message": "Logged out successfully" }
+ *
+ * 3. POST /api/auth/refresh
+ *    Body: { "refresh_token": "eyJhbGci..." }
+ *    Response: { "success": true, "data": { "access_token": "...", "expires_in": 3600 } }
+ *
+ * 4. GET /api/auth/me               [Auth Required]
+ *    Response: { "user":{...}, "role":"Doctor", "permissions":["view_patients",...] }
+ *
+ * 5. POST /api/auth/change-password [Auth Required]
+ *    Body:
+ *      { "current_password": "OldPass@123", "new_password": "NewPass@456" }
+ *    Note: new_password must be >= 8 chars
+ * ------------------------------------------------------------
+ */
 namespace GM_HMS\Controllers\api;
 
 use GM_HMS\Controllers\BaseController;
@@ -205,6 +244,40 @@ class AuthController extends BaseController {
             
             if ($result['success']) {
                 $this->respondSuccess(null, 'Password changed successfully. Please login again.');
+            } else {
+                $this->respondBadRequest($result['error']);
+            }
+            
+        } catch (\Throwable $e) {
+            $this->handleException($e);
+        }
+    }
+    
+    /**
+     * Direct Reset password (without old password)
+     * POST /api/auth/reset-password
+     */
+    public function resetPassword() {
+        $this->restrictMethod('POST');
+        
+        try {
+            $schema = [
+                'required' => ['identifier', 'new_password'],
+                'properties' => [
+                    'identifier' => ['type' => 'string'],
+                    'new_password' => ['type' => 'string', 'minLength' => 6]
+                ]
+            ];
+            
+            $data = $this->getJsonInput($schema);
+            
+            $result = $this->auth->resetPassword(
+                $data['identifier'],
+                $data['new_password']
+            );
+            
+            if ($result['success']) {
+                $this->respondSuccess(null, 'Password has been reset successfully.');
             } else {
                 $this->respondBadRequest($result['error']);
             }

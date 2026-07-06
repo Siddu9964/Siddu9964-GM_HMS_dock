@@ -39,6 +39,7 @@ $router->add('GET', '#^/api/patients/?$#', 'GM_HMS\Controllers\api\PatientContro
 $router->add('GET', '#^/api/patients/(PID-\d{8}-\d{3})/?$#', 'GM_HMS\Controllers\api\PatientController', 'show');
 $router->add('POST', '#^/api/patients/?$#', 'GM_HMS\Controllers\api\PatientController', 'create');
 $router->add('PUT', '#^/api/patients/(PID-\d{8}-\d{3})/?$#', 'GM_HMS\Controllers\api\PatientController', 'update');
+$router->add('POST', '#^/api/patients/([^/]+)/image/?$#', 'GM_HMS\Controllers\api\PatientController', 'uploadImage');
 $router->add('GET', '#^/api/patients/check-duplicate/?$#', 'GM_HMS\Controllers\api\PatientController', 'checkDuplicate');
 $router->add('DELETE', '#^/api/patients/(PID-\d{8}-\d{3})/?$#', 'GM_HMS\Controllers\api\PatientController', 'delete');
 
@@ -48,6 +49,7 @@ $router->add('POST', '#^/api/auth/logout/?$#', 'GM_HMS\Controllers\api\AuthContr
 $router->add('POST', '#^/api/auth/refresh/?$#', 'GM_HMS\Controllers\api\AuthController', 'refresh');
 $router->add('GET', '#^/api/auth/me/?$#', 'GM_HMS\Controllers\api\AuthController', 'me');
 $router->add('POST', '#^/api/auth/change-password/?$#', 'GM_HMS\Controllers\api\AuthController', 'changePassword');
+$router->add('POST', '#^/api/auth/reset-password/?$#', 'GM_HMS\Controllers\api\AuthController', 'resetPassword');
 
 // Admin Info routes
 $router->add('GET', '#^/api/admin/opd-summary/?$#', 'GM_HMS\Controllers\api\AdminInfoController', 'getOpdSummary');
@@ -101,10 +103,10 @@ $router->add('GET', '#^/api/appointments/stats/?$#', 'GM_HMS\Controllers\api\App
 $router->add('GET', '#^/api/appointments/departments/?$#', 'GM_HMS\Controllers\api\AppointmentController', 'getDepartments');
 $router->add('GET', '#^/api/appointments/doctors/?$#', 'GM_HMS\Controllers\api\AppointmentController', 'getDoctors');
 $router->add('GET', '#^/api/appointments/check-availability/?$#', 'GM_HMS\Controllers\api\AppointmentController', 'checkAvailability');
-$router->add('GET', '#^/api/appointments/(APT-\d{8}-\d{4})/?$#', 'GM_HMS\Controllers\api\AppointmentController', 'show');
+$router->add('GET', '#^/api/appointments/([^/]+)/?$#', 'GM_HMS\Controllers\api\AppointmentController', 'show');
 $router->add('POST', '#^/api/appointments/?$#', 'GM_HMS\Controllers\api\AppointmentController', 'create');
-$router->add('PUT', '#^/api/appointments/(APT-\d{8}-\d{4})/?$#', 'GM_HMS\Controllers\api\AppointmentController', 'update');
-$router->add('DELETE', '#^/api/appointments/(APT-\d{8}-\d{4})/?$#', 'GM_HMS\Controllers\api\AppointmentController', 'delete');
+$router->add('PUT', '#^/api/appointments/([^/]+)/?$#', 'GM_HMS\Controllers\api\AppointmentController', 'update');
+$router->add('DELETE', '#^/api/appointments/([^/]+)/?$#', 'GM_HMS\Controllers\api\AppointmentController', 'delete');
 
 // Staff Routes
 $router->add('POST', '#^/api/staff/([^/]+)/update-profile/?$#', 'GM_HMS\Controllers\api\StaffController', 'updateProfile');

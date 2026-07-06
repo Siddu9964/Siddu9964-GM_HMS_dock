@@ -25,6 +25,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['role'])) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="/GM_HMS/assets/css/gm-theme.css">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - GM Hospital Management System</title>
@@ -34,12 +36,12 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['role'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #0FA4AF;
-            --primary-dark: #056674;
-            --accent: #2EAFB9;
+            --primary: #1f6b4a;
+            --primary-dark: #144d34;
+            --accent: #2a8c62;
             --text-dark: #1a202c;
             --text-gray: #718096;
-            --bg-gradient: linear-gradient(135deg, #0FA4AF 0%, #056674 100%);
+            --bg-gradient: linear-gradient(135deg, #1f6b4a 0%, #144d34 100%);
         }
 
         * {
@@ -72,8 +74,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['role'])) {
             align-items: center;
             justify-content: center;
             background: 
-                radial-gradient(circle at 10% 10%, rgba(15, 164, 175, 0.08) 0%, transparent 40%),
-                radial-gradient(circle at 90% 90%, rgba(5, 102, 116, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 10% 10%, rgba(31, 107, 74, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 90% 90%, rgba(20, 77, 52, 0.08) 0%, transparent 40%),
                 linear-gradient(to right, #05445E 33.3%);
             position: relative;
             overflow-x: hidden;
@@ -86,7 +88,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['role'])) {
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: radial-gradient(rgba(15, 164, 175, 0.1) 1px, transparent 1px);
+            background-image: radial-gradient(rgba(31, 107, 74, 0.1) 1px, transparent 1px);
             background-size: 40px 40px;
             opacity: 0.6;
             pointer-events: none;
@@ -101,7 +103,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['role'])) {
             border-radius: 32px;
             box-shadow: 
                 0 40px 100px rgba(0, 0, 0, 0.15),
-                0 0 80px rgba(15, 164, 175, 0.1);
+                0 0 80px rgba(31, 107, 74, 0.1);
             display: flex;
             margin: 20px;
             position: relative;
@@ -147,7 +149,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['role'])) {
             border-radius: 50%;
             padding: 5px;
             background: white;
-            box-shadow: 0 10px 25px rgba(15, 164, 175, 0.3);
+            box-shadow: 0 10px 25px rgba(31, 107, 74, 0.3);
             object-fit: contain;
         }
         
@@ -215,7 +217,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['role'])) {
             background: var(--primary);
             color: white;
             transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(15, 164, 175, 0.3);
+            box-shadow: 0 15px 30px rgba(31, 107, 74, 0.3);
         }
 
         .slider-btn i {
@@ -338,7 +340,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['role'])) {
             background: var(--primary);
             color: white;
             transform: scale(1.15) translateY(-5px);
-            box-shadow: 0 15px 30px rgba(15, 164, 175, 0.3);
+            box-shadow: 0 15px 30px rgba(31, 107, 74, 0.3);
             border-color: var(--primary);
         }
 
@@ -411,7 +413,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['role'])) {
             position: absolute;
             top: 30px;
             right: 40px;
-            background: rgba(15, 164, 175, 0.2);
+            background: rgba(31, 107, 74, 0.2);
             backdrop-filter: blur(12px);
             padding: 10px 22px;
             border-radius: 100px;
@@ -450,7 +452,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['role'])) {
             width: 60px;
             height: 60px;
             border-radius: 16px;
-            box-shadow: 0 10px 20px rgba(15, 164, 175, 0.2);
+            box-shadow: 0 10px 20px rgba(31, 107, 74, 0.2);
             margin: 15px 0;
         }
 
@@ -460,7 +462,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['role'])) {
             border-radius: 20px;
             padding: 5px;
             background: white;
-            box-shadow: 0 10px 25px rgba(15, 164, 175, 0.3);
+            box-shadow: 0 10px 25px rgba(31, 107, 74, 0.3);
             margin: 15px auto;
             display: block;
         }
@@ -520,7 +522,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['role'])) {
             outline: none;
             border-color: var(--primary);
             background: white;
-            box-shadow: 0 0 0 4px rgba(15, 164, 175, 0.1);
+            box-shadow: 0 0 0 4px rgba(31, 107, 74, 0.1);
         }
 
         .toggle-password {
@@ -564,7 +566,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['role'])) {
             font-weight: 700;
             cursor: pointer;
             transition: all 0.3s;
-            box-shadow: 0 10px 25px rgba(15, 164, 175, 0.3);
+            box-shadow: 0 10px 25px rgba(31, 107, 74, 0.3);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -574,7 +576,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['role'])) {
         .submit-btn:hover {
             background: var(--primary-dark);
             transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(15, 164, 175, 0.4);
+            box-shadow: 0 15px 30px rgba(31, 107, 74, 0.4);
         }
         
         .submit-btn:active {
@@ -631,7 +633,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['role'])) {
                 <h1 class="logo-title">Hospital</h1>
             </div>
             <div class="header">
-                <p>Welcome back! Running live on Kubernetes!.</p>
+                <p>Welcome back! Please login to your account.</p>
             </div>
 
             <form id="loginForm">
@@ -831,9 +833,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['role'])) {
                 icon: 'info',
                 title: 'Coming Soon!',
                 text: 'Password reset feature will be available soon.',
-                confirmButtonColor: '#0FA4AF',
+                confirmButtonColor: '#1f6b4a',
                 background: '#fff',
-                iconColor: '#0FA4AF'
+                iconColor: '#1f6b4a'
             });
         }
 
@@ -869,7 +871,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['role'])) {
                         timer: 1500,
                         showConfirmButton: false,
                         background: '#fff',
-                        iconColor: '#0FA4AF'
+                        iconColor: '#1f6b4a'
                     }).then(() => {
                         // Store user ID in localStorage for frontend persistence
                         if (result.role === 'Doctor') {
@@ -885,7 +887,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['role'])) {
                         icon: 'error',
                         title: 'Access Denied',
                         text: result.message || 'Invalid credentials',
-                        confirmButtonColor: '#0FA4AF'
+                        confirmButtonColor: '#1f6b4a'
                     });
                     resetBtn();
                 }
@@ -896,7 +898,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['role'])) {
                     icon: 'error',
                     title: 'System Error',
                     text: 'Unable to connect to login service.',
-                    confirmButtonColor: '#0FA4AF'
+                    confirmButtonColor: '#1f6b4a'
                 });
                 resetBtn();
             });

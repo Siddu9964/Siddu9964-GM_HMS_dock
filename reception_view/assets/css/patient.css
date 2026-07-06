@@ -13,11 +13,11 @@
     position: sticky;
     top: 0;
     z-index: 10;
-    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    background: #f3efe6;
 }
 
 .patient-table thead th {
-    color: white;
+    color: #1f6b4a;
     text-transform: uppercase;
     font-size: 11px;
     font-weight: 700;
@@ -26,7 +26,7 @@
 }
 
 .patient-table tbody tr {
-    background: white;
+    background: #FDFBF7;
     transition: all 0.2s ease;
     border-bottom: 1px solid #e5e7eb;
 }
@@ -40,7 +40,7 @@
 .patient-table tbody td {
     padding: 14px 12px;
     font-size: 14px;
-    color: #374151;
+    color: #1f6b4a !important;
 }
 
 /* Status Badges */
@@ -87,11 +87,11 @@
 
 .action-icon.edit {
     background: #E6FAFA;
-    color: #056674;
+    color: #144d34;
 }
 
 .action-icon.edit:hover {
-    background: #0FA4AF;
+    background: #1f6b4a;
     color: white;
 }
 
@@ -126,7 +126,7 @@
 }
 
 .modal-content {
-    background: white;
+    background: #FDFBF7;
     border-radius: 16px;
     max-width: 1000px;
     width: 95%;
@@ -186,7 +186,7 @@
 
 /* New Modal Header Style */
 .modal-header {
-    background: linear-gradient(135deg, #0FA4AF 0%, #056674 100%);
+    background: linear-gradient(135deg, #1f6b4a 0%, #144d34 100%);
     padding: 24px 30px;
     display: flex;
     align-items: center;
@@ -233,17 +233,17 @@
 
 .modal-body {
     padding: 24px;
-    background: #fff;
+    background: #FDFBF7;
     overflow-y: auto;
     flex: 1;
 }
 
 /* Green Buttons */
 .btn-primary {
-    background: linear-gradient(135deg, #0FA4AF 0%, #056674 100%) !important;
+    background: linear-gradient(135deg, #1f6b4a 0%, #144d34 100%) !important;
     color: white !important;
     border: none;
-    box-shadow: 0 4px 12px rgba(15, 164, 175, 0.3);
+    box-shadow: 0 4px 12px rgba(31, 107, 74, 0.3);
     padding: 12px 24px;
     border-radius: 12px;
     font-weight: 700;
@@ -255,7 +255,7 @@
 
 .btn-primary:hover {
     transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(15, 164, 175, 0.4);
+    box-shadow: 0 8px 20px rgba(31, 107, 74, 0.4);
 }
 
 @keyframes fadeIn {
@@ -338,7 +338,7 @@
     border: 1px solid #e5e7eb;
     border-radius: 8px;
     font-size: 14px;
-    background: white;
+    background: #FDFBF7;
     transition: all 0.2s ease;
     outline: none;
 }
@@ -351,8 +351,8 @@
 .input-group input:focus,
 .input-group select:focus,
 .input-group textarea:focus {
-    border-color: #0FA4AF;
-    box-shadow: 0 0 0 3px rgba(15, 164, 175, 0.1);
+    border-color: #1f6b4a;
+    box-shadow: 0 0 0 3px rgba(31, 107, 74, 0.1);
 }
 
 /* Radio Group */
@@ -386,15 +386,15 @@
 }
 
 .radio-option input[type="radio"]:checked+label {
-    border-color: #0FA4AF;
+    border-color: #1f6b4a;
     background: #E6FAFA;
-    color: #056674;
-    box-shadow: 0 4px 10px rgba(15, 164, 175, 0.1);
+    color: #144d34;
+    box-shadow: 0 4px 10px rgba(31, 107, 74, 0.1);
 }
 
 .radio-option label:hover {
     border-color: #cbd5e0;
-    background: white;
+    background: #FDFBF7;
 }
 
 .hidden {

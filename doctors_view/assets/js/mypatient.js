@@ -13,7 +13,6 @@ let allPatients = [];
 
 document.addEventListener('DOMContentLoaded', function () {
     loadPatients();
-    initializeDataTable();
 
     // Check for hidden patient ID to view history
     const hiddenId = sessionStorage.getItem('history_patient_id');
@@ -28,11 +27,20 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Real-time search
-    document.getElementById('search-patient').addEventListener('input', debounce(function () {
-        if (patientsTable) {
-            patientsTable.search(this.value).draw();
-        }
-    }, 300));
+    const searchInput = document.getElementById('search-patient');
+    if (searchInput) {
+        searchInput.addEventListener('input', debounce(function () {
+            applyFilters(false);
+        }, 300));
+    }
+    
+    // Prevent form submission on enter for the search input
+    const searchForm = document.getElementById('search-filter-form');
+    if (searchForm) {
+        searchForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+        });
+    }
 });
 
 // ============================================================================
@@ -116,6 +124,10 @@ function updateStatistics(patients) {
 // ============================================================================
 
 function populateTable(patients) {
+    if ($.fn.DataTable.isDataTable('#patients-table')) {
+        $('#patients-table').DataTable().destroy();
+    }
+
     const tbody = document.getElementById('patients-table-body');
 
     if (patients.length === 0) {
@@ -157,7 +169,10 @@ function populateTable(patients) {
             }
         }
 
-        const initials = `${patient.first_name.charAt(0)}${patient.last_name.charAt(0)}`;
+        const fName = (patient.first_name && patient.first_name !== 'null') ? patient.first_name : '';
+        const lName = (patient.last_name && patient.last_name !== 'null') ? patient.last_name : '';
+        const fullName = `${fName} ${lName}`.trim() || 'Unknown';
+        const initials = `${fName.charAt(0) || ''}${lName.charAt(0) || ''}`.toUpperCase() || 'P';
 
         let badgeBg, badgeColor;
         if (status === 'Active') {
@@ -170,14 +185,14 @@ function populateTable(patients) {
 
         return `
             <tr style="transition: background 0.2s;">
-                <td style="font-weight: 700; color: #0FA4AF;">${patient.patient_id}</td>
+                <td style="font-weight: 700; color: #1f6b4a;">${patient.patient_id}</td>
                 <td>
                     <div style="display: flex; align-items: center; gap: 0.75rem;">
-                        <div style="width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, #0FA4AF 0%, #056674 100%); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem; box-shadow: 0 4px 6px -1px rgba(15, 164, 175, 0.2);">
+                        <div style="width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, #1f6b4a 0%, #144d34 100%); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem; box-shadow: 0 4px 6px -1px rgba(31, 107, 74, 0.2);">
                             ${initials}
                         </div>
                         <div>
-                            <div style="font-weight: 700; color: #1e293b; font-size: 0.95rem;">${patient.first_name} ${patient.last_name}</div>
+                            <div style="font-weight: 700; color: #1e293b; font-size: 0.95rem;">${fullName}</div>
                             <div style="font-size: 0.75rem; color: var(--gray-500);"><i class="fas fa-phone-alt" style="font-size: 0.7rem; margin-right: 4px;"></i>${patient.phone || 'No phone'}</div>
                         </div>
                     </div>
@@ -186,7 +201,7 @@ function populateTable(patients) {
                 <td><span style="background: #e0f2fe; color: #0369a1; padding: 4px 10px; border-radius: 6px; font-weight: 700; font-size: 0.75rem;">${patient.blood_group || 'N/A'}</span></td>
                 <td>
                     <div style="font-weight: 600; color: #1e293b;">${DateUtils.formatDateReadable(lastVisit)}</div>
-                    <div style="font-size: 0.7rem; color: #0FA4AF; font-weight: 700;">LATEST CONSULTATION</div>
+                    <div style="font-size: 0.7rem; color: #1f6b4a; font-weight: 700;">LATEST CONSULTATION</div>
                 </td>
                 <td>
                     <span style="display: inline-flex; align-items: center; gap: 4px; background: ${badgeBg}; color: ${badgeColor}; padding: 4px 12px; border-radius: 50px; font-weight: 700; font-size: 0.75rem; text-transform: uppercase;">
@@ -209,6 +224,9 @@ function populateTable(patients) {
     }).join('');
 
     tbody.innerHTML = rows;
+    
+    // Re-initialize DataTable after replacing the content
+    initializeDataTable();
 }
 
 // ============================================================================
@@ -231,14 +249,17 @@ function populateCards(patients) {
 
     const cards = patients.map(patient => {
         const age = patient.age || DateUtils.calculateAge(patient.birth_date);
-        const initials = `${patient.first_name.charAt(0)}${patient.last_name.charAt(0)}`;
+        const fName = (patient.first_name && patient.first_name !== 'null') ? patient.first_name : '';
+        const lName = (patient.last_name && patient.last_name !== 'null') ? patient.last_name : '';
+        const fullName = `${fName} ${lName}`.trim() || 'Unknown';
+        const initials = `${fName.charAt(0) || ''}${lName.charAt(0) || ''}`.toUpperCase() || 'P';
         const lastVisit = patient.date || 'Never';
 
         return `
-            <div class="card" style="border: none; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); border-radius: 16px; overflow: hidden; transition: transform 0.3s ease;">
-                <div style="height: 80px; background: linear-gradient(135deg, #0FA4AF 0%, #056674 100%); position: relative;">
+            <div class="bento-card col-span-3" style="border: none; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); border-radius: 16px; overflow: hidden; transition: transform 0.3s ease; padding: 0;">
+                <div style="height: 80px; background: linear-gradient(135deg, #1f6b4a 0%, #144d34 100%); position: relative;">
                     <div style="position: absolute; bottom: -30px; left: 20px; width: 70px; height: 70px; border-radius: 12px; background: white; padding: 4px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
-                        <div style="width: 100%; height: 100%; border-radius: 8px; background: #f1f5f9; color: #0FA4AF; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.5rem;">
+                        <div style="width: 100%; height: 100%; border-radius: 8px; background: #f1f5f9; color: #1f6b4a; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.5rem;">
                             ${initials}
                         </div>
                     </div>
@@ -246,9 +267,9 @@ function populateCards(patients) {
                 <div class="card-body" style="padding: 40px 20px 20px;">
                     <div style="margin-bottom: 1.5rem;">
                         <h3 style="font-size: 1.15rem; font-weight: 700; color: #1e293b; margin-bottom: 0.25rem;">
-                            ${patient.first_name} ${patient.last_name}
+                            ${fullName}
                         </h3>
-                        <p style="color: #0FA4AF; font-size: 0.85rem; font-weight: 700; margin: 0;">${patient.patient_id}</p>
+                        <p style="color: #1f6b4a; font-size: 0.85rem; font-weight: 700; margin: 0;">${patient.patient_id}</p>
                     </div>
                     
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
@@ -268,10 +289,10 @@ function populateCards(patients) {
                     
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
                         <button onclick="PatientDetail.show('${patient.patient_id}')" class="btn" style="background: #f1f5f9; color: #475569; font-weight: 600;">
-                            <i class="fas fa-user-circle"></i> Profile
+                            <i class="fas fa-user-circle" style="color: inherit;"></i> Profile
                         </button>
                         <button onclick="startConsultation('${patient.patient_id}')" class="btn btn-primary" style="font-weight: 600;">
-                            <i class="fas fa-stethoscope"></i> Consult
+                            <i class="fas fa-stethoscope" style="color: inherit;"></i> Consult
                         </button>
                     </div>
                 </div>
@@ -298,8 +319,7 @@ function initializeDataTable() {
             search: '',
             searchPlaceholder: 'Search patients...'
         },
-        dom: 'rtip', // Hide default search and length since we have custom ones
-        pageLength: 10
+        dom: 'rtip' // Hide default search and length since we have custom ones
     });
 }
 
@@ -310,20 +330,31 @@ function initializeDataTable() {
 function toggleView(view) {
     currentView = view;
 
+    const btnTable = document.getElementById('btn-table-view');
+    const btnCards = document.getElementById('btn-cards-view');
+
     if (view === 'table') {
         document.getElementById('table-view').style.display = 'block';
         document.getElementById('cards-view').style.display = 'none';
-        document.getElementById('btn-table-view').classList.add('btn-primary');
-        document.getElementById('btn-table-view').classList.remove('btn-outline');
-        document.getElementById('btn-cards-view').classList.remove('btn-primary');
-        document.getElementById('btn-cards-view').classList.add('btn-outline');
+        
+        btnTable.style.background = '#1f6b4a';
+        btnTable.style.color = 'white';
+        btnTable.style.border = 'none';
+        
+        btnCards.style.background = 'transparent';
+        btnCards.style.color = '#1f6b4a';
+        btnCards.style.border = '1px solid rgba(31, 107, 74, 0.2)';
     } else {
         document.getElementById('table-view').style.display = 'none';
         document.getElementById('cards-view').style.display = 'grid';
-        document.getElementById('btn-cards-view').classList.add('btn-primary');
-        document.getElementById('btn-cards-view').classList.remove('btn-outline');
-        document.getElementById('btn-table-view').classList.remove('btn-primary');
-        document.getElementById('btn-table-view').classList.add('btn-outline');
+        
+        btnCards.style.background = '#1f6b4a';
+        btnCards.style.color = 'white';
+        btnCards.style.border = 'none';
+        
+        btnTable.style.background = 'transparent';
+        btnTable.style.color = '#1f6b4a';
+        btnTable.style.border = '1px solid rgba(31, 107, 74, 0.2)';
     }
 }
 
@@ -331,15 +362,30 @@ function toggleView(view) {
 // APPLY FILTERS
 // ============================================================================
 
-function applyFilters() {
-    const status = document.getElementById('filter-status').value;
-    const date = document.getElementById('filter-date').value;
+function applyFilters(showToastMsg = true) {
+    const term = document.getElementById('search-patient') ? document.getElementById('search-patient').value.toLowerCase() : '';
+    const statusEl = document.getElementById('filter-status');
+    const status = statusEl ? statusEl.value : '';
 
     let filtered = allPatients;
 
+    if (term) {
+        filtered = filtered.filter(p => {
+            const fname = p.first_name && p.first_name !== 'null' ? String(p.first_name).toLowerCase() : '';
+            const lname = p.last_name && p.last_name !== 'null' ? String(p.last_name).toLowerCase() : '';
+            const pid = String(p.patient_id || '').toLowerCase();
+            const phone = String(p.phone || '').toLowerCase();
+            
+            return fname.includes(term) || 
+                   lname.includes(term) || 
+                   pid.includes(term) || 
+                   phone.includes(term);
+        });
+    }
+
     if (status) {
         filtered = filtered.filter(p => {
-            let currentStatus = p.status;
+            let currentStatus = p.status || 'Active';
 
             // Check Consultation Status first (Priority)
             const consultStatus = p.latest_consultation_status;
@@ -358,15 +404,13 @@ function applyFilters() {
         });
     }
 
-    if (date) {
-        filtered = filtered.filter(p => p.date === date);
-    }
-
     populateTable(filtered);
     populateCards(filtered);
     updateStatistics(filtered);
 
-    showToast(`Showing ${filtered.length} patient(s)`, 'info');
+    if (showToastMsg) {
+        showToast(`Showing ${filtered.length} patient(s)`, 'info');
+    }
 }
 
 // ============================================================================
@@ -432,8 +476,9 @@ async function viewPatient(patientId) {
         if (response.success) {
             const patient = response.data;
 
-            document.getElementById('modal-patient-name').textContent =
-                `${patient.first_name} ${patient.last_name}`;
+            const fName = (patient.first_name && patient.first_name !== 'null') ? patient.first_name : '';
+            const lName = (patient.last_name && patient.last_name !== 'null') ? patient.last_name : '';
+            document.getElementById('modal-patient-name').textContent = `${fName} ${lName}`.trim() || 'Unknown';
 
             document.getElementById('modal-patient-details').innerHTML = `
                 <div class="d-grid grid-cols-2 gap-3">
@@ -515,7 +560,7 @@ function convertToCSV(data) {
     const headers = ['Patient ID', 'Name', 'Age', 'Gender', 'Blood Group', 'Email', 'Phone'];
     const rows = data.map(p => [
         p.patient_id,
-        `${p.first_name} ${p.last_name}`,
+        `${(p.first_name && p.first_name !== 'null') ? p.first_name : ''} ${(p.last_name && p.last_name !== 'null') ? p.last_name : ''}`.trim() || 'Unknown',
         p.age || DateUtils.calculateAge(p.birth_date),
         p.sex,
         p.blood_group || '',
@@ -525,45 +570,3 @@ function convertToCSV(data) {
 
     return [headers, ...rows].map(row => row.join(',')).join('\n');
 }
-
-// ============================================================================
-// MODAL STYLES
-// ============================================================================
-
-const style = document.createElement('style');
-style.textContent = `
-.modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10000;
-}
-
-.modal-content {
-    background: white;
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-xl);
-    width: 90%;
-    max-height: 90vh;
-    overflow-y: auto;
-}
-
-.modal-header {
-    padding: 1.5rem;
-    border-bottom: 1px solid var(--gray-200);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.modal-body {
-    padding: 1.5rem;
-}
-`;
-document.head.appendChild(style);

@@ -398,17 +398,17 @@ class DoctorManager {
                             <i class="fas fa-door-open"></i>
                             <span>Room ${doctor.room_number || 'N/A'}</span>
                         </div>
-                        <div class="info-item">
+                        <div class="info-item" style="grid-column: 1 / -1; justify-content: center;">
                             <i class="fas fa-clock"></i>
-                            <span>${doctor.in_time ? doctor.in_time.substring(0, 5) : '--:--'} - ${doctor.out_time ? doctor.out_time.substring(0, 5) : '--:--'}</span>
-                        </div>
-                        <div class="info-item highlight">
-                            <i class="fas fa-calendar-alt"></i>
-                            <span style="font-size: 0.75rem;">${doctor.available_days || 'All Days'}</span>
+                            <span>${doctor.in_time ? doctor.in_time.substring(0, 5) : '--:--'} to ${doctor.out_time ? doctor.out_time.substring(0, 5) : '--:--'}</span>
                         </div>
                         <div class="info-item highlight">
                             <i class="fas fa-rupee-sign"></i>
                             <span class="fee-amount">₹${doctor.consultation_fee || '0'}</span>
+                        </div>
+                        <div class="info-item highlight" style="background: rgba(31, 107, 74, 0.05);">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>${(doctor.available_days || 'All Days').replace('Mon,Tue,Wed,Thu,Fri,Sat,Sun', 'All Days').replace('Mon,Tue,Wed,Thu,Fri,Sat', 'Mon-Sat')}</span>
                         </div>
                     </div>
                 </div>

@@ -1,4 +1,66 @@
 <?php
+/**
+ * ============================================================
+ * PrescriptionController — API Reference
+ * ============================================================
+ * Base URL : http://localhost/GM_HMS/api
+ * Auth     : All endpoints require Auth (Session or Bearer token)
+ * Note     : Prescriptions are stored in the `consultations` table (soap_plan field)
+ * ------------------------------------------------------------
+ *
+ * 1. GET /api/prescriptions?limit=50
+ *    Returns all prescriptions. Param: limit (default 50)
+ *
+ * 2. GET /api/prescriptions/{id}
+ *    Example: GET /api/prescriptions/CON-20260626-1234
+ *    Response: Prescription + patient info + doctor info + parsed medicines array
+ *    Fallback: Also checks legacy `prescriptions` table if not found in consultations
+ *
+ * 3. GET /api/prescriptions/doctor/{doctor_id}
+ *    Example: GET /api/prescriptions/doctor/DOC-001
+ *    Response: { "prescriptions": [ { prescription_id, prescription_date, patient info, medicines[] } ] }
+ *
+ * 4. GET /api/prescriptions/patient/{patient_id}
+ *    Example: GET /api/prescriptions/patient/PID-20260626-001
+ *    Returns full prescription history (status = Completed), with doctor info
+ *    Response: { "history": [ { prescription_id, diagnosis, medicines[], doctor_name, follow_up_date } ] }
+ *
+ * 5. GET /api/prescriptions/patient/{patient_id}/latest
+ *    Returns the single latest prescription for that patient
+ *
+ * 6. GET /api/prescriptions/receptionist/view/{patient_id}
+ *    Returns prescriptions formatted for receptionist print view
+ *
+ * 7. POST /api/prescriptions     [Required: patient_id, doctor_id, medicines]
+ *    Body:
+ *      {
+ *        "patient_id":           "PID-20260626-001",
+ *        "doctor_id":            "DOC-001",
+ *        "appointment_id":       "APT-20260626-0001",
+ *        "diagnosis":            "Viral Fever",
+ *        "general_instructions": "Take full course of medication",
+ *        "dietary_advice":       "Avoid cold drinks",
+ *        "follow_up_date":       "2026-07-10",
+ *        "medicines": [
+ *          {
+ *            "name":      "Paracetamol",
+ *            "dosage":    "500mg",
+ *            "frequency": "1-0-1",
+ *            "timing":    "After Food",
+ *            "duration":  "5 Days",
+ *            "qty":       10,
+ *            "purpose":   "Reduce fever",
+ *            "warnings":  "Do not exceed 4g/day"
+ *          }
+ *        ]
+ *      }
+ *    Response: { "prescription_id": "CON-20260626-1234" }
+ *
+ * 8. POST /api/prescriptions/log-print
+ *    Body: { "prescription_id": "CON-20260626-1234" }
+ *    Logs print activity for audit trail
+ * ------------------------------------------------------------
+ */
 namespace GM_HMS\Controllers\api;
 
 use GM_HMS\Controllers\BaseController;

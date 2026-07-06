@@ -103,31 +103,41 @@ include 'includes/ph_head.php';
 </div>
 
 <!-- Alert KPIs -->
-<div class="ph-stat-grid mb-4">
-  <div class="ph-stat" style="border-left:4px solid var(--ph-primary);">
-    <div class="ph-stat-icon" style="background:var(--ph-primary-light);color:var(--ph-primary);"><i class="fas fa-pills"></i></div>
-    <div class="ph-stat-val"><?= number_format($totalProducts) ?></div>
-    <div class="ph-stat-lbl">Total Products</div>
+<div class="ph-stat-grid mb-4" style="grid-template-columns: repeat(5, 1fr); gap: 1rem;">
+  <div class="ph-stat d-flex align-items-center" style="border-left:4px solid var(--ph-primary); padding: 1rem 1.25rem; gap: 1rem;">
+    <div class="ph-stat-icon m-0" style="background:var(--ph-primary-light);color:var(--ph-primary);width:42px;height:42px;flex-shrink:0;"><i class="fas fa-pills"></i></div>
+    <div class="flex-grow-1">
+      <div class="ph-stat-val" style="font-size:1.5rem;margin-bottom:0;"><?= number_format($totalProducts) ?></div>
+      <div class="ph-stat-lbl" style="font-size:0.7rem;margin-top:0;">Total Products</div>
+    </div>
   </div>
-  <div class="ph-stat" style="border-left:4px solid var(--ph-danger);">
-    <div class="ph-stat-icon" style="background:#fee2e2;color:var(--ph-danger);"><i class="fas fa-times-circle"></i></div>
-    <div class="ph-stat-val text-danger"><?= $outOfStock ?></div>
-    <div class="ph-stat-lbl">Out of Stock</div>
+  <div class="ph-stat d-flex align-items-center" style="border-left:4px solid var(--ph-danger); padding: 1rem 1.25rem; gap: 1rem;">
+    <div class="ph-stat-icon m-0" style="background:#fee2e2;color:var(--ph-danger);width:42px;height:42px;flex-shrink:0;"><i class="fas fa-times-circle"></i></div>
+    <div class="flex-grow-1">
+      <div class="ph-stat-val text-danger" style="font-size:1.5rem;margin-bottom:0;"><?= $outOfStock ?></div>
+      <div class="ph-stat-lbl" style="font-size:0.7rem;margin-top:0;">Out of Stock</div>
+    </div>
   </div>
-  <div class="ph-stat" style="border-left:4px solid var(--ph-warning);">
-    <div class="ph-stat-icon" style="background:#fef9c3;color:var(--ph-warning);"><i class="fas fa-exclamation-triangle"></i></div>
-    <div class="ph-stat-val text-warning"><?= $lowStockCount ?></div>
-    <div class="ph-stat-lbl">Low Stock (&le;<?= $threshold ?> units)</div>
+  <div class="ph-stat d-flex align-items-center" style="border-left:4px solid var(--ph-warning); padding: 1rem 1.25rem; gap: 1rem;">
+    <div class="ph-stat-icon m-0" style="background:#fef9c3;color:var(--ph-warning);width:42px;height:42px;flex-shrink:0;"><i class="fas fa-exclamation-triangle"></i></div>
+    <div class="flex-grow-1">
+      <div class="ph-stat-val text-warning" style="font-size:1.5rem;margin-bottom:0;"><?= $lowStockCount ?></div>
+      <div class="ph-stat-lbl" style="font-size:0.7rem;margin-top:0;">Low Stock (≤<?= $threshold ?>)</div>
+    </div>
   </div>
-  <div class="ph-stat" style="border-left:4px solid var(--ph-info);">
-    <div class="ph-stat-icon" style="background:#dbeafe;color:var(--ph-info);"><i class="fas fa-clock"></i></div>
-    <div class="ph-stat-val" style="color:var(--ph-info);"><?= $expiryCount ?></div>
-    <div class="ph-stat-lbl">Expiring (<?= $expiryDays ?> days)</div>
+  <div class="ph-stat d-flex align-items-center" style="border-left:4px solid var(--ph-info); padding: 1rem 1.25rem; gap: 1rem;">
+    <div class="ph-stat-icon m-0" style="background:#dbeafe;color:var(--ph-info);width:42px;height:42px;flex-shrink:0;"><i class="fas fa-clock"></i></div>
+    <div class="flex-grow-1">
+      <div class="ph-stat-val" style="color:var(--ph-info);font-size:1.5rem;margin-bottom:0;"><?= $expiryCount ?></div>
+      <div class="ph-stat-lbl" style="font-size:0.7rem;margin-top:0;">Expiring (<?= $expiryDays ?>d)</div>
+    </div>
   </div>
-  <div class="ph-stat" style="border-left:4px solid #7C3AED;">
-    <div class="ph-stat-icon" style="background:#ede9fe;color:#7C3AED;"><i class="fas fa-calendar-times"></i></div>
-    <div class="ph-stat-val" style="color:#7C3AED;"><?= count($expiredItems) ?></div>
-    <div class="ph-stat-lbl">Already Expired</div>
+  <div class="ph-stat d-flex align-items-center" style="border-left:4px solid #7C3AED; padding: 1rem 1.25rem; gap: 1rem;">
+    <div class="ph-stat-icon m-0" style="background:#ede9fe;color:#7C3AED;width:42px;height:42px;flex-shrink:0;"><i class="fas fa-calendar-times"></i></div>
+    <div class="flex-grow-1">
+      <div class="ph-stat-val" style="color:#7C3AED;font-size:1.5rem;margin-bottom:0;"><?= count($expiredItems) ?></div>
+      <div class="ph-stat-lbl" style="font-size:0.7rem;margin-top:0;">Expired</div>
+    </div>
   </div>
 </div>
 

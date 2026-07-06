@@ -460,7 +460,7 @@ class OpdBillingManager {
                  style="padding:.55rem 1rem;cursor:pointer;font-size:.84rem;
                         display:flex;justify-content:space-between;align-items:center;
                         border-bottom:1px solid #f1f5f9;transition:background .12s;"
-                 onmouseover="this.style.background='rgba(15,164,175,.1)'"
+                 onmouseover="this.style.background='rgba(31, 107, 74,.1)'"
                  onmouseout="this.style.background='white'">
                 <span style="font-weight:500;color:#1e293b;">${this._escape(d.full_name)}</span>
                 <span style="color:var(--teal);font-size:.75rem;margin-left:.5rem;">${this._escape(d.specialization || '')}</span>
@@ -821,10 +821,10 @@ class OpdBillingManager {
                        title="Print Bill"
                        style="display:inline-flex;align-items:center;justify-content:center;
                                 width:28px;height:28px;border-radius:6px;
-                                background:rgba(15,164,175,.1);color:var(--teal);
+                                background:rgba(31, 107, 74,.1);color:var(--teal);
                                 border:none;cursor:pointer;font-size:.8rem;transition:background .15s;"
-                       onmouseover="this.style.background='rgba(15,164,175,.22)'"
-                       onmouseout="this.style.background='rgba(15,164,175,.1)'">
+                       onmouseover="this.style.background='rgba(31, 107, 74,.22)'"
+                       onmouseout="this.style.background='rgba(31, 107, 74,.1)'">
                         <i class="fas fa-print"></i>
                     </button>
                 </td>
@@ -927,16 +927,16 @@ class OpdBillingManager {
         const date = data.bill_date ? new Date(data.bill_date).toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' }) : '—';
         const time = data.bill_time || '—';
         const status = (data.payment_status || 'Pending').toLowerCase();
-        const badgeClass = { paid: 'paid', cancelled: 'cancelled' }[status] || 'pending';
         const displayStatus = status === 'paid' ? 'PAID' : 'PENDING';
 
-        let itemsHtml = (data.items || []).map(item => `
+        let itemsHtml = (data.items || []).map((item, index) => `
             <tr>
-                <td style="font-weight:600; color:#1e293b;">${this._escape(item.item_name)}</td>
-                <td style="text-align:center;">${item.quantity}</td>
+                <td style="color:#1f6b4a; font-weight:600;">${index + 1}</td>
+                <td style="color:#1e293b;">${this._escape(item.item_name)}</td>
+                <td>${this._fmt(item.quantity)}</td>
                 <td>₹${this._fmt(item.unit_price)}</td>
-                <td style="color:#ef4444;">- ₹${this._fmt(item.discount_amount)}</td>
-                <td style="font-weight:700; color:var(--teal); text-align:right;">₹${this._fmt(item.quantity * item.unit_price - item.discount_amount)}</td>
+                <td>₹${this._fmt(item.discount_amount)}</td>
+                <td style="text-align:right;">₹${this._fmt(item.quantity * item.unit_price - item.discount_amount)}</td>
             </tr>
         `).join('');
 
@@ -977,108 +977,142 @@ class OpdBillingManager {
         ` : '';
 
         content.innerHTML = `
-            <!-- Info Cards Row -->
-            <div class="detail-header-cards">
-                <div class="info-card">
-                    <i class="fas fa-user-injured"></i>
-                    <label>Patient Details</label>
-                    <div class="value">${this._escape(data.patient_name || data.name)}</div>
-                    <div class="sub-value">ID: ${data.patient_id} | Ph: ${data.mobile || '—'}</div>
-                </div>
-                <div class="info-card">
-                    <i class="fas fa-calendar-check"></i>
-                    <label>Date & Time</label>
-                    <div class="value">${date}</div>
-                    <div class="sub-value">at ${time}</div>
-                </div>
-                <div class="info-card">
-                    <i class="fas fa-user-md"></i>
-                    <label>Consultant</label>
-                    <div class="value">Dr. ${this._escape(data.doctor_name || 'Walking')}</div>
-                    <div class="sub-value">OPD Consultation</div>
-                </div>
-                <div class="info-card">
-                    <i class="fas fa-hands-helping"></i>
-                    <label>Referral & Sponsor</label>
-                    <div class="value">${this._escape(data.referral_type || 'Direct/None')}</div>
-                    <div class="sub-value">
-                        ${data.referred_by ? 'By: ' + this._escape(data.referred_by) : 'No Referral'}
-                        ${data.sponsor ? ' | ' + this._escape(data.sponsor) : ''}
+            <div class="receipt-container ${status === 'paid' ? 'is-paid' : ''}">
+                ${status === 'paid' ? '<div class="watermark-paid">PAID</div>' : ''}
+                
+                <!-- Header -->
+                <div class="receipt-header">
+                    <div class="header-left">
+                        <h2>GM Hospital</h2>
+                        <p>612, Nagarabhavi Main Rd, Vinayaka Layout,<br>
+                        Papreddy Palya, 2nd Stage, Nagarabhaavi,<br>
+                        Bengaluru, Karnataka 560072<br>
+                        OPD Billing Department</p>
+                    </div>
+                    <div class="header-right">
+                        <h3>PAYMENT RECEIPT</h3>
+                        <div class="bill-id">${data.bill_id}</div>
+                        <div class="bill-date">${date} - ${time}</div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Items Table -->
-            <div class="detail-table-container">
-                <table class="detail-table">
+                <!-- Patient Info -->
+                <div class="receipt-info-box">
+                    <div class="info-row">
+                        <span class="info-label">PATIENT</span>
+                        <span class="info-value" style="font-weight:600; color:#1e293b; text-transform:uppercase;">${this._escape(data.patient_name || data.name)}</span>
+                        <span class="info-label">PATIENT ID</span>
+                        <span class="info-value">${data.patient_id}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">PHONE</span>
+                        <span class="info-value">${data.mobile || '—'}</span>
+                        <span class="info-label">DOCTOR</span>
+                        <span class="info-value">Dr. ${this._escape(data.doctor_name || 'Walking')}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">APPOINTMENT</span>
+                        <span class="info-value">${data.appointment_id || '—'}</span>
+                        <span class="info-label">CREATED BY</span>
+                        <span class="info-value">${this._escape(data.created_by || 'System')}</span>
+                    </div>
+                </div>
+
+                <!-- Billing Items -->
+                <div class="receipt-section-title">BILLING ITEMS</div>
+                <table class="receipt-table">
                     <thead>
                         <tr>
-                            <th style="width:45%;">Service / Item Name</th>
-                            <th style="text-align:center;">Qty</th>
-                            <th>Unit Price</th>
-                            <th>Discount</th>
-                            <th style="text-align:right;">Total</th>
+                            <th>#</th>
+                            <th>DESCRIPTION</th>
+                            <th>QTY</th>
+                            <th>RATE (₹)</th>
+                            <th>DISCOUNT (₹)</th>
+                            <th style="text-align:right;">AMOUNT (₹)</th>
                         </tr>
                     </thead>
                     <tbody>
                         ${itemsHtml}
                     </tbody>
                 </table>
-            </div>
 
-            <!-- Footer Details -->
-            <div class="detail-footer" style="display:block;">
-                <div style="display:grid; grid-template-columns: 1fr 340px; gap:2rem;">
-                    <div class="notes-section">
-                        <label><i class="fas fa-sticky-note"></i> Notes & Remarks</label>
-                        <div style="font-size:0.95rem; color:#475569; line-height:1.6; min-height:60px;">
-                            ${this._escape(data.notes || 'No additional remarks provided for this transaction.')}
-                        </div>
-                        <div style="margin-top:1.5rem; padding-top:1rem; border-top:1px solid #f1f5f9; font-size:0.8rem; color:#94a3b8;">
-                            <i class="fas fa-user-edit"></i> Bill Generated By: <strong>${this._escape(data.created_by || 'System')}</strong>
-                        </div>
-                    </div>
-
-                    <div class="summary-card" style="margin-top:0;">
+                <!-- Summary Section -->
+                <div class="receipt-summary-container">
+                    <div class="summary-table">
                         <div class="summary-row">
-                            <span>Subtotal Amount</span>
+                            <span>Subtotal</span>
                             <span>₹${this._fmt(data.subtotal)}</span>
                         </div>
                         <div class="summary-row">
-                            <span>Total Discount</span>
-                            <span style="color:#fb7185;">- ₹${this._fmt(data.discount_amount)}</span>
+                            <span>Discount</span>
+                            <span>₹${this._fmt(data.discount_amount)}</span>
                         </div>
                         <div class="summary-row grand-total">
-                            <span>Grand Total</span>
-                            <span>₹${this._fmt(data.grand_total)}</span>
+                            <span>Receipt Amount</span>
+                            <span>₹${this._fmt(data.amount_paid > 0 ? data.amount_paid : data.grand_total)}</span>
                         </div>
-                        <div class="summary-row payment-info" style="margin-top:1rem;">
-                            <span>Amount Received</span>
-                            <span style="color:#22c55e; font-weight:600;">₹${this._fmt(data.amount_paid)}</span>
-                        </div>
-                        <div class="summary-row payment-info">
-                            <span>Balance Due</span>
-                            <span style="color:${data.balance_due > 0 ? '#fb7185' : '#4ade80'}; font-weight:700;">
-                                ₹${this._fmt(data.balance_due)}
-                            </span>
-                        </div>
-                        
-                        <div style="display:flex; flex-direction:column; gap:10px; margin-top:1.5rem;">
-                            <div class="status-pill ${badgeClass}" style="margin:0; width:100%; justify-content:center; padding:0.6rem;">
-                                <i class="fas fa-${status === 'paid' ? 'check-circle' : 'clock'}"></i> ${displayStatus}
-                            </div>
-                            ${hasBalance ? `
-                            <button onclick="opdBilling.settleBillBalance('${data.bill_id}', ${data.balance_due})" 
-                                    class="btn btn-primary" 
-                                    style="background:linear-gradient(135deg, #22c55e, #16a34a); border:none; width:100%; justify-content:center; padding:0.75rem; font-weight:700; box-shadow:0 4px 12px rgba(34,197,94,0.3);">
-                                <i class="fas fa-money-bill-wave"></i> Pay Outstanding Balance
-                            </button>
-                            ` : ''}
-                        </div>
+                        ${data.payments && data.payments.length > 0 ? `
+                        <div class="summary-row payment-mode">
+                            <span style="color:#16a34a;">Payment Mode</span>
+                            <span style="color:#16a34a;">${data.payments[data.payments.length-1].payment_method}</span>
+                        </div>` : ''}
                     </div>
                 </div>
 
-                ${historySection}
+                <!-- Amount in words -->
+                <div class="amount-in-words">
+                    <span style="color:#64748b; font-weight:600; font-size:0.8rem;">AMOUNT IN WORDS:</span>
+                    <span style="font-weight:600; margin-left:5px; color:#1e293b; font-size:0.85rem;">${this.numberToWords(data.amount_paid > 0 ? data.amount_paid : data.grand_total)}</span>
+                </div>
+
+                <!-- History -->
+                ${payments.length > 0 ? `
+                <div class="receipt-section-title" style="margin-top:2rem;">RECEIPT DETAILS</div>
+                <table class="receipt-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>RECEIPT NO.</th>
+                            <th>DATE</th>
+                            <th>MODE OF PAYMENT</th>
+                            <th style="text-align:right;">AMOUNT (₹)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${payments.map((p, index) => `
+                        <tr>
+                            <td>${index + 1}</td>
+                            <td>${p.receipt_id}</td>
+                            <td>${new Date(p.payment_date).toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' })}</td>
+                            <td>${p.payment_method}</td>
+                            <td style="text-align:right;">₹${this._fmt(p.amount)}</td>
+                        </tr>`).join('')}
+                    </tbody>
+                </table>` : ''}
+
+                <!-- Footer -->
+                <div class="receipt-footer">
+                    <div class="footer-left">
+                        <p style="margin:0; font-size:0.75rem; color:#64748b;">Printed on: <strong style="color:#1e293b;">${new Date().toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric'})}, ${new Date().toLocaleTimeString('en-IN', {hour: '2-digit', minute:'2-digit', hour12:true})}</strong></p>
+                        <p style="margin:0; margin-bottom:1rem; font-size:0.75rem; color:#64748b;">Printed by: <strong style="color:#1e293b;">${this._escape(data.created_by || 'System')}</strong></p>
+                        <p style="margin:0; font-size:0.8rem; color:#94a3b8;">Thank you for choosing GM Hospital.</p>
+                        <p style="margin:0; font-size:0.75rem; color:#94a3b8;">This is a computer-generated bill and does not require a signature.</p>
+                    </div>
+                    <div class="footer-right">
+                        <div class="sign-line"></div>
+                        <p style="margin:0; font-size:0.8rem; color:#64748b; text-align:center;">Authorised Signatory</p>
+                    </div>
+                </div>
+                
+                ${hasBalance ? `
+                <div style="margin-top:2rem;">
+                    <button onclick="opdBilling.settleBillBalance('${data.bill_id}', ${data.balance_due})" 
+                            class="btn btn-primary" 
+                            style="background:linear-gradient(135deg, #22c55e, #16a34a); border:none; width:100%; justify-content:center; padding:0.75rem; font-weight:700; border-radius:8px;">
+                        <i class="fas fa-money-bill-wave"></i> Pay Outstanding Balance (₹${this._fmt(data.balance_due)})
+                    </button>
+                </div>
+                ` : ''}
             </div>
         `;
     }
@@ -1452,8 +1486,24 @@ class OpdBillingManager {
     _fmt(n) { return parseFloat(n || 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
     _escape(s) { return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
     _setText(id, v) { const el = document.getElementById(id); if (el) el.textContent = v; }
-    _renderLoading() { document.getElementById('patientResults').innerHTML = `<div class="no-result"><div class="spinner" style="border-color:rgba(15,164,175,.2);border-top-color:var(--teal);margin:auto;"></div></div>`; }
+    _renderLoading() { document.getElementById('patientResults').innerHTML = `<div class="no-result"><div class="spinner" style="border-color:rgba(31, 107, 74,.2);border-top-color:var(--teal);margin:auto;"></div></div>`; }
     _renderNoResult(msg) { document.getElementById('patientResults').innerHTML = `<div class="no-result"><i class="fas fa-user-search"></i><p>${msg}</p></div>`; }
+
+    numberToWords(num) {
+        if (!num || num === 0) return 'Zero Rupees Only';
+        const a = ['', 'One ', 'Two ', 'Three ', 'Four ', 'Five ', 'Six ', 'Seven ', 'Eight ', 'Nine ', 'Ten ', 'Eleven ', 'Twelve ', 'Thirteen ', 'Fourteen ', 'Fifteen ', 'Sixteen ', 'Seventeen ', 'Eighteen ', 'Nineteen '];
+        const b = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+        const numToWords = (n) => {
+            if (n < 20) return a[n];
+            if (n < 100) return b[Math.floor(n / 10)] + (n % 10 !== 0 ? ' ' + a[n % 10] : '');
+            if (n < 1000) return a[Math.floor(n / 100)] + 'Hundred ' + (n % 100 !== 0 ? 'and ' + numToWords(n % 100) : '');
+            if (n < 100000) return numToWords(Math.floor(n / 1000)) + 'Thousand ' + (n % 1000 !== 0 ? numToWords(n % 1000) : '');
+            if (n < 10000000) return numToWords(Math.floor(n / 100000)) + 'Lakh ' + (n % 100000 !== 0 ? numToWords(n % 100000) : '');
+            return numToWords(Math.floor(n / 10000000)) + 'Crore ' + (n % 10000000 !== 0 ? numToWords(n % 10000000) : '');
+        };
+        const intPart = Math.floor(num);
+        return numToWords(intPart) + 'Rupees Only';
+    }
 }
 
 // ─── Bootstrap ────────────────────────────────────────────────

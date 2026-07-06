@@ -1,4 +1,102 @@
 <?php
+/**
+ * ============================================================
+ * OpdController — API Reference
+ * ============================================================
+ * Base URL : http://localhost/GM_HMS/api
+ * Auth     : Session or Bearer token (Doctors see only their queue)
+ * ------------------------------------------------------------
+ *
+ * 1. GET /api/opd/queue
+ *    No params. Returns TODAY's OPD queue sorted: Pending first, then by time.
+ *    Doctors see only their own patients.
+ *    Response fields: appointment_id, token_number, appointment_time,
+ *      appointment_status, patient_id, first_name, last_name, age, sex,
+ *      phone, doctor_name, specialization, room_number
+ *
+ * 2. GET /api/opd/encounter/{APT-ID}
+ *    Example: GET /api/opd/encounter/APT-20260626-0001
+ *    Response:
+ *      {
+ *        "appointment":  { full appointment + patient basics },
+ *        "consultation": { vital_signs: "{bp,pulse,temp,weight,spo2}", complaint: "..." },
+ *        "prescriptions": [ { name, dosage, frequency, timing, duration, qty } ],
+ *        "general_instructions": "...",
+ *        "lab_orders":   [ { order_id, test_name, priority, status } ],
+ *        "invoices":     [ { invoice_id, amount, status } ]
+ *      }
+ *
+ * 3. POST /api/opd/vitals
+ *    Body:
+ *      {
+ *        "appointment_id":  "APT-20260626-0001",
+ *        "patient_id":      "PID-20260626-001",
+ *        "doctor_id":       "DOC-001",
+ *        "bp":              "120/80",
+ *        "pulse":           "72",
+ *        "temp":            "98.6",
+ *        "weight":          "65",
+ *        "spo2":            "99",
+ *        "chief_complaint": "Fever and body ache"
+ *      }
+ *    Side effect: Sets appointment_status = 1 (In Progress)
+ *
+ * 4. POST /api/opd/invoice
+ *    Body:
+ *      {
+ *        "patient_id":     "PID-20260626-001",
+ *        "doctor_id":      "DOC-001",
+ *        "appointment_id": "APT-20260626-0001",
+ *        "title":          "OPD Consultation",
+ *        "amount":         500,
+ *        "status":         "Paid",
+ *        "payment_method": "Cash"
+ *      }
+ *    Response: { "invoice_id": "INV-20260626-1234" }
+ *
+ * 5. POST /api/opd/lab-request
+ *    Body:
+ *      {
+ *        "patient_id": "PID-20260626-001",
+ *        "doctor_id":  "DOC-001",
+ *        "test_name":  "Complete Blood Count (CBC)",
+ *        "priority":   "Urgent",
+ *        "notes":      "Check for anaemia"
+ *      }
+ *    Response: { "order_id": "LAB-20260626-5678" }
+ *
+ * 6. POST /api/opd/follow-up
+ *    Body:
+ *      {
+ *        "patient_id":      "PID-20260626-001",
+ *        "doctor_id":       "DOC-001",
+ *        "appointment_id":  "APT-20260626-0001",
+ *        "follow_up_date":  "2026-07-10",
+ *        "clinical_notes":  "Patient improving.",
+ *        "notes":           "Return if fever persists.",
+ *        "plan":            "Continue Paracetamol + ORS",
+ *        "dietary_advice":  "Drink plenty of fluids"
+ *      }
+ *    Side effect: Sets appointment_status = Completed
+ *
+ * 7. POST /api/opd/analyze-symptoms    [Calls Google Gemini AI]
+ *    Body:
+ *      {
+ *        "complaint":          "High fever with chills for 3 days",
+ *        "patient_age":        35,
+ *        "patient_gender":     "Male",
+ *        "patient_allergies":  ["Penicillin"]
+ *      }
+ *    Response: { "treatment_plan": "{diagnosis, medications:[...], lifestyle}", "ai_model":"gemini-1.5-flash" }
+ *    Medications object keys: name, dosage, frequency, timing, duration, qty, purpose, warnings
+ *
+ * 8. GET /api/opd/stats
+ *    Response: { "total_opd":42, "active_doctors":8, "revenue_today":21000 }
+ *
+ * 9. GET /api/opd/reports
+ *    Response: { "daily_trend":[...], "doctor_wise":[...], "revenue":{total, count} }
+ * ------------------------------------------------------------
+ */
 namespace GM_HMS\Controllers\api;
 
 use GM_HMS\Controllers\BaseController;
@@ -6,10 +104,10 @@ use Exception;
 
 /**
  * OPD Controller
- * 
+ *
  * Aggregates logic for the OPD Reception View.
  * Handles Queue, Vitals, Billing, Prescriptions, and Lab Requests.
- * 
+ *
  * @package GM_HMS\Controllers\api
  * @version 1.1.0
  */
@@ -160,6 +258,8 @@ class OpdController extends BaseController
     {
         $this->restrictMethod('POST');
         $data = $this->getJsonInput(); // Validate required fields if necessary
+        
+        error_log("SAVE VITALS PAYLOAD: " . print_r($data, true));
 
         try {
             // Check if consultation exists for this appointment
@@ -177,7 +277,7 @@ class OpdController extends BaseController
                 // Update
                 $this->db->update(
                     'consultations',
-                    ['vital_signs' => $vitalsJson, 'soap_subjective' => $data['chief_complaint'] ?? ''],
+                    ['vital_signs' => $vitalsJson, 'complaint' => $data['chief_complaint'] ?? '', 'patient_id' => $data['patient_id']],
                     'consultation_id = ?',
                     [$exists['consultation_id']]
                 );
@@ -193,15 +293,15 @@ class OpdController extends BaseController
                     'consultation_date' => date('Y-m-d'),
                     'consultation_time' => date('H:i:s'),
                     'vital_signs' => $vitalsJson,
-                    'soap_subjective' => $data['chief_complaint'] ?? '',
-                    'status' => 'In Progress'
+                    'complaint' => $data['chief_complaint'] ?? '',
+                    'status' => 1
                 ]);
             }
 
-            // Update Appointment Status to 'In Progress'
+            // Update Appointment Status to 'In Progress' (1 means Active/In Progress)
             $this->db->update(
                 'appointments',
-                ['appointment_status' => 'In Progress'],
+                ['appointment_status' => 1],
                 'appointment_id = ?',
                 [$data['appointment_id']]
             );

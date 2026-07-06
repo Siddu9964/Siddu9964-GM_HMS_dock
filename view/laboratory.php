@@ -8,6 +8,8 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="/GM_HMS/assets/css/gm-theme.css">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Laboratory Services - GM HMS</title>
@@ -18,6 +20,9 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Common Admin CSS -->
+    <link rel="stylesheet" href="assets/css/admin_common.css">
     
     <style>
         * { font-family: 'Inter', sans-serif; }
@@ -90,7 +95,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
                             <span class="px-3 py-1 bg-slate-100 text-slate-700 text-[10px] font-black uppercase tracking-widest rounded-full">Diagnostics Hub</span>
                         </div>
                         <h1 class="text-4xl font-black tracking-tight text-slate-900 flex items-center gap-4">
-                            <div class="p-3 bg-slate-900 rounded-2xl shadow-xl shadow-slate-200">
+                            <div class="p-3 rounded-2xl shadow-xl shadow-slate-200" style="background: var(--gm-accent);">
                                 <i class="fas fa-microscope text-white"></i>
                             </div>
                             Laboratory Services
@@ -98,7 +103,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
                         <p class="text-slate-500 mt-2 font-medium">Manage all diagnostic tests and radiology pricing.</p>
                     </div>
                     <div class="flex items-center gap-4">
-                        <button onclick="openCreateModal()" class="px-6 py-3 bg-[#0f172a] hover:bg-slate-800 text-white font-black rounded-xl shadow-lg shadow-slate-200 transition-all flex items-center gap-2">
+                        <button onclick="openCreateModal()" class="px-6 py-3 text-white font-black rounded-xl shadow-lg transition-all flex items-center gap-2" style="background: var(--gm-accent);">
                             <i class="fas fa-plus"></i> Add New Service
                         </button>
                         <button onclick="fetchServices()" class="p-3 bg-white border border-slate-200 rounded-xl text-slate-600 hover:text-slate-900 transition-all shadow-sm">
@@ -108,7 +113,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
                 </div>
 
                 <!-- Main Container -->
-                <div class="bg-white rounded-[2rem] shadow-2xl shadow-slate-200/50 border border-slate-100 overflow-hidden flex flex-col animate-fade-in">
+                <div class="table-container mb-8">
                     <!-- Search & Tabs -->
                     <div class="p-6 bg-slate-50/50 border-b border-slate-100 flex flex-col md:flex-row justify-between items-center gap-4">
                         <div class="flex items-center border-b-2 border-slate-100 overflow-x-auto w-full md:w-auto">
@@ -123,18 +128,21 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
                     </div>
 
                     <!-- Statistics -->
-                    <div class="grid grid-cols-3 divide-x divide-slate-100 border-b border-slate-100 bg-white">
-                        <div class="p-6">
-                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Total Lab</p>
-                            <h4 class="text-2xl font-black text-slate-900" id="stat-lab-count">0</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 px-6 pt-6">
+                        <div class="bento-card">
+                            <div class="bento-title">Total Lab</div>
+                            <h4 class="bento-value" id="stat-lab-count">0</h4>
+                            <i class="fas fa-microscope bento-icon"></i>
                         </div>
-                        <div class="p-6">
-                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Radiology</p>
-                            <h4 class="text-2xl font-black text-slate-900" id="stat-radiology-count">0</h4>
+                        <div class="bento-card">
+                            <div class="bento-title">Radiology</div>
+                            <h4 class="bento-value" id="stat-radiology-count">0</h4>
+                            <i class="fas fa-x-ray bento-icon"></i>
                         </div>
-                        <div class="p-6">
-                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Others</p>
-                            <h4 class="text-2xl font-black text-slate-900" id="stat-other-count">0</h4>
+                        <div class="bento-card">
+                            <div class="bento-title">Others</div>
+                            <h4 class="bento-value" id="stat-other-count">0</h4>
+                            <i class="fas fa-vial bento-icon"></i>
                         </div>
                     </div>
 
@@ -216,9 +224,9 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
     <!-- Create Modal -->
     <div id="create-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[9999] flex items-center justify-center p-4">
         <div class="bg-white w-full max-w-2xl rounded-[2.5rem] shadow-2xl overflow-hidden animate-fade-in border border-white/20">
-            <div class="p-8 bg-slate-50/50 border-b border-slate-100 flex justify-between items-center text-slate-900">
+            <div class="p-4 md:p-6 bg-slate-50/50 border-b border-slate-100 flex justify-between items-center text-slate-900">
                 <div class="flex items-center gap-4">
-                    <div class="h-12 w-12 bg-[#0f172a] rounded-2xl flex items-center justify-center text-white text-xl shadow-lg">
+                    <div class="h-12 w-12 rounded-2xl flex items-center justify-center text-white text-xl shadow-lg" style="background: var(--gm-accent);">
                         <i class="fas fa-plus"></i>
                     </div>
                     <div>
@@ -230,7 +238,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
                     <i class="fas fa-times text-xl"></i>
                 </button>
             </div>
-            <form id="create-service-form" class="p-8 space-y-6">
+            <form id="create-service-form" class="p-4 md:p-6 space-y-6">
                 <div class="space-y-2">
                     <label class="text-xs font-black text-slate-400 uppercase tracking-widest">Select Category</label>
                     <select id="create-service-category" name="category" onchange="renderCreateFields()" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl font-bold focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all">
@@ -248,7 +256,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
                     <button type="button" onclick="closeCreateModal()" class="px-8 py-3 text-slate-500 font-bold hover:text-slate-900 transition-all">
                         Cancel
                     </button>
-                    <button type="submit" class="px-10 py-3 bg-[#0f172a] hover:bg-slate-800 text-white font-black rounded-xl shadow-lg shadow-slate-200 transition-all transform hover:-translate-y-1 active:scale-95 flex items-center gap-2">
+                    <button type="submit" class="px-10 py-3 text-white font-black rounded-xl shadow-lg shadow-slate-200 transition-all transform hover:-translate-y-1 active:scale-95 flex items-center gap-2" style="background: var(--gm-accent);">
                         <i class="fas fa-save"></i>
                         Add Service
                     </button>
@@ -260,9 +268,9 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
     <!-- Edit Modal -->
     <div id="edit-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[9999] flex items-center justify-center p-4">
         <div class="bg-white w-full max-w-2xl rounded-[2.5rem] shadow-2xl overflow-hidden animate-fade-in border border-white/20">
-            <div class="p-8 bg-slate-50/50 border-b border-slate-100 flex justify-between items-center text-slate-900">
+            <div class="p-4 md:p-6 bg-slate-50/50 border-b border-slate-100 flex justify-between items-center text-slate-900">
                 <div class="flex items-center gap-4">
-                    <div class="h-12 w-12 bg-[#0f172a] rounded-2xl flex items-center justify-center text-white text-xl shadow-lg">
+                    <div class="h-12 w-12 rounded-2xl flex items-center justify-center text-white text-xl shadow-lg" style="background: var(--gm-accent);">
                         <i class="fas fa-edit"></i>
                     </div>
                     <div>
@@ -274,7 +282,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
                     <i class="fas fa-times text-xl"></i>
                 </button>
             </div>
-            <form id="edit-service-form" class="p-8 space-y-6">
+            <form id="edit-service-form" class="p-4 md:p-6 space-y-6">
                 <input type="hidden" name="service_type" id="edit-service-type">
                 <input type="hidden" name="service_id" id="edit-service-id">
                 <div id="edit-dynamic-fields" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
@@ -282,7 +290,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
                     <button type="button" onclick="closeEditModal()" class="px-8 py-3 text-slate-500 font-bold hover:text-slate-900 transition-all">
                         Cancel
                     </button>
-                    <button type="submit" class="px-10 py-3 bg-[#0f172a] hover:bg-slate-800 text-white font-black rounded-xl shadow-lg shadow-slate-200 transition-all transform hover:-translate-y-1 active:scale-95 flex items-center gap-2">
+                    <button type="submit" class="px-10 py-3 text-white font-black rounded-xl shadow-lg shadow-slate-200 transition-all transform hover:-translate-y-1 active:scale-95 flex items-center gap-2" style="background: var(--gm-accent);">
                         <i class="fas fa-save"></i>
                         Save Changes
                     </button>
@@ -339,13 +347,14 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
         function renderTable(type, tbodyId) {
             const tbody = $(`#${tbodyId}`);
             tbody.empty();
+            let rowsHtml = '';
             allServices[type].forEach((item, index) => {
                 let row = `<tr class="searchable">
                     <td class="text-slate-400 font-bold">${index + 1}</td>
                     <td><span class="px-2 py-1 bg-slate-100 rounded text-xs font-bold text-slate-600">${item.service_id}</span></td>
                     <td class="font-bold text-slate-900">${item.test_name || item.billing_name}</td>`;
                 
-                if (type === 'radiology') row += `<td><span class="px-2 py-1 bg-purple-50 text-purple-600 rounded text-[10px] font-black uppercase tracking-widest">${item.modality_name}</span></td>`;
+                if (type === 'radiology') row += `<td><span class="px-2 py-1 rounded text-[10px] font-black uppercase tracking-widest" style="background: #e2f2eb; color: var(--gm-accent);">${item.modality_name}</span></td>`;
                 
                 if (type === 'lab') {
                     row += `<td class="text-right price-tag">₹${parseFloat(item.opd_rate).toFixed(2)}</td>
@@ -368,7 +377,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
 
                 row += `<td class="text-center">
                     <div class="flex items-center justify-center gap-2">
-                        <button onclick="openEditModal('${type}', '${item.service_id}')" class="h-9 w-9 bg-slate-50 text-slate-400 hover:bg-[#0f172a] hover:text-white rounded-xl transition-all shadow-sm">
+                        <button onclick="openEditModal('${type}', '${item.service_id}')" class="h-9 w-9 bg-slate-50 text-slate-400 hover:text-white rounded-xl transition-all shadow-sm" onmouseover="this.style.background='var(--gm-accent)'" onmouseout="this.style.background=''">
                             <i class="fas fa-edit"></i>
                         </button>
                         <button onclick="deleteService('${type}', '${item.service_id}')" class="h-9 w-9 bg-slate-50 text-slate-400 hover:bg-red-600 hover:text-white rounded-xl transition-all shadow-sm">
@@ -376,8 +385,9 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
                         </button>
                     </div>
                 </td></tr>`;
-                tbody.append(row);
+                rowsHtml += row;
             });
+            tbody.html(rowsHtml);
         }
 
         function switchTab(tab, el) {

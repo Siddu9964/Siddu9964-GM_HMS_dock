@@ -5,59 +5,55 @@ if (!isset($basePath)) {
 }
 ?>
 <!-- Top Navbar -->
-<header class="bg-white shadow-sm sticky top-0 z-30">
-    <div class="flex items-center justify-between px-8 py-4">
-        <div class="flex items-center flex-1">
-            <button id="sidebarToggle" class="text-gray-600 hover:text-gray-800 mr-4 lg:hidden" onclick="toggleSidebar()">
-                <i class="fas fa-bars text-xl"></i>
-            </button>
-            <div class="relative flex-1 max-w-md">
-                <input type="text" placeholder="Search patients, doctors, appointments..." 
-                       class="w-full px-4 py-2 pl-10 border-2 border-gray-200 rounded-lg focus:border-purple-500 focus:outline-none">
-                <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
-            </div>
+<header style="background: var(--gm-bg); border-bottom: 1px solid var(--gm-glass-border); padding: 1.1rem 1.5rem; height: 80px; position: sticky; top: 0; z-index: 40; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
+    <div style="display: flex; align-items: center; flex: 1;">
+        <button id="sidebarToggle" class="text-gray-600 hover:text-gray-800 mr-4 lg:hidden" onclick="toggleSidebar()">
+            <i class="fas fa-bars text-xl"></i>
+        </button>
+        <div class="relative flex-1 max-w-md" style="position: relative;">
+            <i class="fas fa-search" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--gm-text-light);"></i>
+            <input type="text" placeholder="Search patients, doctors, appointments..." 
+                   style="width: 100%; padding: 0.6rem 1rem 0.6rem 2.5rem; border: 1px solid var(--gm-border); border-radius: var(--gm-r-md); background: var(--gm-bg); font-size: 0.9rem; color: var(--gm-text); outline: none; transition: border-color 0.2s;">
         </div>
+    </div>
+    
+    <div style="display: flex; align-items: center; gap: 1.5rem;">
+        <!-- Notifications -->
+        <button style="position: relative; color: var(--gm-text-light); transition: color 0.2s; background: none; border: none; cursor: pointer;" onmouseover="this.style.color='var(--gm-accent)'" onmouseout="this.style.color='var(--gm-text-light)'">
+            <i class="fas fa-bell" style="font-size: 1.25rem;"></i>
+            <span style="position: absolute; top: -4px; right: -6px; background: var(--gm-danger); color: white; font-size: 0.65rem; font-weight: 700; height: 16px; min-width: 16px; border-radius: 10px; display: flex; align-items: center; justify-content: center; border: 2px solid var(--gm-white);">5</span>
+        </button>
         
-        <div class="flex items-center space-x-6">
-            <!-- Notifications -->
-            <div class="relative">
-                <button class="text-gray-600 hover:text-gray-800 relative">
-                    <i class="fas fa-bell text-xl"></i>
-                    <span class="notification-badge">5</span>
-                </button>
-            </div>
-            
-            <!-- Messages -->
-            <div class="relative">
-                <button class="text-gray-600 hover:text-gray-800 relative">
-                    <i class="fas fa-envelope text-xl"></i>
-                    <span class="notification-badge">3</span>
-                </button>
-            </div>
-            
-            <!-- User Profile -->
-            <div class="relative" id="admin-profile-wrapper">
-                <button onclick="toggleDropdown()" class="flex items-center space-x-3" id="admin-profile-btn">
-                    <img src="https://ui-avatars.com/api/?name=<?php echo urlencode($_SESSION['full_name'] ?? 'Admin'); ?>&background=667eea&color=fff" 
-                         class="w-10 h-10 rounded-full">
-                    <div class="text-left hidden md:block">
-                        <p class="text-sm font-semibold text-gray-800"><?php echo htmlspecialchars($_SESSION['full_name'] ?? 'Admin User'); ?></p>
-                        <p class="text-xs text-gray-500"><?php echo htmlspecialchars($_SESSION['designation'] ?? 'Administrator'); ?></p>
-                    </div>
-                    <i class="fas fa-chevron-down text-gray-400"></i>
-                </button>
-                <div id="userDropdown" class="dropdown-menu">
-                    <a href="javascript:void(0)" onclick="typeof toggleProfileModal === 'function' && toggleProfileModal()" class="block px-4 py-3 hover:bg-gray-50">
-                        <i class="fas fa-user mr-2"></i> Profile
-                    </a>
-                    <a href="javascript:void(0)" onclick="toggleChangePasswordModal()" class="block px-4 py-3 hover:bg-gray-50">
-                        <i class="fas fa-key mr-2"></i> Change Password
-                    </a>
-                    <hr>
-                    <a href="<?php echo $basePath; ?>logout.php" class="block px-4 py-3 hover:bg-gray-50 text-red-600">
-                        <i class="fas fa-sign-out-alt mr-2"></i> Logout
-                    </a>
+        <!-- Messages -->
+        <button style="position: relative; color: var(--gm-text-light); transition: color 0.2s; background: none; border: none; cursor: pointer;" onmouseover="this.style.color='var(--gm-accent)'" onmouseout="this.style.color='var(--gm-text-light)'">
+            <i class="fas fa-envelope" style="font-size: 1.25rem;"></i>
+            <span style="position: absolute; top: -4px; right: -6px; background: var(--gm-primary); color: white; font-size: 0.65rem; font-weight: 700; height: 16px; min-width: 16px; border-radius: 10px; display: flex; align-items: center; justify-content: center; border: 2px solid var(--gm-white);">3</span>
+        </button>
+        
+        <!-- User Profile -->
+        <div class="relative" id="admin-profile-wrapper" style="position: relative; margin-left: 0.5rem; padding-left: 1.5rem; border-left: 1px solid var(--gm-glass-border);">
+            <button onclick="toggleDropdown()" id="admin-profile-btn" style="display: flex; align-items: center; gap: 0.75rem; background: none; border: none; cursor: pointer; text-align: left;">
+                <img src="https://ui-avatars.com/api/?name=<?php echo urlencode($_SESSION['full_name'] ?? 'Admin'); ?>&background=1f6b4a&color=fff&bold=true" 
+                     style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--gm-glass-border); object-fit: cover;">
+                <div class="hidden md:block">
+                    <p style="margin: 0; font-size: 0.9rem; font-weight: 700; color: var(--gm-text);"><?php echo htmlspecialchars($_SESSION['full_name'] ?? 'Admin User'); ?></p>
+                    <p style="margin: 0; font-size: 0.75rem; font-weight: 600; color: var(--gm-text-light);"><?php echo htmlspecialchars($_SESSION['designation'] ?? 'Administrator'); ?></p>
                 </div>
+                <i class="fas fa-chevron-down" style="color: var(--gm-text-light); font-size: 0.8rem; margin-left: 0.25rem;"></i>
+            </button>
+            
+            <!-- Dropdown -->
+            <div id="userDropdown" style="display: none; position: absolute; top: 110%; right: 0; background: var(--gm-white); border-radius: var(--gm-r-md); box-shadow: var(--gm-shadow); min-width: 220px; border: 1px solid var(--gm-glass-border); overflow: hidden; z-index: 1000;">
+                <a href="javascript:void(0)" onclick="typeof toggleProfileModal === 'function' && toggleProfileModal()" style="display: flex; align-items: center; padding: 0.8rem 1rem; color: var(--gm-text); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: background 0.2s;" onmouseover="this.style.background='var(--gm-bg)'" onmouseout="this.style.background='transparent'">
+                    <i class="fas fa-user" style="width: 20px; color: var(--gm-text-light); margin-right: 0.5rem;"></i> Profile
+                </a>
+                <a href="javascript:void(0)" onclick="toggleChangePasswordModal()" style="display: flex; align-items: center; padding: 0.8rem 1rem; color: var(--gm-text); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: background 0.2s;" onmouseover="this.style.background='var(--gm-bg)'" onmouseout="this.style.background='transparent'">
+                    <i class="fas fa-key" style="width: 20px; color: var(--gm-text-light); margin-right: 0.5rem;"></i> Change Password
+                </a>
+                <div style="height: 1px; background: var(--gm-glass-border); margin: 0.25rem 0;"></div>
+                <a href="<?php echo $basePath; ?>logout.php" style="display: flex; align-items: center; padding: 0.8rem 1rem; color: var(--gm-danger); text-decoration: none; font-size: 0.9rem; font-weight: 600; transition: background 0.2s;" onmouseover="this.style.background='var(--gm-danger-light)'" onmouseout="this.style.background='transparent'">
+                    <i class="fas fa-sign-out-alt" style="width: 20px; margin-right: 0.5rem;"></i> Logout
+                </a>
             </div>
         </div>
     </div>
@@ -66,7 +62,7 @@ if (!isset($basePath)) {
 <!-- Change Password Modal -->
 <div id="adminChangePasswordModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); backdrop-filter:blur(5px); z-index:10002; align-items:center; justify-content:center;">
     <div style="background:white; width:100%; max-width:400px; border-radius:20px; overflow:hidden; position:relative; box-shadow:0 25px 50px -12px rgba(0,0,0,0.25);">
-        <div style="height:100px; background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); position:relative;">
+        <div style="height:100px; background:#1f6b4a; position:relative;">
             <button onclick="toggleChangePasswordModal()" style="position:absolute; top:15px; right:15px; background:rgba(255,255,255,0.2); border:none; color:white; font-size:24px; width:32px; height:32px; border-radius:50%; cursor:pointer; line-height:1;">&times;</button>
             <h3 style="color:white; margin:0; position:absolute; bottom:15px; left:30px; font-size:1.25rem; font-weight:700;">Change Password</h3>
         </div>
@@ -94,7 +90,7 @@ if (!isset($basePath)) {
                 <div id="admin-pw-message" style="display:none; margin-bottom:10px; padding:10px; border-radius:8px; font-size:0.875rem;"></div>
                 <div style="display:flex; gap:15px; margin-top:20px;">
                     <button type="button" onclick="toggleChangePasswordModal()" style="flex:1; padding:12px; border-radius:12px; font-weight:600; font-size:14px; border:none; cursor:pointer; background:#e9ecef; color:#495057;">Cancel</button>
-                    <button type="submit" id="admin-pw-submit-btn" style="flex:1; padding:12px; border-radius:12px; font-weight:600; font-size:14px; border:none; cursor:pointer; background:#667eea; color:white;">Update Password</button>
+                    <button type="submit" id="admin-pw-submit-btn" style="flex:1; padding:12px; border-radius:12px; font-weight:600; font-size:14px; border:none; cursor:pointer; background:#1f6b4a; color:white;">Update Password</button>
                 </div>
             </form>
         </div>
@@ -102,37 +98,9 @@ if (!isset($basePath)) {
 </div>
 
 <style>
-.notification-badge {
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    background: #ef4444;
-    color: white;
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 10px;
-    font-weight: bold;
-}
-
-.dropdown-menu {
-    display: none;
-    position: absolute;
-    right: 0;
-    top: 100%;
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-    min-width: 200px;
-    z-index: 1000;
-    margin-top: 8px;
-}
-
-.dropdown-menu.show {
-    display: block;
+/* Base dropdown logic */
+#userDropdown.show {
+    display: block !important;
 }
 
 @media (max-width: 1023px) {

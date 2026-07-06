@@ -38,19 +38,19 @@ include 'includes/ph_head.php';
   --glass-border: 1px solid rgba(255, 255, 255, 0.4);
 }
 
-.ph-page-body { background: var(--med-bg); font-family: 'Plus Jakarta Sans', sans-serif; padding: 2rem !important; }
+.ph-page-body { background: var(--med-bg); font-family: 'Plus Jakarta Sans', sans-serif; padding: 1.75rem !important; }
 
 /* ===== BENTO KPI GRID ===== */
-.bento-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-bottom: 2.5rem; }
+.bento-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 2rem; }
 .bento-card {
   background: var(--med-surface); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-  border: var(--glass-border); border-radius: 24px; padding: 1.75rem; box-shadow: var(--glass-shadow);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column;
+  border: var(--glass-border); border-radius: 16px; padding: 1rem 1.25rem; box-shadow: var(--glass-shadow);
+  transition: all 0.3s ease; display: flex; flex-direction: row; align-items: center; gap: 1rem;
 }
-.bento-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.08); }
-.bento-icon { width: 52px; height: 52px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1.25rem; }
-.bento-val { font-size: 2.5rem; font-weight: 800; color: var(--med-text-main); line-height: 1; }
-.bento-lbl { font-size: 0.85rem; font-weight: 700; color: var(--med-text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 0.5rem; }
+.bento-card:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(0,0,0,0.06); }
+.bento-icon { width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.15rem; flex-shrink: 0; }
+.bento-val { font-size: 1.5rem; font-weight: 800; color: var(--med-text-main); line-height: 1; margin-bottom: 0.15rem; }
+.bento-lbl { font-size: 0.7rem; font-weight: 700; color: var(--med-text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0; }
 
 /* ===== SMART TABLE ===== */
 .smart-table-container { background: white; border-radius: 28px; box-shadow: var(--glass-shadow); border: var(--glass-border); overflow: hidden; }
@@ -115,18 +115,24 @@ include 'includes/ph_head.php';
 <div class="bento-grid">
   <div class="bento-card">
     <div class="bento-icon" style="background: var(--med-primary-light); color: var(--med-primary-dark);"><i class="fas fa-handshake"></i></div>
-    <div class="bento-val"><?= $totalSuppliers ?></div>
-    <div class="bento-lbl">Total Partners</div>
+    <div style="flex: 1;">
+      <div class="bento-val"><?= $totalSuppliers ?></div>
+      <div class="bento-lbl">Total Partners</div>
+    </div>
   </div>
   <div class="bento-card">
     <div class="bento-icon" style="background: #DCFCE7; color: #15803D;"><i class="fas fa-check-shield"></i></div>
-    <div class="bento-val"><?= $activeSuppliers ?></div>
-    <div class="bento-lbl">Active & Verified</div>
+    <div style="flex: 1;">
+      <div class="bento-val"><?= $activeSuppliers ?></div>
+      <div class="bento-lbl">Active & Verified</div>
+    </div>
   </div>
   <div class="bento-card">
     <div class="bento-icon" style="background: #E0F2FE; color: #0369A1;"><i class="fas fa-map-marker-alt"></i></div>
-    <div class="bento-val"><?= $cityCount ?></div>
-    <div class="bento-lbl">Cities Covered</div>
+    <div style="flex: 1;">
+      <div class="bento-val"><?= $cityCount ?></div>
+      <div class="bento-lbl">Cities Covered</div>
+    </div>
   </div>
 </div>
 

@@ -229,25 +229,8 @@ function toggleSidebar() {
     let sidebar = document.getElementById('receptionSidebar');
     if (!sidebar) return;
 
-    const isOpen = sidebar.style.transform === 'translateX(0px)' ||
-        sidebar.classList.contains('translate-x-0') ||
-        sidebar.classList.contains('open');
-
-    if (isOpen && !sidebar.classList.contains('-translate-x-full')) {
-        // Close sidebar
-        sidebar.classList.add('-translate-x-full');
-        sidebar.classList.remove('translate-x-0');
-        sidebar.classList.remove('open');
-        removeSidebarOverlay();
-        document.body.style.overflow = '';
-    } else {
-        // Open sidebar
-        sidebar.classList.remove('-translate-x-full');
-        sidebar.classList.add('translate-x-0');
-        sidebar.classList.add('open');
-        createSidebarOverlay();
-        document.body.style.overflow = 'hidden';
-    }
+    // Toggle a class on body to control layout
+    document.body.classList.toggle('sidebar-collapsed');
 }
 
 function createSidebarOverlay() {

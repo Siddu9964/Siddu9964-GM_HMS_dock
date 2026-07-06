@@ -18,7 +18,7 @@ include 'includes/ph_head.php';
 .preview-cards-wrap::-webkit-scrollbar{width:5px;}
 .preview-cards-wrap::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:4px;}
 .pv-card{background:#fff;border:1.5px solid var(--ph-border);border-radius:10px;padding:.6rem .85rem;display:grid;grid-template-columns:auto 1fr repeat(4,auto);align-items:center;gap:.6rem 1rem;transition:.15s;}
-.pv-card:hover{border-color:var(--ph-primary);box-shadow:0 2px 8px rgba(15,164,175,.1);}
+.pv-card:hover{border-color:var(--ph-primary);box-shadow:0 2px 8px rgba(31, 107, 74,.1);}
 .pv-row-num{width:24px;height:24px;background:#F1F5F9;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:800;color:var(--ph-muted);flex-shrink:0;}
 .pv-name{font-size:.82rem;font-weight:700;color:var(--ph-text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .pv-sub{font-size:.66rem;color:var(--ph-muted);margin-top:.1rem;}
@@ -29,17 +29,17 @@ include 'includes/ph_head.php';
 .pv-exp{background:#fef9c3;color:#92400e;}
 .pv-exp.danger{background:#fee2e2;color:#b91c1c;}
 .pv-exp.ok{background:#dcfce7;color:#15803d;}
-.imp-hero{background:linear-gradient(135deg,#0FA4AF,#024D55);border-radius:14px;padding:1.1rem 1.5rem;color:#fff;display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:1.25rem;}
-.imp-hero h1{font-size:1.1rem;font-weight:800;margin:0;}
-.imp-hero p{font-size:.75rem;opacity:.85;margin:.15rem 0 0;}
+.imp-hero{background:#f3efe6;border-radius:14px;padding:.8rem 1.25rem;color:#0f172a;display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:1.25rem;}
+.imp-hero h1{font-size:1.05rem;font-weight:800;margin:0;color:#1f6b4a;}
+.imp-hero p{font-size:.75rem;color:#64748b;margin:.15rem 0 0;}
 .step-wizard{display:flex;background:#fff;border:1px solid var(--ph-border);border-radius:12px;overflow:hidden;margin-bottom:1.25rem;box-shadow:var(--ph-shadow);}
 .wz-step{flex:1;display:flex;align-items:center;gap:.5rem;padding:.65rem .9rem;border-right:1px solid var(--ph-border);transition:.2s;}
 .wz-step:last-child{border-right:none;}
 .wz-num{width:24px;height:24px;border-radius:50%;background:#F1F5F9;color:var(--ph-muted);font-size:.7rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.2s;}
 .wz-lbl{font-size:.73rem;font-weight:700;color:var(--ph-muted);}
 .wz-sub{font-size:.62rem;color:var(--ph-muted);opacity:.65;}
-.wz-step.active{background:rgba(15,164,175,.06);}
-.wz-step.active .wz-num{background:var(--ph-primary);color:#fff;box-shadow:0 3px 10px rgba(15,164,175,.4);}
+.wz-step.active{background:rgba(31, 107, 74,.06);}
+.wz-step.active .wz-num{background:var(--ph-primary);color:#fff;box-shadow:0 3px 10px rgba(31, 107, 74,.4);}
 .wz-step.active .wz-lbl{color:var(--ph-primary);}
 .wz-step.done .wz-num{background:#10b981;color:#fff;}
 .wz-step.done .wz-lbl{color:#10b981;}
@@ -62,7 +62,7 @@ include 'includes/ph_head.php';
 .fmap-hint{font-size:.68rem;color:var(--ph-muted);margin-top:.1rem;}
 .fmap-sample-tag{display:inline-block;margin-top:.2rem;background:#f1f5f9;border-radius:4px;padding:.1rem .45rem;font-size:.7rem;font-family:monospace;color:#334155;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .fmap-select{flex:1;border:1.5px solid var(--ph-border);border-radius:8px;padding:.4rem .65rem;font-size:.82rem;font-weight:600;background:#fff;cursor:pointer;transition:.2s;min-width:0;}
-.fmap-select:focus{outline:none;border-color:var(--ph-primary);box-shadow:0 0 0 3px rgba(15,164,175,.1);}
+.fmap-select:focus{outline:none;border-color:var(--ph-primary);box-shadow:0 0 0 3px rgba(31, 107, 74,.1);}
 .fmap-select.sel-ok{border-color:#10b981;background:#f0fdf4;color:#065f46;}
 .fmap-select.sel-empty{border-color:#fca5a5;}
 .fmap-badge{flex-shrink:0;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.7rem;}
@@ -72,7 +72,7 @@ include 'includes/ph_head.php';
 .fmap-ready-banner{background:linear-gradient(135deg,#10b981,#059669);color:#fff;border-radius:10px;padding:.75rem 1rem;display:flex;align-items:center;gap:.75rem;margin-bottom:.75rem;font-weight:700;font-size:.85rem;}
 .fmap-err-banner{background:#fee2e2;color:#b91c1c;border-radius:10px;padding:.65rem 1rem;display:flex;align-items:center;gap:.6rem;margin-bottom:.75rem;font-weight:700;font-size:.82rem;border:1.5px solid #fca5a5;}
 .fmap-progress{height:6px;background:#e2e8f0;border-radius:99px;overflow:hidden;margin-bottom:1rem;}
-.fmap-progress-bar{height:100%;background:linear-gradient(90deg,#0FA4AF,#10b981);border-radius:99px;transition:.4s;}
+.fmap-progress-bar{height:100%;background:linear-gradient(90deg,#1f6b4a,#10b981);border-radius:99px;transition:.4s;}
 .preview-wrap{overflow-x:auto;border-radius:8px;border:1px solid var(--ph-border);max-height:320px;overflow-y:auto;}
 .preview-tbl{font-size:.7rem;width:100%;border-collapse:collapse;}
 .preview-tbl th{background:var(--ph-primary);color:#fff;padding:.35rem .6rem;white-space:nowrap;font-weight:700;font-size:.65rem;text-transform:uppercase;letter-spacing:.04em;position:sticky;top:0;}
@@ -102,10 +102,10 @@ include 'includes/ph_head.php';
     <p>Bulk import products from CSV/Excel or export the full catalogue</p>
   </div>
   <div class="d-flex gap-2 align-items-center">
-    <button class="ph-btn ph-btn-sm" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);" onclick="downloadTemplate()">
+    <button class="ph-btn ph-btn-sm" style="background:#fff;color:#1f6b4a;border:1px solid #e2e8f0;box-shadow:0 1px 3px rgba(0,0,0,.05);" onclick="downloadTemplate()">
       <i class="fas fa-download"></i> Template
     </button>
-    <a href="products.php" class="ph-btn ph-btn-sm" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);">
+    <a href="products.php" class="ph-btn ph-btn-sm" style="background:#fff;color:#1f6b4a;border:1px solid #e2e8f0;box-shadow:0 1px 3px rgba(0,0,0,.05);">
       <i class="fas fa-arrow-left"></i> Back
     </a>
   </div>

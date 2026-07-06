@@ -92,12 +92,14 @@ try {
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="/GM_HMS/assets/css/gm-theme.css">
+
     <meta charset="UTF-8">
     <title>OPD Receipt - <?php echo htmlspecialchars($invoice['invoice_id']); ?></title>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 14px; color: #333; max-width: 800px; margin: 0 auto; padding: 20px; }
-        .header { text-align: center; border-bottom: 2px solid #056674; padding-bottom: 10px; margin-bottom: 20px; }
-        .header h1 { margin: 0; color: #056674; font-size: 24px; text-transform: uppercase; }
+        .header { text-align: center; border-bottom: 2px solid #144d34; padding-bottom: 10px; margin-bottom: 20px; }
+        .header h1 { margin: 0; color: #144d34; font-size: 24px; text-transform: uppercase; }
         .header p { margin: 5px 0; font-size: 14px; color: #666; }
         
         .invoice-info { display: flex; justify-content: space-between; margin-bottom: 20px; }
@@ -107,11 +109,11 @@ try {
         
         .receipt-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
         .receipt-table th, .receipt-table td { border: 1px solid #ddd; padding: 12px; text-align: left; }
-        .receipt-table th { background-color: #f8f9fa; color: #056674; }
+        .receipt-table th { background-color: #f8f9fa; color: #144d34; }
         .amount-row td { font-size: 16px; font-weight: bold; }
         
         .footer { margin-top: 40px; text-align: center; font-size: 12px; color: #999; border-top: 1px solid #eee; padding-top: 20px; }
-        .print-btn { background: #056674; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 14px; }
+        .print-btn { background: #144d34; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 14px; }
         
         @media print {
             .print-btn { display: none; }

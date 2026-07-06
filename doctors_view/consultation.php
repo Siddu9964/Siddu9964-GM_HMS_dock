@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Doctor') {
+if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], ['Doctor', 'admin', 'Admin'])) {
     header("Location: /GM_HMS/login.php");
     exit();
 }
@@ -8,6 +8,8 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Doctor') {
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="/GM_HMS/assets/css/gm-theme.css">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clinical Consultation - GM HMS</title>
@@ -21,7 +23,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Doctor') {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="assets/css/doctor_dashboard.css">
+    <link rel="stylesheet" href="assets/css/doctor_dashboard.css?v=<?= time() ?>">
     <link rel="stylesheet" href="assets/css/consultation_redesign.css">
     <link rel="stylesheet" href="assets/css/voice-input.css">
     <link rel="stylesheet" href="assets/css/medication-dropdown.css">
@@ -34,7 +36,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Doctor') {
             height: 44px !important;
             border: 2px solid #F1F5F9 !important;
             border-radius: 12px !important;
-            background-color: #F8FAFC !important;
+            background-color: #f3efe6 !important;
             display: flex !important;
             align-items: center !important;
         }
@@ -82,24 +84,23 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Doctor') {
             <?php include 'includes/doctor_navbar.php'; ?>
             
             <!-- Page Content -->
-            <div class="consultation-container-elite">
+            <div class="doctor-content">
                 <!-- Page Header: Command Center Style -->
-                <div class="header-glass">
-                    <div class="header-main-info">
-                        <div class="pulse-icon">
-                            <i class="fas fa-stethoscope"></i>
-                        </div>
+                <div class="welcome-banner fade-in-up" style="display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 2;">
+                    <div class="header-main-info" style="position: relative; z-index: 2;">
                         <div>
-                            <h1 class="main-page-title">
-                            <i class="fas fa-stethoscope"></i>
-                            Clinical Command Center
-                        </h1>
-                            <p class="main-subtitle flex items-center gap-2">
+                            <h1 class="welcome-title">
+                                <i class="fas fa-stethoscope"></i> Clinical Command Center
+                            </h1>
+                            <p class="welcome-subtitle flex items-center gap-2">
                                 <span class="status-dot"></span> Active Consultation Session
                             </p>
                         </div>
                     </div>
-                    <div class="header-actions-elite">
+                    <i class="fas fa-stethoscope welcome-icon-bg"></i>
+                </div>
+                
+                <div class="header-actions-elite" style="margin-bottom: 1.5rem; text-align: right;">
                         <button onclick="viewPatientHistory()" class="btn-glass">
                             <i class="fas fa-file-medical"></i> Medical Records
                         </button>
@@ -107,7 +108,6 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Doctor') {
                             <i class="fas fa-plus"></i> Add Vitals
                         </button>
                     </div>
-                </div>
                 
                 <!-- Patient Identity Bar: Unified Dashboard Element -->
                 <div class="identity-bar-elite">
@@ -148,8 +148,8 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Doctor') {
                 :root {
                     --elite-primary: #0EA5E9;
                     --elite-secondary: #0F172A;
-                    --elite-teal: #0FA4AF;
-                    --elite-bg: #F8FAFC;
+                    --elite-teal: #1f6b4a;
+                    --elite-bg: #f3efe6;
                     --elite-glass: rgba(255, 255, 255, 0.9);
                     --elite-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
                 }
@@ -178,9 +178,9 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Doctor') {
 
                 .header-main-info { display: flex; align-items: center; gap: 1.5rem; position: relative; z-index: 10; }
                 .pulse-icon { 
-                    width: 60px; height: 60px; background: rgba(15, 164, 175, 0.2); 
+                    width: 60px; height: 60px; background: rgba(31, 107, 74, 0.2); 
                     border-radius: 18px; display: flex; align-items: center; justify-content: center; 
-                    font-size: 1.75rem; color: #0FA4AF; border: 1px solid rgba(15, 164, 175, 0.3);
+                    font-size: 1.75rem; color: #1f6b4a; border: 1px solid rgba(31, 107, 74, 0.3);
                     animation: float 3s ease-in-out infinite;
                 }
 
@@ -209,7 +209,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Doctor') {
                     box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
                     display: flex; align-items: center; gap: 10px;
                 }
-                .btn-primary-glass:hover { background: #056674; transform: scale(1.05); }
+                .btn-primary-glass:hover { background: #144d34; transform: scale(1.05); }
 
                 /* Elite Identity Bar */
                 .identity-bar-elite {
@@ -222,17 +222,17 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Doctor') {
                 .id-selection-panel { flex: 0 0 400px; }
                 .panel-tag { font-size: 0.65rem; font-weight: 800; color: #94A3B8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
                 .elite-select { 
-                    width: 100%; border: 2px solid #F1F5F9; background: #F8FAFC; padding: 10px 16px; 
+                    width: 100%; border: 2px solid #F1F5F9; background: #f3efe6; padding: 10px 16px; 
                     border-radius: 12px; font-size: 0.95rem; font-weight: 700; color: #1E293B; cursor: pointer; transition: 0.3s;
                 }
-                .elite-select:hover { border-color: #0FA4AF; background: white; }
+                .elite-select:hover { border-color: #1f6b4a; background: white; }
 
                 .id-vitals-panel { flex: 1; display: flex; align-items: center; justify-content: flex-end; gap: 0.75rem; }
                 .vital-chip { 
-                    background: #F8FAFC; border: 1px solid #E2E8F0; padding: 8px 16px; border-radius: 14px;
+                    background: #f3efe6; border: 1px solid #E2E8F0; padding: 8px 16px; border-radius: 14px;
                     display: flex; flex-direction: column; min-width: 120px; transition: 0.3s;
                 }
-                .vital-chip:hover { transform: translateY(-4px); border-color: #0FA4AF; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+                .vital-chip:hover { transform: translateY(-4px); border-color: #1f6b4a; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
                 .chip-label { font-size: 0.6rem; font-weight: 800; color: #64748B; text-transform: uppercase; }
                 .chip-value { font-size: 0.9rem; font-weight: 700; color: #1E293B; }
                 .bg-blood { background: #FFF1F2; border-color: #FFE4E6; }
@@ -242,20 +242,20 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Doctor') {
                     width: 44px; height: 44px; border-radius: 50%; border: none; background: #F1F5F9;
                     color: #64748B; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.3s;
                 }
-                .circle-btn:hover { background: #0FA4AF; color: white; transform: rotate(180deg); }
+                .circle-btn:hover { background: #1f6b4a; color: white; transform: rotate(180deg); }
 
                 /* Elite Cards & Grid */
                 .elite-soap-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; margin-bottom: 2rem; }
                 .elite-card { background: white; border-radius: 24px; border: 1px solid #E2E8F0; box-shadow: var(--elite-shadow); position: relative; }
                 
                 .el-card-header { 
-                    padding: 1.5rem 2rem; border-bottom: 2px solid #F1F5F9; background: #F8FAFC; 
+                    padding: 1.5rem 2rem; border-bottom: 2px solid #F1F5F9; background: #f3efe6; 
                     display: flex; align-items: center; gap: 1.25rem;
                 }
                 .el-icon-wrapper { 
                     width: 50px; height: 50px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; color: white;
                 }
-                .sub-bg { background: linear-gradient(135deg, #0FA4AF 0%, #056674 100%); }
+                .sub-bg { background: linear-gradient(135deg, #1f6b4a 0%, #144d34 100%); }
                 .plan-bg { background: linear-gradient(135deg, #6366F1 0%, #4338CA 100%); }
                 
                 .el-header-content h3 { font-size: 1.25rem; font-weight: 800; color: #1E293B; margin: 0; }
@@ -274,7 +274,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Doctor') {
                     width: 100%; border: 2px solid #F1F5F9; border-radius: 16px; padding: 1.25rem; 
                     font-size: 1rem; color: #1E293B; font-family: inherit; resize: vertical; transition: 0.3s;
                 }
-                .elite-textarea:focus { outline: none; border-color: #0FA4AF; box-shadow: 0 0 0 4px rgba(15, 164, 175, 0.15); }
+                .elite-textarea:focus { outline: none; border-color: #1f6b4a; box-shadow: 0 0 0 4px rgba(31, 107, 74, 0.15); }
                 .el-footer-tip { display: flex; align-items: center; gap: 8px; font-size: 0.75rem; color: #64748B; margin-top: 1rem; }
                 .el-footer-tip i { color: #018abd; }
 
@@ -287,15 +287,15 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Doctor') {
 
                 .elite-table-wrapper { border-radius: 16px; border: 1px solid #E2E8F0; margin-bottom: 1.5rem; position: relative; z-index: 100; }
                 .elite-med-table { width: 100%; border-collapse: collapse; }
-                .elite-med-table th { background: #F8FAFC; padding: 12px 16px; text-align: left; font-size: 0.7rem; font-weight: 800; color: #94A3B8; text-transform: uppercase; border-bottom: 2px solid #F1F5F9; }
+                .elite-med-table th { background: #f3efe6; padding: 12px 16px; text-align: left; font-size: 0.7rem; font-weight: 800; color: #94A3B8; text-transform: uppercase; border-bottom: 2px solid #F1F5F9; }
                 .elite-med-table td { padding: 8px 16px; border-bottom: 1px solid #F1F5F9; }
                 .elite-med-table input, .elite-med-table select { width: 100%; border: 1px solid transparent; background: transparent; padding: 8px; font-size: 0.85rem; font-weight: 600; transition: 0.2s; }
-                .elite-med-table input:focus, .elite-med-table select:focus { background: #F8FAFC; border-color: #E2E8F0; border-radius: 6px; outline: none; }
+                .elite-med-table input:focus, .elite-med-table select:focus { background: #f3efe6; border-color: #E2E8F0; border-radius: 6px; outline: none; }
                 
                 .elite-context-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
                 .context-field { 
                     display: flex; flex-direction: column; gap: 10px; padding: 1.25rem; 
-                    background: #f8fafc; border-radius: 18px; border: 1px solid #E2E8F0; transition: 0.3s;
+                    background: #f3efe6; border-radius: 18px; border: 1px solid #E2E8F0; transition: 0.3s;
                 }
                 .context-field:focus-within { background: white; border-color: #0EA5E9; box-shadow: 0 10px 25px rgba(14, 165, 233, 0.1); transform: translateY(-2px); }
                 .context-field.danger:focus-within { border-color: #E11D48; box-shadow: 0 10px 25px rgba(225, 29, 72, 0.1); }
@@ -331,17 +331,17 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Doctor') {
                 .final-block textarea, .elite-input { 
                     border: 2px solid #F1F5F9; border-radius: 12px; padding: 12px; font-size: 0.9rem; font-weight: 600; transition: 0.3s;
                 }
-                .final-block textarea:focus, .elite-input:focus { border-color: #0FA4AF; outline: none; background: #F8FAFC; }
+                .final-block textarea:focus, .elite-input:focus { border-color: #1f6b4a; outline: none; background: #f3efe6; }
                 .final-sub-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; }
 
                 .center-save-action { text-align: center; padding-top: 1rem; border-top: 2px solid #F1F5F9; }
                 .btn-elite-save { 
-                    background: linear-gradient(135deg, #0FA4AF 0%, #056674 100%); color: white;
+                    background: linear-gradient(135deg, #1f6b4a 0%, #144d34 100%); color: white;
                     padding: 1.25rem 4rem; border-radius: 20px; border: none; font-weight: 800; font-size: 1.1rem;
-                    cursor: pointer; transition: 0.3s; box-shadow: 0 15px 30px rgba(15, 164, 175, 0.4);
+                    cursor: pointer; transition: 0.3s; box-shadow: 0 15px 30px rgba(31, 107, 74, 0.4);
                     display: inline-flex; align-items: center; gap: 12px;
                 }
-                .btn-elite-save:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(15, 164, 175, 0.5); transform: scale(1.02); }
+                .btn-elite-save:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(31, 107, 74, 0.5); transform: scale(1.02); }
 
                 @media (max-width: 1200px) {
                     .identity-bar-elite { flex-direction: column; align-items: stretch; padding: 1.5rem; }
@@ -526,7 +526,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Doctor') {
         <div class="modal-content" style="background: white; border-radius: 20px; width: 500px; padding: 2rem; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
                 <h2 style="font-size: 1.5rem; font-weight: 800; color: #0F172A; margin: 0; display: flex; align-items: center; gap: 10px;">
-                    <i class="fas fa-search-plus" style="color: #0FA4AF;"></i>
+                    <i class="fas fa-search-plus" style="color: #1f6b4a;"></i>
                     Advanced Search
                 </h2>
                 <button onclick="Modal.hide('advanced-search-modal')" style="background: none; border: none; font-size: 1.25rem; color: #64748B; cursor: pointer;">

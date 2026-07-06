@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Receptionist') {
+if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], ['Receptionist', 'admin', 'Admin'])) {
     header("Location: ../../../../receptionist_login.php");
     exit();
 }
@@ -9,6 +9,8 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Receptionist') {
 <html lang="en">
 
 <head>
+    <link rel="stylesheet" href="/GM_HMS/assets/css/gm-theme.css">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IPD Admissions - GM HMS</title>
@@ -243,10 +245,10 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Receptionist') {
         }
 
         .step-item.active {
-            border-color: #0FA4AF;
-            background: #0FA4AF;
+            border-color: #1f6b4a;
+            background: #1f6b4a;
             color: #fff;
-            box-shadow: 0 0 0 4px rgba(15, 164, 175, 0.2);
+            box-shadow: 0 0 0 4px rgba(31, 107, 74, 0.2);
         }
 
         .step-item.completed {
@@ -268,7 +270,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Receptionist') {
         }
 
         .step-item.active .step-label {
-            color: #0FA4AF;
+            color: #1f6b4a;
         }
 
         .step-item.completed .step-label {

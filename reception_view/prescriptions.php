@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Receptionist') {
+if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], ['Receptionist', 'admin', 'Admin'])) {
     header("Location: ../login.php");
     exit();
 }
@@ -8,6 +8,8 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Receptionist') {
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="/GM_HMS/assets/css/gm-theme.css">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Patient Prescriptions - GM HMS</title>
@@ -60,8 +62,8 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Receptionist') {
         
         .search-input:focus {
             outline: none;
-            border-color: #0FA4AF;
-            box-shadow: 0 0 0 3px rgba(15, 164, 175, 0.1);
+            border-color: #1f6b4a;
+            box-shadow: 0 0 0 3px rgba(31, 107, 74, 0.1);
         }
 
         /* History Timeline */
@@ -105,8 +107,8 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Receptionist') {
             
             <div class="reception-content">
                 <div class="page-header mb-4">
-                    <h1 class="page-title">
-                        <i class="fas fa-prescription" style="color: #0FA4AF;"></i>
+                    <h1 class="page-title" style="color: #1f6b4a;">
+                        <i class="fas fa-prescription" style="color: #1f6b4a;"></i>
                         Patient Prescriptions
                     </h1>
                     <p class="page-subtitle">Search and view professional prescriptions for patients</p>
@@ -130,7 +132,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Receptionist') {
                 <div id="results-section" style="display: none; margin-bottom: 2rem;">
                     <div class="card mb-4" id="patient-summary-card">
                         <div class="card-body" style="display: flex; gap: 2rem; align-items: center;">
-                            <div style="width: 60px; height: 60px; border-radius: 50%; background: #0FA4AF; color: white; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 700;">
+                            <div style="width: 60px; height: 60px; border-radius: 50%; background: #1f6b4a; color: white; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 700;">
                                 <span id="pat-initials">--</span>
                             </div>
                             <div>
@@ -148,7 +150,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Receptionist') {
 
                 <!-- Global Recent Prescriptions -->
                 <div id="all-prescriptions-section">
-                    <h3 class="section-title mb-3" style="display: flex; justify-content: space-between; align-items: center;">
+                    <h3 class="section-title mb-3" style="display: flex; justify-content: space-between; align-items: center; color: #1f6b4a;">
                         <span>Recent Global Prescriptions</span>
                         <div style="display: flex; align-items: center; gap: 1rem;">
                            <span style="font-size: 0.8rem; font-weight: 400; color: #64748b;">Latest 50 records</span>

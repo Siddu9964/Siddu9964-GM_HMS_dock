@@ -45,13 +45,13 @@ function renderPrescriptionItem(p) {
         <div class="prescription-item">
             <div style="display: flex; gap: 1.5rem; align-items: center;">
                 <div style="text-align: center; border-right: 1px solid #e2e8f0; padding-right: 1.5rem; min-width: 60px;">
-                    <div style="font-weight: 800; color: #0FA4AF; font-size: 1.1rem;">${dateParts[1] || ''}</div>
+                    <div style="font-weight: 800; color: #1f6b4a; font-size: 1.1rem;">${dateParts[1] || ''}</div>
                     <div style="font-size: 0.75rem; color: #64748b; text-transform: uppercase;">${dateParts[0] || ''}</div>
                 </div>
                 <div>
                     <div style="font-weight: 700; color: #1e293b;">${p.diagnosis || 'General Consultation'}</div>
                     <div style="font-size: 0.85rem; color: #64748b;">
-                        <span style="color: #0FA4AF; font-weight: 600;">${p.first_name} ${p.last_name}</span>
+                        <span style="color: #1f6b4a; font-weight: 600;">${p.first_name} ${p.last_name}</span>
                         <span style="margin: 0 8px; opacity: 0.3;">|</span>
                         <i class="fas fa-phone-alt" style="margin-right: 4px;"></i> ${p.patient_phone || 'No Phone'}
                         <span style="margin: 0 8px; opacity: 0.3;">|</span>
@@ -124,7 +124,7 @@ function renderResults(data) {
     const firstPresc = data.prescriptions[0];
     document.getElementById('pat-name').textContent = `${firstPresc.first_name} ${firstPresc.last_name}`;
     document.getElementById('pat-details').textContent = `Age: ${firstPresc.age} | Gender: ${firstPresc.gender} | ID: ${data.patient_id}`;
-    document.getElementById('pat-initials').textContent = `${firstPresc.first_name[0]}${firstPresc.last_name[0]}`;
+    document.getElementById('pat-initials').textContent = `${(firstPresc.first_name || '')[0] || ''}${(firstPresc.last_name || '')[0] || ''}` || 'P';
 
     // Render History
     listContainer.innerHTML = data.prescriptions.map(p => renderPrescriptionItem(p)).join('');

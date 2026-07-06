@@ -2,7 +2,7 @@
 session_start();
 
 // Check authentication
-if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'Nurse') {
+if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], ['Nurse', 'admin', 'Admin'])) {
     header('Location: ../login.php');
     exit();
 }
@@ -14,6 +14,8 @@ $nurseName = $_SESSION['username'] ?? 'Nurse';
 <html lang="en">
 
 <head>
+    <link rel="stylesheet" href="/GM_HMS/assets/css/gm-theme.css">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Patient Care - GM HMS</title>

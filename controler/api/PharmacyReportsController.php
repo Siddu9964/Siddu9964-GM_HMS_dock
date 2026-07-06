@@ -1,4 +1,19 @@
 <?php
+/**
+ * ============================================================
+ * PharmacyReportsController — API Reference
+ * ============================================================
+ * Base URL : http://localhost/GM_HMS/api/pharmacy/reports
+ * Auth     : All endpoints require Auth — All GET, no body
+ * ------------------------------------------------------------
+ *
+ * 1. GET /api/pharmacy/reports                  — Dashboard report index
+ * 2. GET /api/pharmacy/reports/sales            — Sales report (date_from, date_to params)
+ * 3. GET /api/pharmacy/reports/expiry           — Expiry report (days_before param)
+ * 4. GET /api/pharmacy/reports/low-stock        — Low stock report
+ * 5. GET /api/pharmacy/reports/top-products     — Top selling products (limit param)
+ * ------------------------------------------------------------
+ */
 namespace GM_HMS\Controllers\api;
 
 use Exception;
@@ -61,7 +76,7 @@ class PharmacyReportsController extends BaseController {
             $this->respondSuccess($this->db->fetchAll(
                 "SELECT product_id, product_name, batch_number, expiry_date, quantity
                  FROM ph_product
-                 WHERE expiry_date IS NOT NULL AND expiry_date > '2000-01-01'
+                 WHERE expiry_date IS NOT NULL AND expiry_date != '0000-00-00'
                    AND expiry_date <= DATE_ADD(CURDATE(), INTERVAL ? DAY)
                  ORDER BY expiry_date ASC",
                 [$days]
@@ -123,3 +138,4 @@ class PharmacyReportsController extends BaseController {
         } catch (Exception $e) { $this->handleException($e); }
     }
 }
+

@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="/GM_HMS/assets/css/gm-theme.css">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Staff Management - GM Hospital</title>
@@ -26,7 +28,7 @@
         }
         
         body {
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            /* Inherit global theme */
             min-height: 100vh;
         }
         
@@ -43,7 +45,7 @@
         }
         
         thead {
-            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            background: #1f6b4a;
             color: white;
             position: sticky;
             top: 0;
@@ -81,7 +83,7 @@
         }
         
         .btn-primary {
-            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            background: #1f6b4a;
             color: white;
         }
         
@@ -188,7 +190,7 @@
             letter-spacing: 0.05em;
         }
         
-        .tab-btn.active { color: #0FA4AF; border-color: #0FA4AF; background: #E6FAFA; }
+        .tab-btn.active { color: #1f6b4a; border-color: #1f6b4a; background: #E6FAFA; }
         .status-active {
             background: #d1fae5;
             color: #065f46;
@@ -219,7 +221,7 @@
         }
         
         .action-icon.edit {
-            color: #0FA4AF;
+            color: #1f6b4a;
         }
         
         .action-icon.delete {
@@ -361,7 +363,7 @@
             <?php include 'includes/navbar.php'; ?>
             
             <!-- Page Content -->
-            <main class="flex-1 overflow-y-auto p-8" style="background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);">
+            <main class="flex-1 overflow-y-auto p-8">
                 
                 <!-- Page Header -->
                 <div class="mb-6">
@@ -379,26 +381,20 @@
 
                 <!-- KPI Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-                    <div class="stat-card bg-gradient-to-br from-amber-500 to-amber-700 text-white border-0">
-                        <div class="flex flex-col">
-                            <span class="text-sm font-medium opacity-80 uppercase">Total Staff</span>
-                            <h2 id="card-total-staff" class="text-3xl font-bold mt-1">0</h2>
-                        </div>
-                        <i class="fas fa-users-cog stat-icon text-white opacity-20"></i>
+                    <div class="bento-card">
+                        <div class="bento-title">Total Staff</div>
+                        <h2 id="card-total-staff" class="bento-value">0</h2>
+                        <i class="fas fa-users-cog bento-icon"></i>
                     </div>
-                    <div class="stat-card bg-gradient-to-br from-green-500 to-green-700 text-white border-0">
-                        <div class="flex flex-col">
-                            <span class="text-sm font-medium opacity-80 uppercase">Active Staff</span>
-                            <h2 id="card-active-staff" class="text-3xl font-bold mt-1">0</h2>
-                        </div>
-                        <i class="fas fa-user-check stat-icon text-white opacity-20"></i>
+                    <div class="bento-card">
+                        <div class="bento-title">Active Staff</div>
+                        <h2 id="card-active-staff" class="bento-value">0</h2>
+                        <i class="fas fa-user-check bento-icon"></i>
                     </div>
-                    <div class="stat-card bg-gradient-to-br from-blue-500 to-blue-700 text-white border-0">
-                        <div class="flex flex-col">
-                            <span class="text-sm font-medium opacity-80 uppercase">On Duty Today</span>
-                            <h2 id="card-duty-staff" class="text-3xl font-bold mt-1">0</h2>
-                        </div>
-                        <i class="fas fa-briefcase stat-icon text-white opacity-20"></i>
+                    <div class="bento-card">
+                        <div class="bento-title">On Duty Today</div>
+                        <h2 id="card-duty-staff" class="bento-value">0</h2>
+                        <i class="fas fa-briefcase bento-icon"></i>
                     </div>
                 </div>
                 

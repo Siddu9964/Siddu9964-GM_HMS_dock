@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Receptionist') {
+if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], ['Receptionist', 'admin', 'Admin'])) {
     header("Location: ../../../receptionist_login.php");
     exit();
 }
@@ -9,6 +9,8 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Receptionist') {
 <html lang="en">
 
 <head>
+    <link rel="stylesheet" href="/GM_HMS/assets/css/gm-theme.css">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inpatients - GM HMS</title>
@@ -32,10 +34,10 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Receptionist') {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 
     <!-- Reception Dashboard CSS -->
-    <link rel="stylesheet" href="../../assets/css/reception_dashboard.css">
+    <link rel="stylesheet" href="../../assets/css/reception_dashboard.css?v=<?= time() ?>">
 
     <!-- Custom IPD CSS -->
-    <link rel="stylesheet" href="assets/css/ipd_main.css">
+    <link rel="stylesheet" href="assets/css/ipd_main.css?v=<?= time() ?>">
 
     <style>
         .quick-action-btn {
@@ -71,202 +73,134 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Receptionist') {
             <div class="reception-content">
                 <!-- IPD Dashboard Header -->
                 <div style="margin-bottom: 1.5rem;">
-                    <h1 style="font-size: 1.75rem; font-weight: 700; margin-bottom: 0.25rem;">
+                    <h1 style="font-size: 1.75rem; font-weight: 700; margin-bottom: 0.25rem; color: #1f6b4a;">
                         <i class="fas fa-hospital-user"></i> Inpatient Services
                     </h1>
                     <p style="color: #6b7280; font-size: 0.875rem;">Admissions, bed occupancy and payments overview
                     </p>
                 </div>
 
-                <!-- Stats Cards - Horizontal Layout -->
-                <div class="row g-3 mb-4" id="statsGrid">
-                    <div class="col-md-3">
-                        <div class="card border-0 shadow-sm h-100">
-                            <div class="card-body p-3">
-                                <div class="d-flex align-items-center">
-                                    <div class="flex-shrink-0">
-                                        <div class="rounded-circle bg-primary bg-opacity-10 p-3">
-                                            <i class="fas fa-bed text-primary fs-4"></i>
-                                        </div>
-                                    </div>
-                                    <div class="flex-grow-1 ms-3">
-                                        <h3 class="mb-0 fw-bold" id="activeAdmissions">-</h3>
-                                        <p class="text-muted mb-0 small">Active Admissions</p>
-                                    </div>
+                <!-- Dashboard Top Section: KPIs + Quick Actions Side by Side -->
+                <div class="dashboard-top-section" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
+                    
+                    <!-- Left: Stats Cards -->
+                    <div>
+                        <h2 class="section-heading" style="font-size: 1.1rem; color: #64748b; margin-bottom: 1rem;"><i class="fas fa-chart-pie"></i> Overview</h2>
+                        <div class="kpi-cards-grid" id="statsGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 1rem;">
+                            <!-- Active Admissions -->
+                            <div class="kpi-card card border-0 shadow-sm" style="width: 100% !important; max-width: none !important;">
+                                <div class="kpi-icon-wrapper"><i class="fas fa-bed"></i></div>
+                                <div class="kpi-content-inline">
+                                    <span class="kpi-card-value" id="activeAdmissions">-</span>
+                                    <span class="kpi-card-label">Active Admissions</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Bed Occupancy -->
+                            <div class="kpi-card card border-0 shadow-sm" style="width: 100% !important; max-width: none !important;">
+                                <div class="kpi-icon-wrapper"><i class="fas fa-procedures"></i></div>
+                                <div class="kpi-content-inline">
+                                    <span class="kpi-card-value" id="bedOccupancy">-</span>
+                                    <span class="kpi-card-label">Bed Occupancy</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Admissions Today -->
+                            <div class="kpi-card card border-0 shadow-sm" style="width: 100% !important; max-width: none !important;">
+                                <div class="kpi-icon-wrapper"><i class="fas fa-user-plus"></i></div>
+                                <div class="kpi-content-inline">
+                                    <span class="kpi-card-value" id="admissionsToday">-</span>
+                                    <span class="kpi-card-label">Admissions Today</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Payments Today -->
+                            <div class="kpi-card card border-0 shadow-sm" style="width: 100% !important; max-width: none !important;">
+                                <div class="kpi-icon-wrapper"><i class="fas fa-rupee-sign"></i></div>
+                                <div class="kpi-content-inline">
+                                    <span class="kpi-card-value" id="paymentsToday">-</span>
+                                    <span class="kpi-card-label">Payments Today</span>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="col-md-3">
-                        <div class="card border-0 shadow-sm h-100">
-                            <div class="card-body p-3">
-                                <div class="d-flex align-items-center">
-                                    <div class="flex-shrink-0">
-                                        <div class="rounded-circle bg-success bg-opacity-10 p-3">
-                                            <i class="fas fa-procedures text-success fs-4"></i>
-                                        </div>
-                                    </div>
-                                    <div class="flex-grow-1 ms-3">
-                                        <h3 class="mb-0 fw-bold" id="bedOccupancy">-</h3>
-                                        <p class="text-muted mb-0 small">Bed Occupancy</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <div class="card border-0 shadow-sm h-100">
-                            <div class="card-body p-3">
-                                <div class="d-flex align-items-center">
-                                    <div class="flex-shrink-0">
-                                        <div class="rounded-circle bg-warning bg-opacity-10 p-3">
-                                            <i class="fas fa-user-plus text-warning fs-4"></i>
-                                        </div>
-                                    </div>
-                                    <div class="flex-grow-1 ms-3">
-                                        <h3 class="mb-0 fw-bold" id="admissionsToday">-</h3>
-                                        <p class="text-muted mb-0 small">Admissions Today</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <div class="card border-0 shadow-sm h-100">
-                            <div class="card-body p-3">
-                                <div class="d-flex align-items-center">
-                                    <div class="flex-shrink-0">
-                                        <div class="rounded-circle bg-info bg-opacity-10 p-3">
-                                            <i class="fas fa-rupee-sign text-info fs-4"></i>
-                                        </div>
-                                    </div>
-                                    <div class="flex-grow-1 ms-3">
-                                        <h3 class="mb-0 fw-bold" id="paymentsToday">-</h3>
-                                        <p class="text-muted mb-0 small">Payments Today</p>
-                                    </div>
-                                </div>
-                            </div>
+                    <!-- Right: Quick Actions -->
+                    <div>
+                        <h2 class="section-heading" style="font-size: 1.1rem; color: #64748b; margin-bottom: 1rem;"><i class="fas fa-bolt"></i> Quick Actions</h2>
+                        <div class="adv-actions-grid" style="display: flex; flex-direction: column; gap: 0.75rem;">
+                            <button class="adv-action-btn" onclick="window.location.href='../views/admissions/'" style="width: 100%;">
+                                <div class="adv-action-icon"><i class="fas fa-user-plus"></i></div>
+                                <span>New Admission</span>
+                            </button>
+                            <button class="adv-action-btn" onclick="window.location.href='../views/beds/'" style="width: 100%;">
+                                <div class="adv-action-icon"><i class="fas fa-bed"></i></div>
+                                <span>Manage Beds</span>
+                            </button>
+                            <button class="adv-action-btn" onclick="window.location.href='../views/payments/'" style="width: 100%;">
+                                <div class="adv-action-icon"><i class="fas fa-money-bill-wave"></i></div>
+                                <span>Record Payment</span>
+                            </button>
+                            <button class="adv-action-btn" onclick="window.location.href='../views/discharge/'" style="width: 100%;">
+                                <div class="adv-action-icon"><i class="fas fa-sign-out-alt"></i></div>
+                                <span>Discharge Patient</span>
+                            </button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Quick Actions -->
-                <div class="row mb-4">
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <h2 class="card-title"><i class="fas fa-bolt"></i> Quick Actions</h2>
+                <!-- Advanced Navigation Modules -->
+                <div class="mb-4">
+                    <h2 class="section-heading"><i class="fas fa-th-large"></i> All Modules</h2>
+                    <div class="adv-modules-grid">
+                        
+                        <div class="adv-module-card">
+                            <div class="adv-module-header">
+                                <div class="adv-module-icon"><i class="fas fa-hospital-user"></i></div>
+                                <h5 class="adv-module-title">IPD Admissions</h5>
                             </div>
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <button class="btn btn-primary quick-action-btn"
-                                            onclick="window.location.href='../views/admissions/'">
-                                            <i class="fas fa-user-plus fa-2x"></i>
-                                            <span>New Admission</span>
-                                        </button>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <button class="btn btn-success quick-action-btn"
-                                            onclick="window.location.href='../views/beds/'">
-                                            <i class="fas fa-bed fa-2x"></i>
-                                            <span>Manage Beds</span>
-                                        </button>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <button class="btn btn-info quick-action-btn"
-                                            onclick="window.location.href='../views/payments/'">
-                                            <i class="fas fa-money-bill-wave fa-2x"></i>
-                                            <span>Record Payment</span>
-                                        </button>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <button class="btn btn-warning quick-action-btn"
-                                            onclick="window.location.href='../views/discharge/'">
-                                            <i class="fas fa-sign-out-alt fa-2x"></i>
-                                            <span>Discharge Patient</span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
+                            <p class="adv-module-desc">Manage patient admissions, bed assignments, and discharge.</p>
+                            <a href="../views/admissions/" class="adv-btn-outline">Open Module</a>
                         </div>
+                        
+                        <div class="adv-module-card">
+                            <div class="adv-module-header">
+                                <div class="adv-module-icon"><i class="fas fa-bed"></i></div>
+                                <h5 class="adv-module-title">Hospital Beds</h5>
+                            </div>
+                            <p class="adv-module-desc">View bed status, allocate and seamlessly release beds.</p>
+                            <a href="../views/beds/" class="adv-btn-outline">Open Module</a>
+                        </div>
+                        
+                        <div class="adv-module-card">
+                            <div class="adv-module-header">
+                                <div class="adv-module-icon"><i class="fas fa-procedures"></i></div>
+                                <h5 class="adv-module-title">Procedures</h5>
+                            </div>
+                            <p class="adv-module-desc">Record medical procedures performed during admission securely.</p>
+                            <a href="../views/procedures/" class="adv-btn-outline">Open Module</a>
+                        </div>
+                        
+                        <div class="adv-module-card">
+                            <div class="adv-module-header">
+                                <div class="adv-module-icon"><i class="fas fa-file-medical"></i></div>
+                                <h5 class="adv-module-title">Discharge Details</h5>
+                            </div>
+                            <p class="adv-module-desc">Manage comprehensive discharge summaries and instructions.</p>
+                            <a href="../views/discharge/" class="adv-btn-outline">Open Module</a>
+                        </div>
+                        
+                        <div class="adv-module-card">
+                            <div class="adv-module-header">
+                                <div class="adv-module-icon"><i class="fas fa-users"></i></div>
+                                <h5 class="adv-module-title">Visitor Log</h5>
+                            </div>
+                            <p class="adv-module-desc">Track and manage visitors for admitted patients accurately.</p>
+                            <a href="../views/visitors/" class="adv-btn-outline">Open Module</a>
+                        </div>
+                        
                     </div>
                 </div>
-
-                <!-- Navigation Modules -->
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <h2 class="card-title"><i class="fas fa-th-large"></i> All Modules</h2>
-                            </div>
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-4 mb-3">
-                                        <div class="card h-100">
-                                            <div class="card-body text-center">
-                                                <i class="fas fa-hospital-user fa-3x text-primary mb-3"></i>
-                                                <h5 class="card-title">IPD Admissions</h5>
-                                                <p class="card-text">Manage patient admissions, bed assignments, and
-                                                    discharge</p>
-                                                <a href="../views/admissions/" class="btn btn-primary">Open Module</a>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-4 mb-3">
-                                        <div class="card h-100">
-                                            <div class="card-body text-center">
-                                                <i class="fas fa-bed fa-3x text-success mb-3"></i>
-                                                <h5 class="card-title">Hospital Beds</h5>
-                                                <p class="card-text">View bed status, allocate and release beds</p>
-                                                <a href="../views/beds/" class="btn btn-success">Open Module</a>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-4 mb-3">
-                                        <div class="card h-100">
-                                            <div class="card-body text-center">
-                                                <i class="fas fa-procedures fa-3x text-info mb-3"></i>
-                                                <h5 class="card-title">Procedures</h5>
-                                                <p class="card-text">Record medical procedures performed during
-                                                    admission</p>
-                                                <a href="../views/procedures/" class="btn btn-info">Open Module</a>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-4 mb-3">
-                                        <div class="card h-100">
-                                            <div class="card-body text-center">
-                                                <i class="fas fa-file-medical fa-3x text-warning mb-3"></i>
-                                                <h5 class="card-title">Discharge Details</h5>
-                                                <p class="card-text">Manage discharge summaries and follow-up
-                                                    instructions</p>
-                                                <a href="../views/discharge/" class="btn btn-warning">Open Module</a>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-4 mb-3">
-                                        <div class="card h-100">
-                                            <div class="card-body text-center">
-                                                <i class="fas fa-users fa-3x text-secondary mb-3"></i>
-                                                <h5 class="card-title">Visitor Log</h5>
-                                                <p class="card-text">Track visitors for admitted patients</p>
-                                                <a href="../views/visitors/" class="btn btn-secondary">Open Module</a>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                        <!-- End Dashboard Content -->
                     </div>
                     <!-- End Reception Content -->
                 </div>

@@ -15,8 +15,8 @@ const PH = {
         showConfirmButton: false, 
         timer, 
         timerProgressBar: true,
-        background: '#1e293b',
-        color: '#ffffff'
+        background: '#ffffff',
+        color: '#1e293b'
     });
   },
   success(msg) { this.toast('success', msg); },

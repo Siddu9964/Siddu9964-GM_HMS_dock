@@ -1,4 +1,28 @@
 <?php
+/**
+ * ============================================================
+ * PharmacyController — API Reference (Core Dashboard)
+ * ============================================================
+ * Base URL : http://localhost/GM_HMS/api
+ * Auth     : All endpoints require Auth (Session or Bearer token)
+ * ------------------------------------------------------------
+ *
+ * 1. GET /api/pharmacy/dashboard-summary
+ *    Response: { low_stock_count, expiry_alerts_count, today_sales, pending_prescriptions }
+ *
+ * 2. GET /api/pharmacy/low-stock-alerts
+ *    Response: Products where qty < reorder_level
+ *
+ * 3. GET /api/pharmacy/expiry-alerts
+ *    Response: Products expiring within 90 days
+ *
+ * 4. GET /api/pharmacy/prescriptions
+ *    Response: Pending (unfulfilled) prescriptions
+ *
+ * 5. GET /api/pharmacy/patient-prescription?patient_id=PID-001
+ *    Returns latest prescription for a patient
+ * ------------------------------------------------------------
+ */
 namespace GM_HMS\Controllers\api;
 
 use Exception;
@@ -32,9 +56,9 @@ class PharmacyController extends BaseController {
         $this->billing = new PharmacyBillingModel();
     }
 
-    // ──────────────────────────────────────────────────────
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     // DASHBOARD  GET /api/pharmacy/dashboard-summary
-    // ──────────────────────────────────────────────────────
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     public function getDashboardSummary(): void {
         $this->restrictMethod('GET');
         $this->requireAuth();
@@ -47,9 +71,9 @@ class PharmacyController extends BaseController {
         } catch (Exception $e) { $this->handleException($e); }
     }
 
-    // ──────────────────────────────────────────────────────
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     // LOW STOCK  GET /api/pharmacy/low-stock-alerts
-    // ──────────────────────────────────────────────────────
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     public function getLowStockAlerts(): void {
         $this->restrictMethod('GET');
         $this->requireAuth();
@@ -58,9 +82,9 @@ class PharmacyController extends BaseController {
         } catch (Exception $e) { $this->handleException($e); }
     }
 
-    // ──────────────────────────────────────────────────────
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     // EXPIRY  GET /api/pharmacy/expiry-alerts
-    // ──────────────────────────────────────────────────────
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     public function getExpiryAlerts(): void {
         $this->restrictMethod('GET');
         $this->requireAuth();
@@ -69,9 +93,9 @@ class PharmacyController extends BaseController {
         } catch (Exception $e) { $this->handleException($e); }
     }
 
-    // ──────────────────────────────────────────────────────
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     // PRESCRIPTIONS  GET /api/pharmacy/prescriptions
-    // ──────────────────────────────────────────────────────
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     public function getPrescriptions(): void {
         $this->restrictMethod('GET');
         $this->requireAuth();
@@ -80,9 +104,9 @@ class PharmacyController extends BaseController {
         } catch (Exception $e) { $this->handleException($e); }
     }
 
-    // ══════════════════════════════════════════════════════
+    // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     // PATIENT ENDPOINTS
-    // ══════════════════════════════════════════════════════
+    // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
     /**
      * GET /api/pharmacy/patients/all
@@ -132,9 +156,9 @@ class PharmacyController extends BaseController {
         } catch (Exception $e) { $this->handleException($e); }
     }
 
-    // ══════════════════════════════════════════════════════
+    // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     // PRODUCT / MEDICINE SEARCH
-    // ══════════════════════════════════════════════════════
+    // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
     /**
      * GET /api/pharmacy/products/search?q=
@@ -150,9 +174,9 @@ class PharmacyController extends BaseController {
         } catch (Exception $e) { $this->handleException($e); }
     }
 
-    // ══════════════════════════════════════════════════════
+    // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     // SPONSOR ENDPOINTS
-    // ══════════════════════════════════════════════════════
+    // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     public function getSponsors(): void {
         $this->restrictMethod('GET');
         $this->requireAuth();
@@ -161,9 +185,9 @@ class PharmacyController extends BaseController {
         } catch (Exception $e) { $this->handleException($e); }
     }
 
-    // ══════════════════════════════════════════════════════
+    // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     // BILLING  POST /api/pharmacy/billing/create
-    // ══════════════════════════════════════════════════════
+    // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
     /**
      * POST /api/pharmacy/billing/create
@@ -193,7 +217,7 @@ class PharmacyController extends BaseController {
 
         if (empty($cart)) { $this->respondBadRequest('Cart is empty'); return; }
 
-        // ── Server-side recalculation ──────────────────────
+        // â”€â”€ Server-side recalculation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         $subtotal = $taxTotal = $grandTotal = 0;
         $itemRows = [];
 
@@ -238,7 +262,7 @@ class PharmacyController extends BaseController {
         try {
             mysqli_begin_transaction($conn);
 
-            // ── Stock check & deduct ───────────────────────
+            // â”€â”€ Stock check & deduct â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
             foreach ($itemRows as $item) {
                 $available = $this->billing->getProductStock($item['product_id']);
                 if ($available < $item['qty']) {
@@ -251,7 +275,7 @@ class PharmacyController extends BaseController {
                 $this->billing->deductStock($item['product_id'], $item['qty']);
             }
 
-            // ── Save bill ─────────────────────────────────
+            // â”€â”€ Save bill â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
             $invoice_no = $this->billing->generateInvoiceNo();
 
             $this->billing->insertSalesMaster([
@@ -275,7 +299,7 @@ class PharmacyController extends BaseController {
 
             mysqli_commit($conn);
 
-            // ── Build invoice HTML ─────────────────────────
+            // â”€â”€ Build invoice HTML â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
             $printedBy   = $this->currentUser['full_name'] ?? $this->currentUser['username'] ?? 'Pharmacist';
             $invoiceHtml = $this->billing->generateInvoiceHTML(
                 [
@@ -306,9 +330,10 @@ class PharmacyController extends BaseController {
         }
     }
 
-    // ══════════════════════════════════════════════════════
+    // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     // PRIVATE HELPERS
-    // ══════════════════════════════════════════════════════
+    // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 }
+
 

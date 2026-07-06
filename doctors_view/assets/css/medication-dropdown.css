@@ -16,13 +16,13 @@
     font-size: 0.875rem;
     font-weight: 500;
     transition: all 0.2s ease;
-    background: white;
+    background: #FDFBF7;
 }
 
 .medication-search-input:focus {
     outline: none;
-    border-color: #0FA4AF;
-    box-shadow: 0 0 0 3px rgba(15, 164, 175, 0.1);
+    border-color: #1f6b4a;
+    box-shadow: 0 0 0 3px rgba(31, 107, 74, 0.1);
 }
 
 .medication-dropdown-list {
@@ -30,7 +30,7 @@
     top: calc(100% + 4px);
     left: 0;
     right: 0;
-    background: white;
+    background: #FDFBF7;
     border: 1px solid #e5e7eb;
     border-radius: 12px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
@@ -67,7 +67,7 @@
     align-items: center;
     gap: 0.5rem;
     padding: 0.5rem;
-    background: linear-gradient(135deg, #0FA4AF 0%, #056674 100%);
+    background: linear-gradient(135deg, #1f6b4a 0%, #144d34 100%);
     color: white;
     border-radius: 8px;
     margin-bottom: 0.5rem;
@@ -112,13 +112,13 @@
 
 .brand-item:hover {
     background: #eff6ff;
-    border-color: #0FA4AF;
+    border-color: #1f6b4a;
     transform: translateX(4px);
-    box-shadow: 0 2px 8px rgba(15, 164, 175, 0.15);
+    box-shadow: 0 2px 8px rgba(31, 107, 74, 0.15);
 }
 
 .brand-item i {
-    color: #0FA4AF;
+    color: #1f6b4a;
     font-size: 0.875rem;
 }
 
@@ -132,7 +132,7 @@
 .dosage-hint {
     font-size: 0.75rem;
     color: #6b7280;
-    background: white;
+    background: #FDFBF7;
     padding: 0.25rem 0.5rem;
     border-radius: 4px;
     border: 1px solid #e5e7eb;
@@ -157,12 +157,12 @@
 }
 
 .medication-dropdown-list::-webkit-scrollbar-thumb {
-    background: #0FA4AF;
+    background: #1f6b4a;
     border-radius: 10px;
 }
 
 .medication-dropdown-list::-webkit-scrollbar-thumb:hover {
-    background: #056674;
+    background: #144d34;
 }
 
 /* Loading state */
@@ -201,9 +201,9 @@
 
 .duration-group:focus-within,
 .qty-group:focus-within {
-    border-color: #0FA4AF;
-    background: white;
-    box-shadow: 0 0 0 2px rgba(15, 164, 175, 0.1);
+    border-color: #1f6b4a;
+    background: #FDFBF7;
+    box-shadow: 0 0 0 2px rgba(31, 107, 74, 0.1);
 }
 
 .med-duration-num,

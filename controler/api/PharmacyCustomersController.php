@@ -1,4 +1,21 @@
 <?php
+/**
+ * ============================================================
+ * PharmacyCustomersController — API Reference
+ * ============================================================
+ * Base URL : http://localhost/GM_HMS/api/pharmacy/customers
+ * Auth     : All endpoints require Auth
+ * ------------------------------------------------------------
+ *
+ * 1. GET /api/pharmacy/customers
+ *    Response: [ { id, name, phone, email, address } ]
+ *
+ * 2. POST /api/pharmacy/customers
+ *    Body: { "name":"Walk-in Customer", "phone":"9000000000", "email":"", "address":"" }
+ *
+ * 3. DELETE /api/pharmacy/customers/{id}
+ * ------------------------------------------------------------
+ */
 namespace GM_HMS\Controllers\api;
 
 use Exception;
@@ -7,9 +24,9 @@ use GM_HMS\Controllers\BaseController;
 /**
  * PharmacyCustomersController
  * Routes:
- *   GET    /api/pharmacy/customers       → list
- *   POST   /api/pharmacy/customers       → save (create/update)
- *   DELETE /api/pharmacy/customers/{id}  → delete
+ *   GET    /api/pharmacy/customers       â†’ list
+ *   POST   /api/pharmacy/customers       â†’ save (create/update)
+ *   DELETE /api/pharmacy/customers/{id}  â†’ delete
  */
 class PharmacyCustomersController extends BaseController {
     public function __construct() { parent::__construct(); }
@@ -74,3 +91,4 @@ class PharmacyCustomersController extends BaseController {
         }
     }
 }
+

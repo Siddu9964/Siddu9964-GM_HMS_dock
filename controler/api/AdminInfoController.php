@@ -1,4 +1,42 @@
 <?php
+/**
+ * ============================================================
+ * AdminInfoController — API Reference
+ * ============================================================
+ * Base URL : http://localhost/GM_HMS/api
+ * Auth     : All endpoints require Auth (Session or Bearer token)
+ * All endpoints are GET — read-only dashboard stats
+ * ------------------------------------------------------------
+ *
+ * 1. GET /api/admin/dashboard-summary
+ *    Response: { total_patients, total_doctors, total_revenue, total_beds,
+ *                occupied_beds, available_beds, active_opd_today, active_ipd }
+ *
+ * 2. GET /api/admin/opd-summary
+ *    Response: { total_today, pending, completed, cancelled, revenue_today }
+ *
+ * 3. GET /api/admin/ipd-summary
+ *    Response: { total_admissions, current_admissions, total_revenue }
+ *
+ * 4. GET /api/admin/bed-details
+ *    Response: [ { ward_name, total_beds, occupied, available } ]
+ *
+ * 5. GET /api/admin/opd-details
+ *    Response: [ Full OPD appointment list for today ]
+ *
+ * 6. GET /api/admin/ipd-details
+ *    Response: [ Full IPD admission list ]
+ *
+ * 7. GET /api/admin/bed-availability
+ *    Response: { total, occupied, available, occupancy_rate_pct }
+ *
+ * 8. GET /api/admin/active-departments
+ *    Response: [ { department_id, department_name, head_doctor, status } ]
+ *
+ * 9. GET /api/admin/analytics
+ *    Response: { revenue_trend:[...], patient_trend:[...], department_stats:[...] }
+ * ------------------------------------------------------------
+ */
 namespace GM_HMS\Controllers\api;
 
 use GM_HMS\Controllers\BaseController;
@@ -361,3 +399,4 @@ class AdminInfoController extends BaseController {
         }
     }
 }
+

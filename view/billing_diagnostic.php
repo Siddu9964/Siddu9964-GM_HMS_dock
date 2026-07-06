@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel="stylesheet" href="/GM_HMS/assets/css/gm-theme.css">
+
     <title>Billing System Diagnostic</title>
     <style>
         body { font-family: Arial, sans-serif; padding: 20px; }

@@ -18,7 +18,7 @@
     display: flex;
     width: 90%;
     height: 90%;
-    background: #ffffff;
+    background: #FDFBF7;
     /* Pure white paper */
     border-radius: 8px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
@@ -79,7 +79,7 @@
 
 .book-page {
     flex: 1;
-    background: #ffffff;
+    background: #FDFBF7;
     padding: 50px;
     overflow-y: auto;
     position: relative;
@@ -151,7 +151,7 @@
 
 .close-notebook:hover {
     color: #c0392b;
-    background: #fff;
+    background: #FDFBF7;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
@@ -203,7 +203,7 @@
     .notebook-overlay {
         position: static;
         display: block;
-        background: white;
+        background: #FDFBF7;
     }
 
     .notebook-sidebar,

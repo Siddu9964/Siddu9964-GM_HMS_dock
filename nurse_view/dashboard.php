@@ -2,8 +2,8 @@
 session_start();
 
 // Check authentication
-if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'Nurse') {
-    header('Location: ../login.php');
+if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], ['Nurse', 'admin', 'Admin'])) {
+    header("Location: /GM_HMS/login.php");
     exit();
 }
 
@@ -13,6 +13,8 @@ $nurseName = $_SESSION['username'] ?? 'Nurse';
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="/GM_HMS/assets/css/gm-theme.css">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nurse Dashboard - GM HMS</title>
@@ -32,14 +34,14 @@ $nurseName = $_SESSION['username'] ?? 'Nurse';
         }
 
         :root {
-            --primary: #4A90E2;
-            --primary-dark: #357ABD;
-            --success: #28A745;
-            --warning: #FFC107;
-            --danger: #DC3545;
-            --info: #17A2B8;
+            --primary: #1f6b4a;
+            --primary-dark: #144d34;
+            --success: #16a34a;
+            --warning: #f59e0b;
+            --danger: #e11d48;
+            --info: #0ea5e9;
             --light: #F8F9FA;
-            --dark: #343A40;
+            --dark: #1e293b;
         }
 
         body {
@@ -65,44 +67,46 @@ $nurseName = $_SESSION['username'] ?? 'Nurse';
         }
 
         .container {
-            max-width: 1400px;
-            margin: 0 auto;
+            width: 100%;
+            max-width: none;
+            padding: 0;
         }
 
         .welcome-card {
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
-            padding: 30px;
+            padding: 20px 25px;
             border-radius: 12px;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(31, 107, 74, 0.3);
         }
 
         .welcome-card h2 {
-            font-size: 28px;
-            margin-bottom: 8px;
+            font-size: 22px;
+            margin-bottom: 5px;
         }
 
         .welcome-card p {
-            font-size: 16px;
+            font-size: 14px;
             opacity: 0.9;
+            margin: 0;
         }
 
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
         }
 
         .stat-card {
             background: white;
-            padding: 25px;
+            padding: 18px;
             border-radius: 12px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.08);
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 15px;
             transition: transform 0.3s;
         }
 
@@ -112,13 +116,13 @@ $nurseName = $_SESSION['username'] ?? 'Nurse';
         }
 
         .stat-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 12px;
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            font-size: 20px;
             color: white;
         }
 
@@ -128,15 +132,17 @@ $nurseName = $_SESSION['username'] ?? 'Nurse';
         .stat-icon.red { background: var(--danger); }
 
         .stat-content h3 {
-            font-size: 32px;
+            font-size: 24px;
             font-weight: 700;
             color: var(--dark);
-            margin-bottom: 5px;
+            margin: 0 0 2px 0;
+            line-height: 1;
         }
 
         .stat-content p {
             color: #6C757D;
-            font-size: 14px;
+            font-size: 13px;
+            margin: 0;
         }
 
         .loading {
@@ -156,23 +162,27 @@ $nurseName = $_SESSION['username'] ?? 'Nurse';
 
         .quick-actions {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-top: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 12px;
+            margin-top: 20px;
         }
 
         .action-btn {
             background: white;
             border: 2px solid var(--primary);
             color: var(--primary);
-            padding: 15px 20px;
+            padding: 12px 15px;
             border-radius: 8px;
             font-weight: 600;
+            font-size: 14px;
             cursor: pointer;
             transition: all 0.3s;
             text-align: center;
             text-decoration: none;
-            display: block;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
         .action-btn:hover {

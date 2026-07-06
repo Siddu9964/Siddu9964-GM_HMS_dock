@@ -95,6 +95,37 @@ class AuthenticationManager {
             );
 
             if (!$userAuth) {
+                // Check patient table
+                $patientAuth = $this->db->fetchOne(
+                    "SELECT sl_no, patient_id as id, first_name as username, CONCAT(first_name, ' ', last_name) as full_name, email, phone as mobile_number, password, age, sex, 'Active' as status FROM patient 
+                     WHERE first_name = ? OR email = ? OR phone = ? OR patient_id = ?",
+                    [$identifier, $identifier, $identifier, $identifier]
+                );
+
+                if ($patientAuth && password_verify($password, $patientAuth['password'])) {
+                    $detectedRole = 'Patient';
+                    
+                    // Remove password from returned array
+                    unset($patientAuth['password']);
+                    $patientAuth['designation'] = 'Patient';
+                    
+                    $this->auditLogger->logSecurityEvent(
+                        'login_success', 
+                        AuditLogger::SEVERITY_INFO, 
+                        "Patient {$identifier} logged in"
+                    );
+                    
+                    return [
+                        'success' => true, 
+                        'user' => $patientAuth, 
+                        'role' => 'Patient'
+                    ];
+                }
+
+                if ($patientAuth) {
+                    return ['success' => false, 'error' => "Invalid password."];
+                }
+
                 return ['success' => false, 'error' => "User account not found."];
             }
             return ['success' => false, 'error' => "Invalid password for user '{$identifier}'."];
@@ -228,6 +259,57 @@ class AuthenticationManager {
             } catch (\Throwable $logError) {
                 error_log("Failed to log security event: " . $logError->getMessage());
             }
+            return ['success' => false, 'error' => 'Internal error: ' . $e->getMessage()];
+        }
+    }
+    public function resetPassword($identifier, $newPassword) {
+        try {
+            // Check patient table first
+            $patientAuth = $this->db->fetchOne(
+                "SELECT sl_no, patient_id FROM patient 
+                 WHERE first_name = ? OR email = ? OR phone = ? OR patient_id = ?",
+                [$identifier, $identifier, $identifier, $identifier]
+            );
+
+            if ($patientAuth) {
+                // Update patient password using password_hash
+                $newHash = password_hash($newPassword, PASSWORD_DEFAULT);
+                $this->db->execute(
+                    "UPDATE patient SET password = ? WHERE sl_no = ?",
+                    [$newHash, $patientAuth['sl_no']]
+                );
+                $this->auditLogger->logSecurityEvent('password_reset', AuditLogger::SEVERITY_INFO, "Password reset for patient {$identifier}");
+                return ['success' => true];
+            }
+
+            // Check generic user table (for staff)
+            $userAuth = $this->db->fetchOne(
+                "SELECT sl_no, id, role FROM user WHERE id = ? OR username = ?",
+                [$identifier, $identifier]
+            );
+
+            if ($userAuth) {
+                $newHash = $this->encryption->hashPassword($newPassword);
+                $internalSlNo = $userAuth['sl_no'];
+                $internalStringId = $userAuth['id'];
+                $detectedRole = $userAuth['role'];
+
+                $this->db->execute("UPDATE user SET password = ? WHERE sl_no = ?", [$newHash, $internalSlNo]);
+
+                if ($detectedRole === 'Doctor') {
+                    $this->db->execute("UPDATE doctors SET password = ? WHERE doctor_id = ?", [$newHash, $internalStringId]);
+                } elseif (in_array($detectedRole, ['Receptionist', 'Admin', 'Nurse'])) {
+                    $this->db->execute("UPDATE staff SET password = ? WHERE sl_no = ?", [$newHash, $internalSlNo]);
+                }
+                
+                $this->auditLogger->logSecurityEvent('password_reset', AuditLogger::SEVERITY_INFO, "Password reset for staff {$identifier}");
+                return ['success' => true];
+            }
+
+            return ['success' => false, 'error' => 'User not found.'];
+
+        } catch (\Throwable $e) {
+            error_log("Exception in resetPassword: " . $e->getMessage());
             return ['success' => false, 'error' => 'Internal error: ' . $e->getMessage()];
         }
     }

@@ -62,7 +62,7 @@ include 'includes/ph_head.php';
 </div>
 
 <!-- Summary Stats -->
-<div class="ph-stat-grid mb-4" id="statRow"></div>
+<div class="ph-stat-grid mb-4" id="statRow" style="grid-template-columns: repeat(4, 1fr); gap: 1rem;"></div>
 
 <!-- Sales Table -->
 <div class="ph-card">
@@ -164,16 +164,18 @@ async function load() {
 
 function renderStats(s) {
     const data = [
-        { label:'Total Sales', val: fmt.currency(s.total_sales), icon:'fa-rupee-sign', color:'#0FA4AF' },
+        { label:'Total Sales', val: fmt.currency(s.total_sales), icon:'fa-rupee-sign', color:'#1f6b4a' },
         { label:'Total Bills',  val: fmt.number(s.total_bills),  icon:'fa-receipt',    color:'#22C55E' },
         { label:'Total Tax',    val: fmt.currency(s.total_tax),  icon:'fa-percent',    color:'#F59E0B' },
         { label:'Total Discount',val:fmt.currency(s.total_disc), icon:'fa-tag',        color:'#8B5CF6' },
     ];
     document.getElementById('statRow').innerHTML = data.map(d => `
-        <div class="ph-stat" style="border-left:4px solid ${d.color};">
-            <div class="ph-stat-icon" style="background:${d.color}20;color:${d.color};"><i class="fas ${d.icon}"></i></div>
-            <div class="ph-stat-val">${d.val}</div>
-            <div class="ph-stat-lbl">${d.label}</div>
+        <div class="ph-stat d-flex align-items-center" style="border-left:4px solid ${d.color}; padding: 1rem 1.25rem; gap: 1rem;">
+            <div class="ph-stat-icon m-0" style="background:${d.color}20;color:${d.color};width:42px;height:42px;flex-shrink:0;"><i class="fas ${d.icon}"></i></div>
+            <div class="flex-grow-1">
+                <div class="ph-stat-val" style="font-size:1.5rem;margin-bottom:0;">${d.val}</div>
+                <div class="ph-stat-lbl" style="font-size:0.7rem;margin-top:0;">${d.label}</div>
+            </div>
         </div>`).join('');
 }
 

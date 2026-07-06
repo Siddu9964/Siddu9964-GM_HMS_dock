@@ -42,7 +42,11 @@ class AppointmentModel
                        a.total_amount,
                        a.payment_mode,
                        a.token_number,
-                       COALESCE(a.appointment_status, obm.last_status) as appointment_status,
+                       CASE 
+                           WHEN COALESCE(a.appointment_status, obm.last_status) = 'Cancelled' THEN 'Cancelled'
+                           WHEN (d.in_time IS NULL OR d.out_time IS NULL OR d.in_time = '' OR d.out_time = '' OR d.in_time = '00:00:00' OR d.out_time = '00:00:00') THEN 'Doctor On Leave'
+                           ELSE COALESCE(a.appointment_status, obm.last_status)
+                       END as appointment_status,
                        a.payment_status,
                        COALESCE(a.patient_id, p.patient_id) as patient_id,
                        a.phone as appointment_phone, 
@@ -145,7 +149,47 @@ class AppointmentModel
                 "SELECT first_name, last_name, phone FROM patient WHERE patient_id = ?",
                 [$data['patient_id']]
             );
-            $patientName = $patient ? ($patient['first_name'] . ' ' . $patient['last_name']) : 'Unknown';
+
+            // Auto-register patient if they don't exist (e.g. if the app sent a name instead of an ID)
+            if (!$patient && !preg_match('/^PID-/', $data['patient_id'])) {
+                $patientModel = new PatientModel();
+                
+                $nameStr = !empty($data['patient_name']) ? $data['patient_name'] : $data['patient_id'];
+                $parts = explode(' ', trim($nameStr));
+                $firstName = $parts[0];
+                $lastName = count($parts) > 1 ? implode(' ', array_slice($parts, 1)) : '';
+                
+                $newPid = $patientModel->createPatient([
+                    'first_name' => $firstName,
+                    'last_name' => $lastName,
+                    'phone' => !empty($data['phone']) ? $data['phone'] : '0000000000',
+                    'email' => $data['email'] ?? '',
+                    'password' => password_hash('Patient@1234', PASSWORD_DEFAULT)
+                ]);
+                
+                if ($newPid) {
+                    $data['patient_id'] = $newPid; // Overwrite with the generated true ID
+                    $patient = [
+                        'first_name' => $firstName,
+                        'last_name' => $lastName,
+                        'phone' => !empty($data['phone']) ? $data['phone'] : '0000000000'
+                    ];
+                }
+            }
+
+            $patientName = !empty($data['patient_name']) 
+                ? $data['patient_name'] 
+                : ($patient ? ($patient['first_name'] . ' ' . $patient['last_name']) : 'Unknown');
+
+            // Prevent multiple appointments for the same patient on the same day
+            $existing = $this->db->fetchOne(
+                "SELECT appointment_id FROM appointments WHERE patient_id = ? AND appointment_date = ? AND appointment_status != 'Cancelled'",
+                [$data['patient_id'], $data['appointment_date']]
+            );
+            
+            if ($existing) {
+                throw new Exception("Patient already has an appointment scheduled on this date.");
+            }
 
             $doctor = $this->db->fetchOne(
                 "SELECT full_name, specialization FROM doctors WHERE doctor_id = ?",
@@ -163,16 +207,17 @@ class AppointmentModel
             $phone = (!empty($data['phone'])) ? $data['phone'] : ($patient['phone'] ?? '');
 
             $sql = "INSERT INTO appointments (
-                        appointment_id, patient_id, patient_name, phone, doctor_id, doctor_name, specialization,
+                        appointment_id, patient_id, patient_name, phone, email, doctor_id, doctor_name, specialization,
                         appointment_date, appointment_time, reason, appointment_status, remarks, token_number,
                         consultation_fee, discount, total_amount, appointment_type, payment_status, payment_mode
-                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
             $this->db->execute($sql, [
                 $appointmentId,
                 $data['patient_id'],
                 $patientName,
                 $phone,
+                $data['email'] ?? '',
                 $data['doctor_id'],
                 $doctorName,
                 $specialization,
@@ -192,31 +237,35 @@ class AppointmentModel
 
             // Create billing if amount > 0
             if (($data['total_amount'] ?? 0) > 0) {
-                $billingModel = new OpdBillingModel();
-                $billId = $billingModel->createBill([
-                    'patient_id' => $data['patient_id'],
-                    'doctor_id' => $data['doctor_id'],
-                    'appointment_id' => $appointmentId,
-                    'created_by' => 'system_apt'
-                ], [
-                    [
-                        'item_type' => 'Consultation',
-                        'item_name' => 'Consultation Fee',
-                        'unit_price' => floatval($data['consultation_fee'] ?? $data['total_amount']),
-                        'quantity' => 1,
-                        'is_taxable' => true,
-                        'tax_percentage' => 18.00,
-                        'discount_amount' => floatval($data['discount'] ?? 0)
-                    ]
-                ]);
-
-                if (($data['payment_status'] ?? 'Pending') === 'Paid') {
-                    $billingModel->recordPayment($billId, [
-                        'amount' => floatval($data['total_amount']),
-                        'payment_mode' => $data['payment_mode'] ?? 'Cash',
-                        'notes' => 'Paid at registration'
+                try {
+                    $billingModel = new OpdBillingModel();
+                    $billId = $billingModel->createBill([
+                        'patient_id' => $data['patient_id'],
+                        'doctor_id' => $data['doctor_id'],
+                        'appointment_id' => $appointmentId,
+                        'created_by' => 'system_apt'
+                    ], [
+                        [
+                            'item_type' => 'Consultation',
+                            'item_name' => 'Consultation Fee',
+                            'unit_price' => floatval($data['consultation_fee'] ?? $data['total_amount']),
+                            'quantity' => 1,
+                            'is_taxable' => true,
+                            'tax_percentage' => 0,
+                            'discount_amount' => floatval($data['discount'] ?? 0)
+                        ]
                     ]);
-                }
+
+                    if (($data['payment_status'] ?? 'Pending') === 'Paid') {
+                        $billingModel->recordPayment($billId, [
+                            'amount' => floatval($data['total_amount']),
+                            'payment_mode' => $data['payment_mode'] ?? 'Cash',
+                            'notes' => 'Paid at registration'
+                        ]);
+                    }
+                } catch (\Exception $e) {
+                    error_log("Billing warning during appointment creation: " . $e->getMessage());
+             }
             }
 
             $this->db->commit();
@@ -230,7 +279,7 @@ class AppointmentModel
 
     public function updateAppointment($id, $data)
     {
-        $allowed = ['appointment_date', 'appointment_time', 'reason', 'appointment_status', 'remarks', 'payment_status', 'doctor_id', 'phone'];
+        $allowed = ['appointment_date', 'appointment_time', 'reason', 'appointment_status', 'remarks', 'payment_status', 'doctor_id', 'phone', 'email'];
         $fields = [];
         $params = [];
 
@@ -347,5 +396,17 @@ class AppointmentModel
                 AND appointment_status NOT IN ('Cancelled', 'Rescheduled')";
         $res = $this->db->fetchOne($sql, [$doctorId, $date, $time]);
         return ($res['count'] ?? 0) == 0;
+    }
+
+    /**
+     * Get all booked times for a doctor on a specific date
+     */
+    public function getBookedTimes($doctorId, $date)
+    {
+        $sql = "SELECT appointment_time FROM appointments 
+                WHERE doctor_id = ? AND appointment_date = ? 
+                AND appointment_status NOT IN ('Cancelled', 'Rescheduled')";
+        $res = $this->db->fetchAll($sql, [$doctorId, $date]);
+        return array_column($res, 'appointment_time');
     }
 }

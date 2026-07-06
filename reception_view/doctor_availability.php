@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Receptionist') {
+if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], ['Receptionist', 'admin', 'Admin'])) {
     header("Location: /GM_HMS/login.php");
     exit();
 }
@@ -9,6 +9,8 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Receptionist') {
 <html lang="en">
 
 <head>
+    <link rel="stylesheet" href="/GM_HMS/assets/css/gm-theme.css">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Doctor Availability - GM HMS</title>
@@ -20,8 +22,8 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Receptionist') {
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="assets/css/reception_dashboard.css">
-    <link rel="stylesheet" href="assets/reception.css">
+    <link rel="stylesheet" href="assets/css/reception_dashboard.css?v=<?= time() ?>">
+    <link rel="stylesheet" href="assets/reception.css?v=<?= time() ?>">
 
     <style>
         /* Fix modal blur issue */
@@ -185,7 +187,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Receptionist') {
                 <!-- Main Card -->
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">
+                        <h3 class="card-title" style="color: #1f6b4a;">
                             <i class="fas fa-user-md"></i>
                             Doctor Directory
                         </h3>
@@ -274,7 +276,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Receptionist') {
     <div id="toastContainer" class="toast-container"></div>
 
     <!-- JavaScript - MVC View Layer -->
-    <script src="assets/js/doctor.js"></script>
+    <script src="assets/js/doctor.js?v=<?= time() ?>"></script>
 </body>
 
 </html>

@@ -1,4 +1,43 @@
 <?php
+/**
+ * ============================================================
+ * ReceptionController — API Reference
+ * ============================================================
+ * Base URL : http://localhost/GM_HMS/api
+ * Auth     : All endpoints require Auth (Session or Bearer token)
+ * ------------------------------------------------------------
+ *
+ * 1. GET /api/reception/dashboard/summary
+ *    No params. Returns live dashboard stats.
+ *    Response:
+ *      {
+ *        "patients_today":         12,
+ *        "appointments_scheduled": 28,
+ *        "pending_payments":       5,
+ *        "doctors_available":      8,
+ *        "recent_appointments":    [ { appointment_id, first_name, last_name } ]
+ *      }
+ *
+ * 2. GET /api/reception/dashboard/today-appointments
+ *    No params. Returns today's full appointment list.
+ *    Response: [ { appointment_id, patient_name, doctor_name, appointment_time, status } ]
+ *
+ * 3. GET /api/reception/dashboard/recent-patients
+ *    No params. Returns last 10 registered patients.
+ *    Response: [ { patient_id, first_name, last_name, registration_date, time } ]
+ *
+ * 4. POST /api/reception/profile/update
+ *    Updates receptionist's own profile. Allowed fields: full_name, email, phone, address
+ *    Body:
+ *      {
+ *        "full_name": "Anita Sharma",
+ *        "email":     "anita@hospital.com",
+ *        "phone":     "9876543210",
+ *        "address":   "12 MG Road, Jaipur"
+ *      }
+ *    Response: { "success": true, "message": "Profile updated successfully" }
+ * ------------------------------------------------------------
+ */
 namespace GM_HMS\Controllers\api;
 
 use GM_HMS\Controllers\BaseController;

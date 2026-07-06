@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="/GM_HMS/assets/css/gm-theme.css">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IPD Management - GM HMS</title>
@@ -25,7 +27,7 @@
         .bed-maintenance { background: #fefce8; border-color: #fef08a; color: #854d0e; }
         .bed-blocked { background: #f8fafc; border-color: #cbd5e1; color: #475569; }
         .tab-btn { padding: 0.75rem 1.5rem; font-weight: 600; border-bottom: 2px solid transparent; transition: all 0.2s; }
-        .tab-btn.active { color: #0FA4AF; border-color: #0FA4AF; background: #E6FAFA; }
+        .tab-btn.active { color: #1f6b4a; border-color: #1f6b4a; background: #E6FAFA; }
     </style>
 </head>
 <body>

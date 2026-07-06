@@ -245,15 +245,15 @@ class PatientModel
         // Generate patient ID
         $patientId = $this->generatePatientId();
 
-        // Calculate age from birth date
-        $age = !empty($data['birth_date']) ? $this->calculateAge($data['birth_date']) : null;
+        // Calculate age from birth date, otherwise use explicit age
+        $age = !empty($data['birth_date']) ? $this->calculateAge($data['birth_date']) : ($data['age'] ?? null);
 
         $sql = "INSERT INTO patient (
-                    `patient_id`, `title`, `first_name`, `last_name`, `sex`, `aadhar`, `phone`,
+                    `patient_id`, `title`, `first_name`, `last_name`, `sex`, `aadhar`, `phone`, `email`, `password`,
                     `birth_date`, `age`, `blood_group`, `occupation`, `vaccine_status`,
                     `address`, `country`, `state`, `district`, `city`, `area`, `pincode`,
                     `date`, `time`, `account_opening_timestamp`
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         $params = [
             $patientId,
@@ -263,6 +263,8 @@ class PatientModel
             $data['sex'] ?? null,
             $data['aadhar'] ?? null,
             $data['phone'] ?? '',
+            $data['email'] ?? null,
+            $data['password'] ?? null,
             $data['birth_date'] ?? null,
             $age,
             $data['blood_group'] ?? '',
@@ -305,6 +307,8 @@ class PatientModel
             'sex',
             'aadhar',
             'phone',
+            'email',
+            'password',
             'birth_date',
             'age',
             'blood_group',
@@ -397,6 +401,7 @@ class PatientModel
             'sex' => $row['sex'] ?? null,
             'aadhar' => $row['aadhar'] ?? null,
             'phone' => $row['phone'] ?? null,
+            'email' => $row['email'] ?? null,
             'birth_date' => $row['birth_date'] ?? null,
             'age' => $row['age'] ?? null,
             'blood_group' => $row['blood_group'] ?? null,
@@ -413,6 +418,7 @@ class PatientModel
             'time' => $row['time'] ?? null,
             'account_opening_timestamp' => $row['account_opening_timestamp'] ?? null,
             'status' => $row['status'] ?? 'Active',
+            'image' => $row['image'] ?? null,
             'latest_appointment_status' => $row['latest_appointment_status'] ?? null,
             'latest_consultation_status' => $row['latest_consultation_status'] ?? null
         ];

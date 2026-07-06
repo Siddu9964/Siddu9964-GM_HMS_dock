@@ -122,7 +122,7 @@ function formatPatientResult(patient) {
         <div class="patient-result-item" style="padding: 8px 0;">
             <div style="display: flex; align-items: center; gap: 12px;">
                 <div style="flex-shrink: 0; width: 40px; height: 40px; background: linear-gradient(135deg, #3b82f6, #2563eb); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 16px;">
-                    ${(p.first_name.charAt(0) + p.last_name.charAt(0)).toUpperCase()}
+                    ${((p.first_name || '').charAt(0) + (p.last_name || '').charAt(0)).toUpperCase() || 'P'}
                 </div>
                 <div style="flex: 1; min-width: 0;">
                     <div style="font-weight: 600; color: #1e293b; font-size: 14px; margin-bottom: 2px;">
@@ -740,45 +740,24 @@ function loadReports() {
                 <!-- Report Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                     <!-- Today's Collection -->
-                    <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-6 text-white">
-                        <div class="flex items-center justify-between mb-4">
-                            <div>
-                                <p class="text-blue-100 text-sm">Today's Collection</p>
-                                <h4 class="text-3xl font-bold mt-2" id="report-today-collection">₹0.00</h4>
-                            </div>
-                            <div class="bg-white bg-opacity-20 rounded-full p-4">
-                                <i class="fas fa-calendar-day text-2xl"></i>
-                            </div>
-                        </div>
-                        <p class="text-blue-100 text-xs">OPD + IPD combined</p>
+                    <div class="bento-card">
+                        <div class="bento-title">Today's Collection</div>
+                        <h3 class="bento-value" id="report-today-collection">₹0.00</h3>
+                        <i class="fas fa-calendar-day bento-icon"></i>
                     </div>
                     
                     <!-- This Month -->
-                    <div class="bg-gradient-to-br from-green-500 to-green-600 rounded-xl p-6 text-white">
-                        <div class="flex items-center justify-between mb-4">
-                            <div>
-                                <p class="text-green-100 text-sm">This Month</p>
-                                <h4 class="text-3xl font-bold mt-2" id="report-month-collection">₹0.00</h4>
-                            </div>
-                            <div class="bg-white bg-opacity-20 rounded-full p-4">
-                                <i class="fas fa-calendar-alt text-2xl"></i>
-                            </div>
-                        </div>
-                        <p class="text-green-100 text-xs">Total revenue this month</p>
+                    <div class="bento-card">
+                        <div class="bento-title">This Month</div>
+                        <h3 class="bento-value" id="report-month-collection">₹0.00</h3>
+                        <i class="fas fa-calendar-alt bento-icon"></i>
                     </div>
                     
                     <!-- Outstanding -->
-                    <div class="bg-gradient-to-br from-red-500 to-red-600 rounded-xl p-6 text-white">
-                        <div class="flex items-center justify-between mb-4">
-                            <div>
-                                <p class="text-red-100 text-sm">Outstanding</p>
-                                <h4 class="text-3xl font-bold mt-2" id="report-outstanding">₹0.00</h4>
-                            </div>
-                            <div class="bg-white bg-opacity-20 rounded-full p-4">
-                                <i class="fas fa-exclamation-triangle text-2xl"></i>
-                            </div>
-                        </div>
-                        <p class="text-red-100 text-xs">Pending payments</p>
+                    <div class="bento-card">
+                        <div class="bento-title">Outstanding</div>
+                        <h3 class="bento-value" id="report-outstanding">₹0.00</h3>
+                        <i class="fas fa-exclamation-triangle bento-icon"></i>
                     </div>
                 </div>
                 

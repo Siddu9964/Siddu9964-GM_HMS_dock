@@ -27,6 +27,8 @@ if (!$billId && !$receiptId) { echo "No billing identifiers provided."; exit(); 
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="/GM_HMS/assets/css/gm-theme.css">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OPD Bill — <?= $billId ?></title>
@@ -42,12 +44,12 @@ if (!$billId && !$receiptId) { echo "No billing identifiers provided."; exit(); 
         }
 
         /* Header */
-        .bill-header { display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 18px; border-bottom: 2.5px solid #0FA4AF; margin-bottom: 20px; }
-        .hospital-info h1 { font-size: 22px; font-weight: 700; color: #0FA4AF; letter-spacing: -.3px; }
+        .bill-header { display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 18px; border-bottom: 2.5px solid #1f6b4a; margin-bottom: 20px; }
+        .hospital-info h1 { font-size: 22px; font-weight: 700; color: #1f6b4a; letter-spacing: -.3px; }
         .hospital-info p  { font-size: 11px; color: #64748b; margin-top: 2px; }
         .bill-meta { text-align: right; }
         .bill-meta h2 { font-size: 18px; font-weight: 700; color: #1e293b; letter-spacing: 1px; text-transform: uppercase; }
-        .bill-meta .bid { font-size: 13px; font-weight: 600; color: #0FA4AF; margin-top: 4px; }
+        .bill-meta .bid { font-size: 13px; font-weight: 600; color: #1f6b4a; margin-top: 4px; }
         .bill-meta .bdate { font-size: 11px; color: #64748b; margin-top: 2px; }
 
         /* Patient Info */
@@ -65,7 +67,7 @@ if (!$billId && !$receiptId) { echo "No billing identifiers provided."; exit(); 
         .section-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: #64748b; margin-bottom: 8px; }
         table.items { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
         table.items thead th {
-            background: #0FA4AF; color: white;
+            background: #1f6b4a; color: white;
             padding: 7px 10px; text-align: left;
             font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .4px;
         }
@@ -76,14 +78,14 @@ if (!$billId && !$receiptId) { echo "No billing identifiers provided."; exit(); 
         table.items tfoot td { padding: 6px 10px; font-size: 12px; }
         .type-badge {
             display: inline-block; padding: 1px 7px; border-radius: 999px;
-            font-size: 10px; font-weight: 600; background: rgba(15,164,175,.1); color: #0FA4AF;
+            font-size: 10px; font-weight: 600; background: rgba(31, 107, 74,.1); color: #1f6b4a;
         }
 
         /* Totals */
         .totals-section { display: flex; justify-content: flex-end; margin-bottom: 20px; }
         .totals-box { width: 260px; }
         .total-row { display: flex; justify-content: space-between; padding: 4px 0; font-size: 12px; color: #475569; }
-        .total-row.grand { border-top: 2px solid #0FA4AF; margin-top: 6px; padding-top: 8px; font-size: 15px; font-weight: 700; color: #0FA4AF; }
+        .total-row.grand { border-top: 2px solid #1f6b4a; margin-top: 6px; padding-top: 8px; font-size: 15px; font-weight: 700; color: #1f6b4a; }
         .total-row.paid  { color: #16a34a; font-weight: 600; }
         .total-row.balance { color: #dc2626; font-weight: 600; }
 
@@ -115,7 +117,7 @@ if (!$billId && !$receiptId) { echo "No billing identifiers provided."; exit(); 
 
         /* Print */
         .no-print { background: white; padding: 12px 20px; display: flex; gap: 10px; justify-content: center; position: fixed; bottom: 0; left: 0; right: 0; box-shadow: 0 -4px 16px rgba(0,0,0,.1); z-index: 100; }
-        .btn-print { background: linear-gradient(135deg,#0FA4AF,#056674); color: white; border: none; padding: 9px 24px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; display: flex; align-items: center; gap: 8px; }
+        .btn-print { background: linear-gradient(135deg,#1f6b4a,#144d34); color: white; border: none; padding: 9px 24px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; display: flex; align-items: center; gap: 8px; }
         .btn-close  { background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; padding: 9px 24px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; }
 
         @media print {

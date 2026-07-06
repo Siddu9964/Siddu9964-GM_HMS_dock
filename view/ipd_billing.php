@@ -8,6 +8,8 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="/GM_HMS/assets/css/gm-theme.css">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IPD Billing & Payments - GM HMS</title>
@@ -18,6 +20,9 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Common Admin CSS -->
+    <link rel="stylesheet" href="assets/css/admin_common.css">
     
     <!-- DataTables -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
@@ -36,7 +41,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
             padding: 15px;
             border-radius: 8px;
             margin-bottom: 10px;
-            border-left: 4px solid #0FA4AF;
+            border-left: 4px solid #1f6b4a;
         }
         
         .billing-summary {
@@ -106,14 +111,14 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
                     <div>
                         <h1 class="text-3xl font-black tracking-tight text-slate-900 flex items-center gap-3">
-                            <span class="p-2 bg-blue-600 rounded-lg">
+                            <span class="p-2 rounded-lg" style="background: var(--gm-accent);">
                                 <i class="fas fa-file-invoice-dollar text-white"></i>
                             </span>
                             IPD Billing & Payments
                         </h1>
                         <p class="text-slate-500 mt-1 font-medium">Comprehensive in-patient billing management</p>
                     </div>
-                    <button onclick="showNewBillModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl shadow-lg shadow-blue-200 transition-all transform hover:-translate-y-1 active:scale-95 flex items-center gap-2 font-bold">
+                    <button onclick="showNewBillModal()" class="text-white px-6 py-3 rounded-xl shadow-lg transition-all transform hover:-translate-y-1 active:scale-95 flex items-center gap-2 font-bold" style="background: var(--gm-accent);">
                         <i class="fas fa-plus"></i>
                         New IPD Bill
                     </button>
@@ -129,7 +134,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
                             <select class="w-full" id="admissionSearch"></select>
                         </div>
                         <div class="flex items-end gap-2">
-                            <button onclick="loadAdmissionBills()" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-bold transition-all">
+                            <button onclick="loadAdmissionBills()" class="flex-1 text-white px-6 py-3 rounded-xl font-bold transition-all" style="background: var(--gm-accent);">
                                 <i class="fas fa-search"></i> Load Bills
                             </button>
                             <button onclick="clearSearch()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-6 py-3 rounded-xl font-bold transition-all">
@@ -142,55 +147,31 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
                 <!-- Billing Summary -->
                 <div id="billingSummaryCard" class="hidden mb-8">
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                            <div class="flex items-center gap-4">
-                                <div class="p-3 bg-emerald-50 text-emerald-600 rounded-xl">
-                                    <i class="fas fa-rupee-sign text-xl"></i>
-                                </div>
-                                <div>
-                                    <p class="text-slate-500 text-xs font-bold uppercase tracking-wider">Total Charges</p>
-                                    <h3 class="text-2xl font-black text-slate-900" id="totalCharges">₹0</h3>
-                                </div>
-                            </div>
+                        <div class="bento-card">
+                            <div class="bento-title">Total Charges</div>
+                            <h3 class="bento-value" id="totalCharges">₹0</h3>
+                            <i class="fas fa-rupee-sign bento-icon"></i>
                         </div>
-                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                            <div class="flex items-center gap-4">
-                                <div class="p-3 bg-blue-50 text-blue-600 rounded-xl">
-                                    <i class="fas fa-money-bill-wave text-xl"></i>
-                                </div>
-                                <div>
-                                    <p class="text-slate-500 text-xs font-bold uppercase tracking-wider">Total Paid</p>
-                                    <h3 class="text-2xl font-black text-slate-900" id="totalPaid">₹0</h3>
-                                </div>
-                            </div>
+                        <div class="bento-card">
+                            <div class="bento-title">Total Paid</div>
+                            <h3 class="bento-value" id="totalPaid">₹0</h3>
+                            <i class="fas fa-money-bill-wave bento-icon"></i>
                         </div>
-                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                            <div class="flex items-center gap-4">
-                                <div class="p-3 bg-rose-50 text-rose-600 rounded-xl">
-                                    <i class="fas fa-exclamation-circle text-xl"></i>
-                                </div>
-                                <div>
-                                    <p class="text-slate-500 text-xs font-bold uppercase tracking-wider">Balance Due</p>
-                                    <h3 class="text-2xl font-black text-slate-900" id="balanceDue">₹0</h3>
-                                </div>
-                            </div>
+                        <div class="bento-card">
+                            <div class="bento-title">Balance Due</div>
+                            <h3 class="bento-value" id="balanceDue">₹0</h3>
+                            <i class="fas fa-exclamation-circle bento-icon"></i>
                         </div>
-                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                            <div class="flex items-center gap-4">
-                                <div class="p-3 bg-amber-50 text-amber-600 rounded-xl">
-                                    <i class="fas fa-file-invoice text-xl"></i>
-                                </div>
-                                <div>
-                                    <p class="text-slate-500 text-xs font-bold uppercase tracking-wider">Total Bills</p>
-                                    <h3 class="text-2xl font-black text-slate-900" id="billCount">0</h3>
-                                </div>
-                            </div>
+                        <div class="bento-card">
+                            <div class="bento-title">Total Bills</div>
+                            <h3 class="bento-value" id="billCount">0</h3>
+                            <i class="fas fa-file-invoice bento-icon"></i>
                         </div>
                     </div>
                 </div>
                 
                 <!-- Bills Table -->
-                <div class="bg-white rounded-2xl shadow-sm border border-slate-100">
+                <div class="table-container">
                     <div class="p-6 border-b border-slate-100">
                         <h5 class="text-lg font-bold text-slate-900"><i class="fas fa-list"></i> Bills</h5>
                     </div>
@@ -331,7 +312,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
                 <button type="button" onclick="closeNewBillModal()" class="px-8 py-3 text-slate-500 font-bold hover:text-slate-900 transition-all rounded-xl">
                     Cancel
                 </button>
-                <button type="button" onclick="saveBill()" class="px-10 py-3 bg-blue-600 hover:bg-blue-700 text-white font-black rounded-xl shadow-lg shadow-blue-200 transition-all">
+                <button type="button" onclick="saveBill()" class="px-10 py-3 text-white font-black rounded-xl shadow-lg transition-all" style="background: var(--gm-accent);">
                     <i class="fas fa-save"></i> Create Bill
                 </button>
             </div>
@@ -598,7 +579,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
                             '₹' + parseFloat(bill.amount_paid).toFixed(2),
                             '₹' + parseFloat(bill.balance_due).toFixed(2),
                             getPaymentStatusBadge(bill.payment_status),
-                            `<button class="px-3 py-1 bg-blue-500 text-white rounded-lg text-xs" onclick="viewBill('${bill.bill_id}')">View</button>`
+                            `<button class="px-3 py-1 text-white rounded-lg text-xs" style="background: var(--gm-accent);" onclick="viewBill('${bill.bill_id}')">View</button>`
                         ]);
                     });
                 }

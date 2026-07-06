@@ -28,7 +28,7 @@ include 'includes/ph_head.php';
 
       <style>
         :root {
-          --ph-primary: #0FA4AF;
+          --ph-primary: #1f6b4a;
           --ph-primary-dark: #096b6b;
           --ph-bg: #f8fafc;
           --ph-card-bg: #ffffff;
@@ -148,7 +148,7 @@ include 'includes/ph_head.php';
           outline: none;
           border-color: var(--ph-primary);
           background: #fff;
-          box-shadow: 0 0 0 3px rgba(15, 164, 175, 0.1);
+          box-shadow: 0 0 0 3px rgba(31, 107, 74, 0.1);
         }
 
         .input-icon {
@@ -290,7 +290,7 @@ include 'includes/ph_head.php';
         .pay-tab.active {
           background: var(--ph-primary);
           color: #fff;
-          box-shadow: 0 2px 6px rgba(15, 164, 175, 0.2);
+          box-shadow: 0 2px 6px rgba(31, 107, 74, 0.2);
         }
 
         .pay-input-grp {
@@ -983,7 +983,8 @@ include 'includes/ph_head.php';
       const lineDisc = gross * c.discount_pct / 100;
       const taxable = gross - lineDisc;
       const lineTax = taxable - (taxable / (1 + c.tax_pct / 100));
-      const cgstAmt = lineTax / 2;
+      const cgstAmt = lineTax / 2,
+        sgstAmt = lineTax / 2;
       const subtotal = taxable;
 
       const nm = c.manual ? `<input class="row-input" style="text-align:left;font-size:0.8rem;" value="${c.product_name}" oninput="cart[${i}].product_name=this.value">` : `<div style="font-weight:700;color:var(--ph-text);font-size:0.8rem;">${c.product_name}</div>`;

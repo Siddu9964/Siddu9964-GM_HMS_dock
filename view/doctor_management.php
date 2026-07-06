@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="/GM_HMS/assets/css/gm-theme.css">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Doctor Management - GM Hospital</title>
@@ -28,9 +30,7 @@
         }
         
         body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-            min-height: 100vh;
+            /* Inherit global theme */
         }
         
         /* Table Styles */
@@ -47,12 +47,11 @@
         }
         
         thead {
-            background: #f8fafc;
-            color: #475569;
+            background: #1f6b4a;
+            color: white;
             position: sticky;
             top: 0;
             z-index: 10;
-            border-bottom: 2px solid #f1f5f9;
         }
         
         th {
@@ -94,7 +93,7 @@
         }
         
         .btn-primary {
-            background: #0f172a;
+            background: #1f6b4a;
             color: white;
             box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.1);
         }
@@ -150,8 +149,8 @@
 
         /* Card Section Styling */
         .section-card {
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
+            background: #f3efe6;
+            border: 1px solid #1f6b4a;
             border-radius: 16px;
             padding: 24px;
             margin-bottom: 24px;
@@ -170,7 +169,7 @@
             gap: 12px;
             margin-bottom: 20px;
             padding-bottom: 12px;
-            border-bottom: 2px solid #e2e8f0;
+            border-bottom: 2px solid #1f6b4a;
         }
 
         .section-title i {
@@ -343,7 +342,7 @@
         }
         
         .action-icon.edit {
-            color: #0FA4AF;
+            color: #1f6b4a;
         }
         
         .action-icon.delete {
@@ -365,7 +364,7 @@
         }
         
         .toast.success {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            background: #1f6b4a;
         }
         
         .toast.error {
@@ -466,7 +465,7 @@
             <?php include 'includes/navbar.php'; ?>
             
             <!-- Page Content -->
-            <main class="flex-1 overflow-y-auto p-8" style="background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);">
+            <main class="flex-1 overflow-y-auto p-4 md:p-6">
                 
                 <!-- Page Header -->
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10">
@@ -491,33 +490,25 @@
 
                 <!-- KPI Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                    <div class="stat-card bg-gradient-to-br from-teal-500 to-teal-700 text-white border-0">
-                        <div class="flex flex-col">
-                            <span class="text-sm font-medium opacity-80 uppercase">Total Doctors</span>
-                            <h2 id="card-total-doctors" class="text-3xl font-bold mt-1">0</h2>
-                        </div>
-                        <i class="fas fa-user-md stat-icon text-white opacity-20"></i>
+                    <div class="bento-card">
+                        <div class="bento-title">Total Doctors</div>
+                        <h2 id="card-total-doctors" class="bento-value">0</h2>
+                        <i class="fas fa-user-md bento-icon"></i>
                     </div>
-                    <div class="stat-card bg-gradient-to-br from-green-500 to-green-700 text-white border-0">
-                        <div class="flex flex-col">
-                            <span class="text-sm font-medium opacity-80 uppercase">Active Now</span>
-                            <h2 id="card-active-doctors" class="text-3xl font-bold mt-1">0</h2>
-                        </div>
-                        <i class="fas fa-check-circle stat-icon text-white opacity-20"></i>
+                    <div class="bento-card">
+                        <div class="bento-title">Active Now</div>
+                        <h2 id="card-active-doctors" class="bento-value">0</h2>
+                        <i class="fas fa-check-circle bento-icon"></i>
                     </div>
-                    <div class="stat-card bg-gradient-to-br from-blue-500 to-blue-700 text-white border-0">
-                        <div class="flex flex-col">
-                            <span class="text-sm font-medium opacity-80 uppercase">Departments</span>
-                            <h2 id="card-total-depts" class="text-3xl font-bold mt-1">0</h2>
-                        </div>
-                        <i class="fas fa-hospital stat-icon text-white opacity-20"></i>
+                    <div class="bento-card">
+                        <div class="bento-title">Departments</div>
+                        <h2 id="card-total-depts" class="bento-value">0</h2>
+                        <i class="fas fa-hospital bento-icon"></i>
                     </div>
-                    <div class="stat-card bg-gradient-to-br from-orange-400 to-orange-600 text-white border-0">
-                        <div class="flex flex-col">
-                            <span class="text-sm font-medium opacity-80 uppercase">Avg Rating</span>
-                            <h2 class="text-3xl font-bold mt-1">4.8</h2>
-                        </div>
-                        <i class="fas fa-star stat-icon text-white opacity-20"></i>
+                    <div class="bento-card">
+                        <div class="bento-title">Avg Rating</div>
+                        <h2 class="bento-value">4.8</h2>
+                        <i class="fas fa-star bento-icon"></i>
                     </div>
                 </div>
                 

@@ -1,5 +1,50 @@
 <?php
 /**
+ * ============================================================
+ * ConsultationController — API Reference
+ * ============================================================
+ * Base URL : http://localhost/GM_HMS/api
+ * Auth     : All endpoints require Auth (Session or Bearer token)
+ * Table    : consultations
+ * ------------------------------------------------------------
+ *
+ * 1. GET /api/consultations
+ *    Query: doctor_id, patient_id, date (optional filters)
+ *    Response: All consultations matching filters
+ *
+ * 2. GET /api/consultations/{id}
+ *    Example: GET /api/consultations/CON-20260626-1234
+ *    Response: Full consultation with SOAP notes, vitals, diagnosis
+ *
+ * 3. POST /api/consultations
+ *    Body:
+ *      {
+ *        "patient_id":         "PID-20260626-001",
+ *        "doctor_id":          "DOC-001",
+ *        "appointment_id":     "APT-20260626-0001",
+ *        "consultation_date":  "2026-06-26",
+ *        "chief_complaint":    "Cough and cold",
+ *        "soap_subjective":    "3 days of cough",
+ *        "soap_objective":     "Temp 99F, throat inflamed",
+ *        "soap_assessment":    "Acute pharyngitis",
+ *        "soap_plan":          "{\"medications\":[...]}",
+ *        "vital_signs":        "{\"bp\":\"120/80\",\"pulse\":\"78\"}",
+ *        "final_diagnosis":    "Viral pharyngitis",
+ *        "follow_up_date":     "2026-07-05",
+ *        "status":             "Completed"
+ *      }
+ *
+ * 4. PUT /api/consultations/{id}
+ *    Body: Same as POST — send only changed fields (partial update supported)
+ *
+ * 5. DELETE /api/consultations/{id}
+ *
+ * 6. POST /api/consultations/translate-audio    [AI-powered]
+ *    Body: { "audio_data": "base64_encoded...", "language": "en" }
+ *    Returns transcribed text for SOAP notes
+ * ------------------------------------------------------------
+ */
+/**
  * Consultation API Controller
  * 
  * Handles SOAP notes, consultation history, and clinical documentation
@@ -20,6 +65,27 @@ class ConsultationController extends BaseController {
     
     public function __construct() {
         parent::__construct();
+    }
+    
+    private function resolveServiceNames($idsString) {
+        if (empty($idsString)) return '';
+        $ids = array_filter(array_map('trim', explode(',', $idsString)));
+        $names = [];
+        foreach ($ids as $id) {
+            if (strpos($id, 'LAB') === 0) {
+                $row = $this->db->fetchOne("SELECT test_name FROM lab_services WHERE service_id = ?", [$id]);
+                $names[] = $row ? $row['test_name'] : $id;
+            } elseif (strpos($id, 'RDS') === 0) {
+                $row = $this->db->fetchOne("SELECT billing_name FROM radiology_services WHERE service_id = ?", [$id]);
+                $names[] = $row ? $row['billing_name'] : $id;
+            } elseif (strpos($id, 'OTH') === 0) {
+                $row = $this->db->fetchOne("SELECT billing_name FROM other_services WHERE service_id = ?", [$id]);
+                $names[] = $row ? $row['billing_name'] : $id;
+            } else {
+                $names[] = $id;
+            }
+        }
+        return implode(', ', $names);
     }
     
     /**
@@ -58,6 +124,14 @@ class ConsultationController extends BaseController {
             $params[] = (int)$limit;
             
             $consultations = $this->db->fetchAll($query, $params);
+            
+            // Resolve clinical findings IDs to Full Names
+            foreach ($consultations as &$c) {
+                if (!empty($c['soap_objective'])) {
+                    $c['soap_objective'] = $this->resolveServiceNames($c['soap_objective']);
+                }
+            }
+            
             $this->respondSuccess($consultations);
             
         } catch (Exception $e) {
@@ -80,6 +154,10 @@ class ConsultationController extends BaseController {
             
             if (!$consultation) {
                 $this->respondNotFound('Consultation not found');
+            }
+            
+            if (!empty($consultation['soap_objective'])) {
+                $consultation['soap_objective'] = $this->resolveServiceNames($consultation['soap_objective']);
             }
             
             $this->respondSuccess($consultation);
@@ -468,3 +546,4 @@ class ConsultationController extends BaseController {
         }
     }
 }
+

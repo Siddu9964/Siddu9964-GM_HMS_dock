@@ -7,9 +7,13 @@
 */
 
 #universal-reception-navbar {
-    background: #ffffff !important;
-    padding: 1.5rem 2rem !important; /* spacing-lg spacing-xl */
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important; /* shadow-md */
+    background: rgba(255, 255, 255, .9) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
+    padding: 0 1.75rem !important;
+    height: 60px !important;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, .06) !important;
     position: sticky !important;
     top: 0 !important;
     z-index: 999 !important;
@@ -30,7 +34,7 @@
 #universal-reception-navbar h2#page-title {
     font-size: 1.5rem !important;
     font-weight: 700 !important;
-    color: #111827 !important; /* gray-900 */
+    color: #1f6b4a !important; /* Medical Teal */
     margin: 0 !important;
     line-height: 1.2 !important;
 }
@@ -62,16 +66,16 @@
 
 /* Primary Button (Teal) */
 #universal-reception-navbar .btn-primary {
-    background-color: #0FA4AF !important; /* Medical Teal */
-    border-color: #0FA4AF !important;
+    background-color: #1f6b4a !important; /* Medical Teal */
+    border-color: #1f6b4a !important;
     color: #ffffff !important;
     box-shadow: none !important;
 }
 
 
 #universal-reception-navbar .btn-primary:hover {
-    background-color: #056674 !important; /* Darker Teal */
-    border-color: #056674 !important;
+    background-color: #144d34 !important; /* Darker Teal */
+    border-color: #144d34 !important;
     transform: translateY(-1px) !important;
     color: #ffffff !important;
 }
@@ -79,12 +83,12 @@
 /* Outline Button (White/Teal) */
 #universal-reception-navbar .btn-outline {
     background-color: transparent !important;
-    border: 2px solid #0FA4AF !important;
-    color: #0FA4AF !important;
+    border: 2px solid #1f6b4a !important;
+    color: #1f6b4a !important;
 }
 
 #universal-reception-navbar .btn-outline:hover {
-    background-color: #0FA4AF !important;
+    background-color: #1f6b4a !important;
     color: #ffffff !important;
 }
 
@@ -189,7 +193,7 @@
 
 .profile-card-header {
     height: 100px;
-    background: linear-gradient(135deg, #0FA4AF 0%, #056674 100%);
+    background: linear-gradient(135deg, #1f6b4a 0%, #144d34 100%);
     position: relative;
 }
 
@@ -381,13 +385,13 @@ body.compact-mode .table th {
     <!-- Left Section: Mobile Menu + Page Title -->
     <div style="display: flex; align-items: center; gap: 1rem;">
         <!-- Mobile Menu Toggle -->
-        <button onclick="toggleSidebar()" class="btn btn-outline" style="display: none;" id="mobile-menu-btn">
+        <button onclick="toggleSidebar()" class="btn btn-outline" id="desktop-menu-btn" style="padding: 0.5rem; display: inline-flex;">
             <i class="fas fa-bars"></i>
         </button>
         
         <!-- Page Title -->
         <div>
-            <h2 id="page-title" style="font-size: 1.5rem; font-weight: 700; color: var(--gray-900); margin: 0;">
+            <h2 id="page-title" style="font-size: 1.5rem; font-weight: 700; color: #1f6b4a; margin: 0;">
                 <?php echo isset($pageTitle) ? htmlspecialchars($pageTitle) : 'Dashboard'; ?>
             </h2>
             <p id="page-subtitle" style="font-size: 0.875rem; color: var(--gray-500); margin: 0;">
@@ -488,7 +492,7 @@ if (!isset($basePath)) {
         </div>
         <div class="profile-card-content">
             <div class="profile-card-avatar">
-                <img src="https://ui-avatars.com/api/?name=<?php echo urlencode($_SESSION['full_name'] ?? 'Receptionist'); ?>&background=0FA4AF&color=fff&size=128" alt="Avatar">
+                <img src="https://ui-avatars.com/api/?name=<?php echo urlencode($_SESSION['full_name'] ?? 'Receptionist'); ?>&background=1f6b4a&color=fff&size=128" alt="Avatar">
             </div>
             <h3 class="profile-card-name"><?php echo htmlspecialchars($_SESSION['full_name'] ?? 'Receptionist'); ?></h3>
             <p class="profile-card-role"><?php echo htmlspecialchars($_SESSION['designation'] ?? 'Hospital Staff'); ?></p>
@@ -627,7 +631,7 @@ if (!isset($basePath)) {
                 <h4 style="color: #4a5568; margin-bottom: 15px; font-size: 1rem; border-bottom: 2px solid #edf2f7; padding-bottom: 5px;">Account</h4>
                 <div onclick="toggleEditProfileModal(); toggleSettingsModal();" style="display: flex; align-items: center; justify-content: space-between; padding: 12px; background: #f8f9fa; border-radius: 10px; cursor: pointer; transition: background 0.2s; margin-bottom: 10px;">
                     <div style="display: flex; align-items: center; gap: 10px;">
-                        <i class="fas fa-user-edit" style="color: #0FA4AF;"></i>
+                        <i class="fas fa-user-edit" style="color: #1f6b4a;"></i>
                         <span style="font-weight: 500; font-size: 0.95rem;">Edit Profile</span>
                     </div>
                     <i class="fas fa-chevron-right" style="color: #cbd5e0; font-size: 0.8rem;"></i>
@@ -666,8 +670,8 @@ if (!isset($basePath)) {
         <div class="profile-card-content" style="padding-top: 30px;">
             <form id="edit-profile-form" onsubmit="handleProfileUpdate(event)">
                 <div style="text-align: center; margin-bottom: 20px; position: relative; width: 100px; margin-left: auto; margin-right: auto;">
-                    <img id="edit-profile-preview" src="https://ui-avatars.com/api/?name=User" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid #0FA4AF;">
-                    <label for="profile-photo-input" style="position: absolute; bottom: 0; right: 0; background: #0FA4AF; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
+                    <img id="edit-profile-preview" src="https://ui-avatars.com/api/?name=User" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid #1f6b4a;">
+                    <label for="profile-photo-input" style="position: absolute; bottom: 0; right: 0; background: #1f6b4a; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
                         <i class="fas fa-camera" style="font-size: 14px;"></i>
                     </label>
                     <input type="file" id="profile-photo-input" name="photo" accept="image/*" style="display: none;" onchange="previewProfilePhoto(this)">
@@ -809,7 +813,7 @@ function toggleDarkMode() {
     const slider = document.querySelector('#darkModeToggle + .slider');
     if (isDark) {
         document.body.classList.add('dark-mode');
-        slider.style.backgroundColor = '#0FA4AF';
+        slider.style.backgroundColor = '#1f6b4a';
         // Persist
         localStorage.setItem('theme', 'dark');
     } else {
@@ -826,7 +830,7 @@ function toggleCompactMode() {
     
     if (isCompact) {
         document.body.classList.add('compact-mode');
-        slider.style.backgroundColor = '#0FA4AF';
+        slider.style.backgroundColor = '#1f6b4a';
         localStorage.setItem('compactMode', 'enabled');
     } else {
         document.body.classList.remove('compact-mode');
@@ -937,7 +941,7 @@ function toggleNotificationPref() {
     const slider = document.querySelector('#notificationsToggle + .slider');
     
     if (isEnabled) {
-        slider.style.backgroundColor = '#0FA4AF';
+        slider.style.backgroundColor = '#1f6b4a';
         localStorage.setItem('notifications', 'enabled');
         if(typeof Swal !== 'undefined') {
             Swal.fire({
@@ -966,7 +970,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const toggle = document.getElementById('darkModeToggle');
         if(toggle) {
             toggle.checked = true;
-            toggle.nextElementSibling.style.backgroundColor = '#0FA4AF';
+            toggle.nextElementSibling.style.backgroundColor = '#1f6b4a';
         }
     }
     
@@ -979,7 +983,7 @@ document.addEventListener('DOMContentLoaded', () => {
             notifToggle.nextElementSibling.style.backgroundColor = '#ccc';
         } else {
             notifToggle.checked = true; // Default enabled
-            notifToggle.nextElementSibling.style.backgroundColor = '#0FA4AF';
+            notifToggle.nextElementSibling.style.backgroundColor = '#1f6b4a';
         }
     }
     

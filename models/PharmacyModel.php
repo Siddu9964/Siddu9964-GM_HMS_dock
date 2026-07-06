@@ -88,7 +88,7 @@ class PharmacyModel {
     public function getAllProductsSortedByExpiry() {
         $sql = "SELECT product_id, product_name, content, strength, form, therapeutic, quantity, pack, batch_number, expiry_date 
                 FROM ph_product 
-                WHERE expiry_date IS NOT NULL AND expiry_date > '2000-01-01'
+                WHERE expiry_date IS NOT NULL AND expiry_date != '0000-00-00'
                 ORDER BY expiry_date ASC";
         return $this->db->fetchAll($sql);
     }

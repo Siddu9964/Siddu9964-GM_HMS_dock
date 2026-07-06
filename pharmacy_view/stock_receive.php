@@ -301,6 +301,8 @@ async function bulkPrint() {
     let printContent = `
     <html>
     <head>
+    <link rel="stylesheet" href="/GM_HMS/assets/css/gm-theme.css">
+
         <title>GRN Bulk Print</title>
         <style>
             body { font-family: Arial, sans-serif; padding: 20px; color: #333; }
@@ -796,7 +798,7 @@ async function viewGRN(id) {
     `).join('') +
     `</tbody></table></div>`;
 
-    Swal.fire({ title: 'GRN — ' + grn.receive_no, html: body, width: '900px', confirmButtonColor: '#0FA4AF', confirmButtonText: 'Close' });
+    Swal.fire({ title: 'GRN — ' + grn.receive_no, html: body, width: '900px', confirmButtonColor: '#1f6b4a', confirmButtonText: 'Close' });
 }
 
 async function deleteGRN(receive_no, isSubmitted) {

@@ -69,7 +69,7 @@ function renderPrescriptionsTable(prescriptions) {
                 <td>
                     <div class="d-flex align-items-center">
                         <div class="avatar-circle mr-2 bg-light text-primary">
-                            ${p.first_name.charAt(0)}${p.last_name.charAt(0)}
+                            ${(p.first_name || '').charAt(0)}${(p.last_name || '').charAt(0) || 'P'}
                         </div>
                         <div>
                             <div class="font-weight-bold">${p.first_name} ${p.last_name}</div>
@@ -103,26 +103,28 @@ function renderPrescriptionsTable(prescriptions) {
 function addMedicineRow() {
     const rowId = Date.now();
     const row = `
-        <div class="medicine-row row mb-2" id="row-${rowId}">
-            <div class="col-md-3">
-                <input type="text" class="form-control med-name" placeholder="Medicine Name" required>
-            </div>
-            <div class="col-md-2">
-                <input type="text" class="form-control med-dosage" placeholder="Dosage (500mg)" required>
-            </div>
-            <div class="col-md-2">
-                <input type="text" class="form-control med-freq" placeholder="Freq (1-0-1)" required>
-            </div>
-            <div class="col-md-2">
-                <input type="text" class="form-control med-dur" placeholder="Duration" required>
-            </div>
-            <div class="col-md-2">
-                <input type="text" class="form-control med-instr" placeholder="Instructions">
-            </div>
-            <div class="col-md-1">
-                <button type="button" class="btn btn-danger btn-sm" onclick="$('#row-${rowId}').remove()">
-                    <i class="fas fa-trash"></i>
-                </button>
+        <div class="medicine-row" id="row-${rowId}">
+            <div class="row align-items-center">
+                <div class="col-md-3 mb-2 mb-md-0">
+                    <input type="text" class="form-control med-name" placeholder="Medicine Name" required>
+                </div>
+                <div class="col-md-2 mb-2 mb-md-0">
+                    <input type="text" class="form-control med-dosage" placeholder="Dosage (e.g. 500mg)" required>
+                </div>
+                <div class="col-md-2 mb-2 mb-md-0">
+                    <input type="text" class="form-control med-freq" placeholder="Freq (1-0-1)" required>
+                </div>
+                <div class="col-md-2 mb-2 mb-md-0">
+                    <input type="text" class="form-control med-dur" placeholder="Duration (5 Days)" required>
+                </div>
+                <div class="col-md-2 mb-2 mb-md-0">
+                    <input type="text" class="form-control med-instr" placeholder="Instructions">
+                </div>
+                <div class="col-md-1 text-center">
+                    <button type="button" class="btn btn-outline-danger btn-sm" onclick="$('#row-${rowId}').remove()" style="border-radius: 6px; padding: 6px 12px; border-width: 1px;" title="Remove Medicine">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
             </div>
         </div>
     `;

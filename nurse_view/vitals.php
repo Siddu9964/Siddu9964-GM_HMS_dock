@@ -2,7 +2,7 @@
 session_start();
 
 // Check authentication
-if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'Nurse') {
+if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], ['Nurse', 'admin', 'Admin'])) {
     header('Location: ../login.php');
     exit();
 }
@@ -14,6 +14,8 @@ $patientId = $_GET['patient_id'] ?? null;
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="/GM_HMS/assets/css/gm-theme.css">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clinical Vitals Recording - GM HMS</title>
@@ -26,13 +28,13 @@ $patientId = $_GET['patient_id'] ?? null;
     
     <style>
         :root {
-            --primary: #4f46e5;
-            --primary-light: #818cf8;
-            --primary-dark: #3730a3;
+            --primary: #1f6b4a;
+            --primary-light: #319e6e;
+            --primary-dark: #144d34;
             --success: #10b981;
             --warning: #f59e0b;
             --danger: #ef4444;
-            --info: #0ea5e9;
+            --info: #1A237E;
             --slate-50: #f8fafc;
             --slate-100: #f1f5f9;
             --slate-200: #e2e8f0;
@@ -52,7 +54,7 @@ $patientId = $_GET['patient_id'] ?? null;
 
         body {
             background: #f1f5f9;
-            background-image: radial-gradient(at 0% 0%, rgba(79, 70, 229, 0.05) 0px, transparent 50%),
+            background-image: radial-gradient(at 0% 0%, rgba(31, 107, 74, 0.05) 0px, transparent 50%),
                               radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.05) 0px, transparent 50%);
             min-height: 100vh;
             display: flex;
@@ -76,8 +78,10 @@ $patientId = $_GET['patient_id'] ?? null;
         }
 
         .container {
-            max-width: 1000px;
-            margin: 0 auto;
+            width: 100%;
+            max-width: none;
+            padding: 0;
+            margin: 0;
         }
 
         /* Page Header Enhancements */
@@ -103,19 +107,20 @@ $patientId = $_GET['patient_id'] ?? null;
             margin-top: 0.25rem;
         }
 
-        /* Patient Identity Card */
+        /* Patient Identity Card - Premium Medical Teal */
         .patient-focus-card {
-            background: var(--slate-900);
-            border-radius: 1.5rem;
-            padding: 1.5rem 2rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border-radius: 1.25rem;
+            padding: 1.25rem 1.5rem;
             color: white;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 2rem;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+            margin-bottom: 2.5rem;
+            box-shadow: 0 20px 25px -5px rgba(31, 107, 74, 0.3), 0 10px 10px -5px rgba(31, 107, 74, 0.2);
             position: relative;
             overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
             animation: slideInLeft 0.7s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
@@ -126,7 +131,7 @@ $patientId = $_GET['patient_id'] ?? null;
             right: -10%;
             width: 300px;
             height: 300px;
-            background: linear-gradient(135deg, rgba(79, 70, 229, 0.2) 0%, transparent 80%);
+            background: linear-gradient(135deg, rgba(31, 107, 74, 0.2) 0%, transparent 80%);
             border-radius: 50%;
         }
 
@@ -139,50 +144,54 @@ $patientId = $_GET['patient_id'] ?? null;
         }
 
         .patient-avatar {
-            width: 64px;
-            height: 64px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 1rem;
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(4px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 0.75rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
+            font-size: 1.25rem;
             font-weight: 700;
             font-family: 'Outfit';
-            color: var(--primary-light);
+            color: white;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
         }
 
         .identity-text h2 {
             font-family: 'Outfit';
-            font-size: 1.5rem;
-            margin-bottom: 0.25rem;
+            font-size: 1.15rem;
+            margin-bottom: 0.15rem;
         }
 
         .identity-text p {
-            color: #94a3b8;
-            font-size: 0.875rem;
+            color: #cbd5e1;
+            font-size: 0.75rem;
             display: flex;
             gap: 1rem;
         }
 
         .patient-loc-badge {
-            background: var(--primary);
-            padding: 0.5rem 1.25rem;
-            border-radius: 2rem;
-            font-weight: 700;
-            font-size: 0.875rem;
-            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            font-size: 0.75rem;
             position: relative;
             z-index: 1;
+            text-align: right;
         }
 
         /* Modern Form Styling */
         .vitals-form-card {
             background: var(--glass);
             backdrop-filter: blur(12px);
-            border-radius: 2rem;
-            padding: 2.5rem;
+            border-radius: 1.25rem;
+            padding: 1.5rem;
             box-shadow: var(--shadow);
             border: 1px solid white;
             animation: fadeInUp 0.8s ease-out;
@@ -190,9 +199,10 @@ $patientId = $_GET['patient_id'] ?? null;
 
         .vitals-section-title {
             font-family: 'Outfit';
-            font-size: 1.25rem;
+            font-size: 1.05rem;
+            font-weight: 700;
             color: var(--slate-900);
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
             display: flex;
             align-items: center;
             gap: 0.75rem;
@@ -201,20 +211,20 @@ $patientId = $_GET['patient_id'] ?? null;
         .vitals-section-title i {
             color: var(--primary);
             background: var(--slate-100);
-            width: 32px;
-            height: 32px;
+            width: 28px;
+            height: 28px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 0.75rem;
-            font-size: 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.85rem;
         }
 
         .advanced-vitals-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 2rem;
-            margin-bottom: 2.5rem;
+            gap: 1.25rem;
+            margin-bottom: 2rem;
         }
 
         /* Vital Input Group */
@@ -232,28 +242,30 @@ $patientId = $_GET['patient_id'] ?? null;
 
         .vital-label span {
             font-weight: 600;
-            font-size: 0.875rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
             color: var(--slate-700);
         }
 
         .vital-range-indicator {
-            font-size: 0.75rem;
+            font-size: 0.65rem;
             color: #94a3b8;
         }
 
         .vital-input-wrapper {
             display: flex;
             align-items: center;
-            background: white;
+            background: var(--slate-50);
             border: 2px solid var(--slate-200);
-            border-radius: 1rem;
+            border-radius: 0.75rem;
             padding: 0.25rem 0.25rem 0.25rem 1rem;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .vital-input-wrapper:focus-within {
             border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+            box-shadow: 0 0 0 4px rgba(31, 107, 74, 0.1);
             transform: translateY(-2px);
         }
 
@@ -265,8 +277,8 @@ $patientId = $_GET['patient_id'] ?? null;
         .vital-control {
             flex: 1;
             border: none;
-            padding: 0.75rem 0;
-            font-size: 1.125rem;
+            padding: 0.5rem 0;
+            font-size: 0.95rem;
             font-weight: 600;
             color: var(--slate-900);
             outline: none;
@@ -274,11 +286,11 @@ $patientId = $_GET['patient_id'] ?? null;
         }
 
         .vital-unit {
-            background: var(--slate-50);
+            background: var(--slate-100);
             color: var(--slate-700);
-            padding: 0.75rem 1rem;
-            border-radius: 0.75rem;
-            font-size: 0.875rem;
+            padding: 0.4rem 0.75rem;
+            border-radius: 0.5rem;
+            font-size: 0.75rem;
             font-weight: 700;
         }
 
@@ -374,8 +386,8 @@ $patientId = $_GET['patient_id'] ?? null;
         .avpu-container {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 1rem;
-            margin-bottom: 2rem;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
         }
 
         .avpu-option {
@@ -389,30 +401,33 @@ $patientId = $_GET['patient_id'] ?? null;
         }
 
         .avpu-box {
-            background: var(--slate-100);
-            padding: 1.25rem;
-            border-radius: 1rem;
+            background: var(--slate-50);
+            padding: 0.75rem;
+            border-radius: 0.75rem;
             text-align: center;
             transition: all 0.3s;
-            border: 2px solid transparent;
+            border: 2px solid var(--slate-200);
         }
 
         .avpu-box h4 {
             font-family: 'Outfit';
-            font-size: 1.25rem;
-            margin-bottom: 0.25rem;
+            font-size: 1rem;
+            margin-bottom: 0.15rem;
             color: var(--slate-900);
         }
 
         .avpu-box p {
-            font-size: 0.75rem;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
             color: #64748b;
         }
 
         .avpu-option input:checked + .avpu-box {
             background: white;
             border-color: var(--primary);
-            box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.2);
+            box-shadow: 0 10px 15px -3px rgba(31, 107, 74, 0.2);
             transform: translateY(-5px);
         }
 
@@ -427,20 +442,20 @@ $patientId = $_GET['patient_id'] ?? null;
 
         .remarks-box {
             width: 100%;
-            background: white;
+            background: var(--slate-50);
             border: 2px solid var(--slate-200);
-            border-radius: 1rem;
-            padding: 1.25rem;
-            font-size: 1rem;
+            border-radius: 0.75rem;
+            padding: 1rem;
+            font-size: 0.85rem;
             outline: none;
             transition: all 0.3s;
-            min-height: 120px;
+            min-height: 80px;
             resize: vertical;
         }
 
         .remarks-box:focus {
             border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+            box-shadow: 0 0 0 4px rgba(31, 107, 74, 0.1);
         }
 
         /* Action Button */
@@ -455,31 +470,32 @@ $patientId = $_GET['patient_id'] ?? null;
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
             border: none;
-            padding: 1.25rem;
-            border-radius: 1.25rem;
+            padding: 1rem;
+            border-radius: 0.75rem;
             font-family: 'Outfit';
-            font-size: 1.125rem;
+            font-size: 0.95rem;
             font-weight: 700;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 0.75rem;
+            gap: 0.5rem;
             transition: all 0.3s;
-            box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.4);
+            box-shadow: 0 4px 12px rgba(31, 107, 74, 0.3);
         }
 
         .btn-premium:hover {
             transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 20px 25px -5px rgba(79, 70, 229, 0.4);
+            box-shadow: 0 20px 25px -5px rgba(31, 107, 74, 0.4);
         }
 
         .btn-cancel {
-            padding: 1.25rem 2rem;
+            padding: 1rem 1.5rem;
             background: white;
             border: 2px solid var(--slate-200);
-            border-radius: 1.25rem;
+            border-radius: 0.75rem;
             font-family: 'Outfit';
+            font-size: 0.95rem;
             font-weight: 600;
             color: #64748b;
             cursor: pointer;
@@ -504,9 +520,10 @@ $patientId = $_GET['patient_id'] ?? null;
             width: 50%;
             border: none;
             background: transparent;
-            font-size: 1.125rem;
+            font-size: 0.95rem;
             font-weight: 600;
             outline: none;
+            text-align: center;
         }
 
         .bp-separator {
@@ -652,7 +669,7 @@ $patientId = $_GET['patient_id'] ?? null;
         .btn-toggle-form:hover {
             background: var(--primary);
             color: white;
-            box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.2);
+            box-shadow: 0 10px 15px -3px rgba(31, 107, 74, 0.2);
         }
 
         .btn-toggle-form.active {
@@ -1430,7 +1447,7 @@ $patientId = $_GET['patient_id'] ?? null;
 
                     <div class="card-vitals-grid">
                         ${renderTrend('Temperature', latest.temperature, '°F', 97, 99, '#ef4444')}
-                        ${renderTrend('BP Systolic', latest.bp_systolic, 'mmHg', 110, 140, '#4f46e5')}
+                        ${renderTrend('BP Systolic', latest.bp_systolic, 'mmHg', 110, 140, '#1f6b4a')}
                         ${renderTrend('Pulse Rate', latest.pulse_rate, 'BPM', 60, 100, '#10b981')}
                         ${renderTrend('SpO2 Sat.', latest.spo2, '%', 95, 100, '#0ea5e9')}
                     </div>

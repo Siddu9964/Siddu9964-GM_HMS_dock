@@ -33,6 +33,8 @@ try {
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="/GM_HMS/assets/css/gm-theme.css">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OPD Bill - <?php echo htmlspecialchars($bill['bill_id']); ?></title>
@@ -55,7 +57,7 @@ try {
         
         /* Header */
         .invoice-header {
-            border-bottom: 3px solid #056674;
+            border-bottom: 3px solid #144d34;
             padding-bottom: 20px;
             margin-bottom: 30px;
         }
@@ -67,7 +69,7 @@ try {
         .hospital-name {
             font-size: 28px;
             font-weight: 700;
-            color: #056674;
+            color: #144d34;
             margin-bottom: 5px;
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -90,7 +92,7 @@ try {
             text-align: center;
             font-size: 24px;
             font-weight: 700;
-            color: #056674;
+            color: #144d34;
             margin: 20px 0;
             padding: 10px;
             background: #f0f9fa;
@@ -107,7 +109,7 @@ try {
         
         .info-section h3 {
             font-size: 14px;
-            color: #056674;
+            color: #144d34;
             font-weight: 600;
             margin-bottom: 10px;
             padding-bottom: 5px;
@@ -144,7 +146,7 @@ try {
         }
         
         .items-table thead {
-            background: linear-gradient(135deg, #056674 0%, #078799 100%);
+            background: linear-gradient(135deg, #144d34 0%, #078799 100%);
             color: white;
         }
         
@@ -228,17 +230,17 @@ try {
         .summary-total {
             margin-top: 10px;
             padding-top: 15px;
-            border-top: 3px solid #056674;
+            border-top: 3px solid #144d34;
             font-size: 18px;
         }
         
         .summary-total .summary-label {
-            color: #056674;
+            color: #144d34;
             font-weight: 700;
         }
         
         .summary-total .summary-value {
-            color: #056674;
+            color: #144d34;
             font-weight: 700;
         }
         
@@ -335,7 +337,7 @@ try {
             position: fixed;
             top: 20px;
             right: 20px;
-            background: #056674;
+            background: #144d34;
             color: white;
             border: none;
             padding: 12px 24px;

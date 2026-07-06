@@ -9,6 +9,8 @@ $bill_id = $_GET['bill_id'] ?? '';
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel="stylesheet" href="/GM_HMS/assets/css/gm-theme.css">
+
     <title>Print Bill - <?php echo htmlspecialchars($bill_id); ?></title>
     <style>
         body { font-family: 'Courier New', Courier, monospace; font-size: 12px; margin: 0; padding: 20px; line-height: 1.2; }

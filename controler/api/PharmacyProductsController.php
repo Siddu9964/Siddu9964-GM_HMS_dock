@@ -1,4 +1,25 @@
 <?php
+/**
+ * ============================================================
+ * PharmacyProductsController — API Reference
+ * ============================================================
+ * Base URL : http://localhost/GM_HMS/api/pharmacy/products
+ * Auth     : All endpoints require Auth
+ * ------------------------------------------------------------
+ *
+ * 1. GET /api/pharmacy/products
+ *    Response: Full product list with stock levels
+ *
+ * 2. POST /api/pharmacy/products
+ *    Body: { "product_name":"Paracetamol 500mg", "category":"Analgesic",
+ *            "unit":"Strip", "reorder_level":50, "selling_price":6.00 }
+ *
+ * 3. PUT /api/pharmacy/products/{id}
+ *    Body: Send only changed fields
+ *
+ * 4. DELETE /api/pharmacy/products/{id}
+ * ------------------------------------------------------------
+ */
 namespace GM_HMS\Controllers\api;
 
 use Exception;
@@ -7,10 +28,10 @@ use GM_HMS\Controllers\BaseController;
 /**
  * PharmacyProductsController
  * Routes:
- *   GET  /api/pharmacy/products          → list (with search/filter)
- *   POST /api/pharmacy/products          → create
- *   PUT  /api/pharmacy/products/{sl_no}  → update
- *   DELETE /api/pharmacy/products/{sl_no}→ delete
+ *   GET  /api/pharmacy/products          â†’ list (with search/filter)
+ *   POST /api/pharmacy/products          â†’ create
+ *   PUT  /api/pharmacy/products/{sl_no}  â†’ update
+ *   DELETE /api/pharmacy/products/{sl_no}â†’ delete
  */
 class PharmacyProductsController extends BaseController {
 
@@ -95,3 +116,4 @@ class PharmacyProductsController extends BaseController {
         } catch (Exception $e) { $this->handleException($e); }
     }
 }
+

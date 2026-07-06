@@ -34,28 +34,32 @@ include "includes/ph_head.php";
   --glass-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.08);
 }
 
-.ph-page-body { background: var(--proc-bg); font-family: 'Plus Jakarta Sans', sans-serif; padding: 2rem !important; }
+.ph-page-body { background: var(--proc-bg); font-family: 'Plus Jakarta Sans', sans-serif; padding: 1.75rem !important; }
 
 /* ===== BENTO KPI GRID (GLASSMORPHISM) ===== */
 .bento-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 1.5rem;
-  margin-bottom: 2.5rem;
+  gap: 1rem;
+  margin-bottom: 2rem;
 }
 .bento-card {
   background: var(--glass-white);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: var(--glass-border);
-  border-radius: 28px;
-  padding: 1.75rem;
+  border-radius: 16px;
+  padding: 1rem 1.25rem;
   box-shadow: var(--glass-shadow);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
 }
-.bento-card:hover { transform: translateY(-6px); box-shadow: 0 24px 48px rgba(0,0,0,0.1); }
+.bento-card:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(0,0,0,0.08); }
 .bento-card::before {
   content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
   background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 60%);
@@ -63,13 +67,13 @@ include "includes/ph_head.php";
 }
 
 .bento-icon {
-  width: 52px; height: 52px; border-radius: 16px;
+  width: 42px; height: 42px; border-radius: 10px;
   display: flex; align-items: center; justify-content: center;
-  font-size: 1.35rem; margin-bottom: 1.25rem;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.05);
+  font-size: 1.15rem; flex-shrink: 0;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
 }
-.bento-val { font-size: 2.5rem; font-weight: 800; color: var(--proc-slate); letter-spacing: -1px; line-height: 1; }
-.bento-lbl { font-size: 0.85rem; font-weight: 700; color: #64748B; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 0.5rem; }
+.bento-val { font-size: 1.5rem; font-weight: 800; color: var(--proc-slate); letter-spacing: -1px; line-height: 1; margin-bottom: 0.15rem; }
+.bento-lbl { font-size: 0.7rem; font-weight: 700; color: #64748B; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0; }
 
 /* ===== SMART SUGGESTION BANNER ===== */
 .smart-alert {
@@ -152,23 +156,31 @@ include "includes/ph_head.php";
 <div class="bento-grid">
   <div class="bento-card">
     <div class="bento-icon" style="background: #E0F2FE; color: #0369A1;"><i class="fas fa-clock"></i></div>
-    <div class="bento-val" id="stat-pending"><?= $pendingCount ?></div>
-    <div class="bento-lbl">Pending Review</div>
+    <div style="flex: 1;">
+      <div class="bento-val" id="stat-pending"><?= $pendingCount ?></div>
+      <div class="bento-lbl">Pending Review</div>
+    </div>
   </div>
   <div class="bento-card">
     <div class="bento-icon" style="background: #DCFCE7; color: #15803D;"><i class="fas fa-check-double"></i></div>
-    <div class="bento-val" id="stat-approved"><?= $approvedCount ?></div>
-    <div class="bento-lbl">Approved Requests</div>
+    <div style="flex: 1;">
+      <div class="bento-val" id="stat-approved"><?= $approvedCount ?></div>
+      <div class="bento-lbl">Approved Requests</div>
+    </div>
   </div>
   <div class="bento-card">
     <div class="bento-icon" style="background: #FEE2E2; color: #B91C1C;"><i class="fas fa-bolt"></i></div>
-    <div class="bento-val" id="stat-urgent"><?= $urgentCount ?></div>
-    <div class="bento-lbl">Urgent Action</div>
+    <div style="flex: 1;">
+      <div class="bento-val" id="stat-urgent"><?= $urgentCount ?></div>
+      <div class="bento-lbl">Urgent Action</div>
+    </div>
   </div>
   <div class="bento-card">
     <div class="bento-icon" style="background: #F1F5F9; color: #475569;"><i class="fas fa-archive"></i></div>
-    <div class="bento-val" id="stat-total"><?= $totalCount ?></div>
-    <div class="bento-lbl">Total Requisitions</div>
+    <div style="flex: 1;">
+      <div class="bento-val" id="stat-total"><?= $totalCount ?></div>
+      <div class="bento-lbl">Total Requisitions</div>
+    </div>
   </div>
 </div>
 
@@ -858,8 +870,10 @@ function exportPrint(){
     <td>${r.qty}</td><td>${r.priority}</td><td>${r.company_name||''}</td><td>${r.status}</td>
     <td>${r.department||''}</td><td>${r.requested_by||''}</td>
   </tr>`).join('');
-  const html=`<!DOCTYPE html><html><head><title>Indent Requests</title>
-  <style>body{font-family:Arial,sans-serif;font-size:12px}table{width:100%;border-collapse:collapse}th,td{border:1px solid #ddd;padding:6px 8px;text-align:left}th{background:#0FA4AF;color:#fff}tr:nth-child(even){background:#f9f9f9}h2{color:#0F172A}</style>
+  const html=`<!DOCTYPE html><html><head>
+    <link rel="stylesheet" href="/GM_HMS/assets/css/gm-theme.css">
+<title>Indent Requests</title>
+  <style>body{font-family:Arial,sans-serif;font-size:12px}table{width:100%;border-collapse:collapse}th,td{border:1px solid #ddd;padding:6px 8px;text-align:left}th{background:#1f6b4a;color:#fff}tr:nth-child(even){background:#f9f9f9}h2{color:#0F172A}</style>
   </head><body>
   <h2>Indent Requests Report</h2><p>Generated: ${new Date().toLocaleString()} | Total: ${data.length}</p>
   <table><thead><tr><th>Indent No</th><th>Date & Time</th><th>Item</th><th>Qty</th><th>Priority</th><th>Company</th><th>Status</th><th>Department</th><th>Requested By</th></tr></thead>

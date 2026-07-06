@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="/GM_HMS/assets/css/gm-theme.css">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Floor-Wise Bed Management - GM HMS</title>
@@ -15,7 +17,7 @@
             padding: 2rem;
             margin-bottom: 2rem;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            border-left: 6px solid #0FA4AF;
+            border-left: 6px solid #1f6b4a;
         }
         
         .floor-header {
@@ -129,7 +131,7 @@
             font-size: 0.75rem;
             padding: 0.25rem 0.625rem;
             background: #dbeafe;
-            color: #056674;
+            color: #144d34;
             border-radius: 0.375rem;
             font-weight: 600;
         }

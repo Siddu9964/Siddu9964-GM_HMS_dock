@@ -26,11 +26,11 @@ include 'includes/ph_head.php';
   --surface-2: #F8FAFC;
   --p-dark:    #011c22;
   --p-mid:     #024D55;
-  --p-base:    #0FA4AF;
+  --p-base:    #1f6b4a;
   --p-light:   #5DE8F0;
   --p-pale:    #E0F7FA;
-  --p-dim:     rgba(15,164,175,.10);
-  --p-dim2:    rgba(15,164,175,.18);
+  --p-dim:     rgba(31, 107, 74,.10);
+  --p-dim2:    rgba(31, 107, 74,.18);
   --s-indigo:  #4F46E5;
   --s-emerald: #059669;
   --s-amber:   #D97706;
@@ -58,7 +58,7 @@ include 'includes/ph_head.php';
 @media print {
   /* Hide the main UI completely */
   body > *:not(#rx-print-zone) { display: none !important; }
-  .wrapper, .content-wrapper, .main-header, .main-sidebar, .rx-wrap { display: none !important; }
+  .wrapper, .content-wrapper, .main-header, .main-sidebar, .ph-wrap { display: none !important; }
 
   /* Ensure the body has no extra margins or heights */
   body, html {
@@ -95,17 +95,17 @@ include 'includes/ph_head.php';
 .rx-header-adv { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:25px; padding-bottom:15px; border-bottom:1px solid #E2E8F0; }
 .rx-header-left h1 { margin:0 0 6px; font-size:28px; font-weight:900; color:#011c22; letter-spacing:-0.5px; line-height:1; }
 .rx-header-left p { margin:0; font-size:10px; color:#64748B; line-height:1.5; }
-.rx-header-left p i { color:#0FA4AF; margin-right:4px; }
+.rx-header-left p i { color:#1f6b4a; margin-right:4px; }
 .rx-header-right { text-align:right; }
 .rx-barcode { font-family:'Courier New', monospace; font-size:28px; line-height:1; color:#CBD5E1; margin-bottom:6px; font-weight:100; letter-spacing:-2px; }
 .rx-num-adv { font-size:13px; font-weight:800; color:#011c22; letter-spacing:0.5px; }
-.rx-num-adv span { color:#0FA4AF; }
+.rx-num-adv span { color:#1f6b4a; }
 .rx-meta-adv { font-size:9px; color:#94A3B8; margin-top:4px; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; }
 
 /* Info Grid */
 .rx-info-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; }
 .rx-info-box { background:#F8FAFC; border:1px solid #E2E8F0; border-radius:10px; padding:14px 18px; position:relative; overflow:hidden; }
-.rx-info-box::before { content:''; position:absolute; top:0; left:0; bottom:0; width:5px; background:#0FA4AF; }
+.rx-info-box::before { content:''; position:absolute; top:0; left:0; bottom:0; width:5px; background:#1f6b4a; }
 .rx-info-box.doc-box::before { background:#024D55; }
 .rx-box-title { font-size:8px; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:#94A3B8; margin-bottom:10px; display:flex; align-items:center; gap:5px; }
 .rx-box-name { font-size:16px; font-weight:900; color:#011c22; margin-bottom:8px; }
@@ -123,14 +123,14 @@ include 'includes/ph_head.php';
 .rx-sec-title { display:flex; align-items:center; gap:12px; margin-bottom:10px; margin-top:10px; }
 .rx-sec-title h3 { margin:0; font-size:12px; font-weight:900; color:#011c22; text-transform:uppercase; letter-spacing:0.08em; display:flex; align-items:center; }
 .rx-sec-title .line { flex:1; height:1px; background:linear-gradient(90deg, #E2E8F0, transparent); }
-.rx-sec-icon { font-family:Georgia,serif; font-size:24px; font-weight:bold; color:#0FA4AF; line-height:0.8; margin-right:8px; opacity:0.8; }
+.rx-sec-icon { font-family:Georgia,serif; font-size:24px; font-weight:bold; color:#1f6b4a; line-height:0.8; margin-right:8px; opacity:0.8; }
 
 /* Modern Table */
 .rx-mod-tbl { width:100%; border-collapse:separate; border-spacing:0; margin-bottom:8px; }
 .rx-mod-tbl th { padding:10px 12px; text-align:left; font-size:8px; font-weight:800; text-transform:uppercase; letter-spacing:0.08em; color:#94A3B8; border-bottom:2px solid #E2E8F0; }
 .rx-mod-tbl td { padding:12px; font-size:10.5px; color:#334155; border-bottom:1px solid #F1F5F9; vertical-align:middle; }
 .rx-mod-tbl tr:last-child td { border-bottom:none; }
-.rx-mod-tbl .med-idx { font-weight:900; color:#0FA4AF; font-size:11px; }
+.rx-mod-tbl .med-idx { font-weight:900; color:#1f6b4a; font-size:11px; }
 .rx-mod-tbl .med-name { font-weight:800; color:#0F172A; font-size:12.5px; display:block; margin-bottom:2px; }
 .rx-mod-tbl .med-badge { display:inline-flex; align-items:center; justify-content:center; background:#F8FAFC; border:1px solid #E2E8F0; border-radius:6px; padding:3px 8px; font-size:9.5px; font-weight:700; color:#475569; }
 .rx-mod-tbl .med-dur { font-weight:700; color:#024D55; }
@@ -141,7 +141,7 @@ include 'includes/ph_head.php';
 .rx-img-box img { max-width:280px; max-height:240px; object-fit:contain; border-radius:6px; display:block; }
 
 /* Watermark */
-.rx-watermark-adv { position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); font-size:350px; font-family:Georgia,serif; font-weight:bold; color:rgba(15,164,175,0.03); z-index:-1; pointer-events:none; }
+.rx-watermark-adv { position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); font-size:350px; font-family:Georgia,serif; font-weight:bold; color:rgba(31, 107, 74,0.03); z-index:-1; pointer-events:none; }
 
 /* Signatures */
 .rx-sigs-mod { display:flex; justify-content:space-between; margin-top:20px; padding-top:15px; }
@@ -153,28 +153,27 @@ include 'includes/ph_head.php';
 
 /* Footer */
 .rx-foot-mod { margin-top:40px; padding-top:15px; border-top:1px solid #E2E8F0; display:flex; justify-content:space-between; font-size:8.5px; color:#94A3B8; align-items:center; }
-.rx-foot-mod strong { color:#0FA4AF; font-weight:800; font-size:10px; }
+.rx-foot-mod strong { color:#1f6b4a; font-weight:800; font-size:10px; }
 .rx-validity-badge { background:#FFFBEB; border:1px solid #FDE68A; color:#92400E; padding:4px 10px; border-radius:99px; font-weight:700; font-size:8.5px; display:inline-flex; align-items:center; gap:4px; }
 
 /* ════════════════════════════════════════════════════════════
    HEADER
    ════════════════════════════════════════════════════════════ */
 .rx-header {
-  background:linear-gradient(135deg,var(--p-dark) 0%,var(--p-mid) 55%,var(--p-base) 100%);
-  padding:1.5rem 2rem 2.5rem; position:relative; overflow:hidden;
+  background:#f3efe6;
+  padding:1rem 1.75rem 1.5rem; position:relative; overflow:hidden;
 }
-.rx-header::before { content:'';position:absolute;width:420px;height:420px;border-radius:50%;top:-160px;right:-60px;background:rgba(255,255,255,.04);pointer-events:none; }
-.rx-header::after  { content:'';position:absolute;width:220px;height:220px;border-radius:50%;bottom:-80px;left:28%;background:rgba(93,232,240,.06);pointer-events:none; }
+.rx-header::before, .rx-header::after { display: none; }
 .rx-hinner { position:relative;z-index:1; }
-.rx-htag { display:inline-flex;align-items:center;gap:.4rem;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);padding:.28rem .85rem;border-radius:99px;font-size:.67rem;font-weight:700;color:rgba(255,255,255,.85);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.7rem; }
-.rx-ht  { font-size:2.1rem;font-weight:900;color:#fff;letter-spacing:-1px;line-height:1.05;margin-bottom:.35rem; }
-.rx-ht em { font-style:normal;color:var(--p-light); }
-.rx-hsub { font-size:.82rem;color:rgba(255,255,255,.55);max-width:460px;line-height:1.6;margin-bottom:1.5rem; }
-.rx-hstats { display:flex;gap:1.25rem;flex-wrap:wrap; }
-.rxhs { background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);border-radius:var(--radius);padding:.85rem 1.25rem;min-width:108px;backdrop-filter:blur(14px);transition:var(--ease); }
-.rxhs:hover { background:rgba(255,255,255,.16); }
-.rxhs-v { font-size:1.75rem;font-weight:900;color:#fff;line-height:1; }
-.rxhs-l { font-size:.62rem;font-weight:700;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.07em;margin-top:.15rem; }
+.rx-htag { display:inline-flex;align-items:center;gap:.4rem;background:rgba(31,107,74,.1);border:1px solid rgba(31,107,74,.2);padding:.28rem .85rem;border-radius:99px;font-size:.6rem;font-weight:700;color:#1f6b4a;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.5rem; }
+.rx-ht  { font-size:1.5rem;font-weight:900;color:#0f172a;letter-spacing:-.5px;line-height:1.1;margin-bottom:.2rem; }
+.rx-ht em { font-style:normal;color:#1f6b4a; }
+.rx-hsub { font-size:.75rem;color:#64748b;max-width:460px;line-height:1.5;margin-bottom:1rem; }
+.rx-hstats { display:flex;gap:1rem;flex-wrap:wrap; }
+.rxhs { background:#fff;border:1px solid #e2e8f0;border-radius:var(--radius);padding:.65rem 1rem;min-width:100px;box-shadow: 0 2px 8px rgba(15,23,42,.05);transition:var(--ease); }
+.rxhs:hover { box-shadow: 0 4px 12px rgba(15,23,42,.08); transform: translateY(-2px); }
+.rxhs-v { font-size:1.35rem;font-weight:900;color:#0f172a;line-height:1; }
+.rxhs-l { font-size:.55rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.07em;margin-top:.2rem; }
 
 /* ════════════════════════════════════════════════════════════
    CONTROL BAR  (sticky)
@@ -246,15 +245,15 @@ include 'includes/ph_head.php';
    PRINT BUTTON — shared across all views
    ════════════════════════════════════════════════════════════ */
 .rx-print-btn {
-  display:inline-flex; align-items:center; gap:.32rem;
-  padding:.38rem .75rem; border-radius:var(--radius-sm);
-  border:1.5px solid var(--p-base); background:transparent;
-  color:var(--p-mid); font-size:.73rem; font-weight:700;
+  display:inline-flex; align-items:center; gap:.4rem;
+  padding:.5rem 1.2rem; border-radius:var(--radius-sm);
+  border:none; background:var(--s-emerald);
+  color:#fff; font-size:.85rem; font-weight:800;
   cursor:pointer; transition:var(--ease); font-family:var(--font);
-  white-space:nowrap;
+  white-space:nowrap; box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
 }
-.rx-print-btn:hover { background:var(--p-base); color:#fff; box-shadow:0 3px 12px rgba(15,164,175,.3); }
-.rx-print-btn i { font-size:.68rem; }
+.rx-print-btn:hover { background:#047857; color:#fff; box-shadow:0 6px 16px rgba(5, 150, 105, 0.4); transform: translateY(-1px); }
+.rx-print-btn i { font-size:.85rem; }
 
 /* small icon-only variant */
 .rx-print-ic {
@@ -447,7 +446,7 @@ include 'includes/ph_head.php';
 <!-- ═══════ PRINT ZONE ═══════ -->
 <div id="rx-print-zone"></div>
 
-<div class="rx-wrap">
+<div class="ph-wrap">
 <?php include 'includes/pharmacy_sidebar.php'; ?>
 <div id="ph-content">
 <?php include 'includes/pharmacy_navbar.php'; ?>
@@ -582,7 +581,7 @@ include 'includes/ph_head.php';
 
 </div><!-- ph-page-body -->
 </div><!-- ph-content -->
-</div><!-- rx-wrap -->
+</div><!-- ph-wrap -->
 
 <!-- ══ MODAL ══ -->
 <div class="rx-mback" id="rxModal">
@@ -615,7 +614,7 @@ let ALL = [], RENDERED = [];
 let curView = 'split', selectedIdx = -1;
 let medToggleOn = false;
 
-const PAL = ['#0FA4AF','#4F46E5','#059669','#D97706','#E11D48','#7C3AED','#0891B2','#B45309'];
+const PAL = ['#1f6b4a','#4F46E5','#059669','#D97706','#E11D48','#7C3AED','#0891B2','#B45309'];
 function hsh(s){ let h=0; for(let i=0;i<s.length;i++) h=Math.imul(31,h)+s.charCodeAt(i)|0; return Math.abs(h); }
 function esc(s){ if(s==null)return''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function ini(n){ if(!n||!n.trim())return'?'; const p=n.trim().split(/\s+/); return(p[0][0]+(p[1]?p[1][0]:p[0][1]||'')).toUpperCase(); }
@@ -864,7 +863,7 @@ function printRx(idx){
     <!-- ── DIGITAL IMAGE ──────────────────────────────── -->
     ${hi ? `
     <div class="rx-sec-title">
-      <h3><i class="fas fa-file-image" style="color:#0FA4AF;margin-right:6px"></i> Digital Prescription Scan</h3>
+      <h3><i class="fas fa-file-image" style="color:#1f6b4a;margin-right:6px"></i> Digital Prescription Scan</h3>
       <div class="line"></div>
     </div>
     <div class="rx-img-box">

@@ -106,7 +106,7 @@
 }
 .nexus-search:focus-within {
   border-color: #06b6d4;
-  background: #fff;
+  background: #FDFBF7;
   box-shadow: 0 0 0 4px rgba(6,182,212,0.1);
 }
 .nexus-search input { background: transparent; border: none; outline: none; font-size: 0.85rem; width: 100%; font-weight: 600; color: #1e293b; }
@@ -157,5 +157,6 @@
 .btn-attach.done { background: #10b981; border-color: #10b981; }
 .btn-submit { background: #06b6d4; color: #fff; padding: 12px 28px; border-radius: 12px; font-weight: 800; border: none; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 10px 20px rgba(6,182,212,0.2); font-size: 0.9rem; }
 .btn-submit:hover { transform: translateY(-1px); background: #0891b2; }
+
 
 

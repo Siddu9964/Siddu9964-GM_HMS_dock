@@ -4,28 +4,7 @@
    ===================================================== */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
-:root {
-  --ph-primary: #0FA4AF;
-  --ph-primary-dark: #024D55;
-  --ph-primary-light: #E0F7FA;
-  --ph-accent: #5DE8F0;
-  --ph-bg: #F0F4F8;
-  --ph-surface: #FFFFFF;
-  --ph-border: #E2E8F0;
-  --ph-text: #0F172A;
-  --ph-muted: #64748B;
-  --ph-success: #22C55E;
-  --ph-warning: #F59E0B;
-  --ph-danger: #EF4444;
-  --ph-info: #3B82F6;
-  --ph-sidebar-bg: #0A0F1E;
-  --ph-sidebar-w: 250px;
-  --ph-navbar-h: 64px;
-  --ph-radius: 14px;
-  --ph-shadow: 0 2px 8px rgba(15, 23, 42, .07);
-  --ph-shadow-md: 0 8px 24px rgba(15, 23, 42, .12);
-  --ph-shadow-lg: 0 20px 48px rgba(15, 23, 42, .16);
-}
+/* :root removed and centralized to gm-theme.css */
 
 *,
 *::before,
@@ -48,7 +27,7 @@ body {
 }
 
 /* =====================================================
-   SIDEBAR
+   LAYOUT WRAP
    ===================================================== */
 .ph-wrap {
   display: flex;
@@ -90,13 +69,13 @@ body {
   width: 38px;
   height: 38px;
   border-radius: 11px;
-  background: linear-gradient(135deg, var(--ph-primary), #0d8a94);
+  background: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
+  color: var(--ph-primary);
   font-size: 1rem;
-  box-shadow: 0 4px 14px rgba(15, 164, 175, .45);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, .15);
 }
 
 .ph-logo-text {
@@ -142,7 +121,7 @@ body {
   font-size: .6rem;
   font-weight: 700;
   text-transform: uppercase;
-  color: #334155;
+  color: rgba(255, 255, 255, 0.6);
   letter-spacing: .12em;
   padding: 0 .6rem;
   margin-bottom: .5rem;
@@ -162,7 +141,7 @@ body {
   gap: .75rem;
   padding: .6rem .85rem;
   border-radius: 10px;
-  color: #64748B;
+  color: rgba(255, 255, 255, 0.75);
   text-decoration: none;
   font-size: .81rem;
   font-weight: 500;
@@ -189,8 +168,8 @@ body {
 }
 
 .ph-nav-link:hover {
-  background: rgba(255, 255, 255, .06);
-  color: #cbd5e1;
+  background: rgba(255, 255, 255, .1);
+  color: #ffffff;
 }
 
 .ph-nav-link:hover i {
@@ -198,14 +177,14 @@ body {
 }
 
 .ph-nav-link.active {
-  background: linear-gradient(135deg, rgba(15, 164, 175, .25), rgba(15, 164, 175, .12));
-  color: #5DE8F0;
+  background: rgba(255, 255, 255, .15);
+  color: #ffffff;
   font-weight: 700;
-  box-shadow: 0 0 0 1px rgba(15, 164, 175, .2);
+  box-shadow: none;
 }
 
 .ph-nav-link.active i {
-  color: #5DE8F0;
+  color: #ffffff;
 }
 
 .ph-nav-link.active::before {
@@ -216,14 +195,17 @@ body {
   bottom: 20%;
   width: 3px;
   border-radius: 0 3px 3px 0;
-  background: var(--ph-primary);
+  background: #ffffff;
 }
 
 /* =====================================================
-   NAVBAR
+   CONTENT AREA — scroll container
+   =====================================================
+   Sidebar is position:fixed so it is removed from flow.
+   #ph-content fills remaining width and scrolls.
    ===================================================== */
 #ph-content {
-  flex: 1;
+  width: calc(100% - var(--ph-sidebar-w));
   min-width: 0;
   margin-left: var(--ph-sidebar-w);
   display: flex;
@@ -231,9 +213,26 @@ body {
   min-height: 100vh;
 }
 
+#ph-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+#ph-content::-webkit-scrollbar-track {
+  background: #e2e8f0;
+}
+
+#ph-content::-webkit-scrollbar-thumb {
+  background: #94A3B8;
+  border-radius: 99px;
+}
+
+#ph-content::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
 .ph-navbar {
   height: var(--ph-navbar-h);
-  background: rgba(255, 255, 255, .9);
+  background: var(--ph-bg);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--ph-border);
   display: flex;
@@ -256,7 +255,7 @@ body {
    PAGE HEADER
    ===================================================== */
 .ph-page-title {
-  font-size: 1.5rem;
+  font-size: 2.5rem;
   font-weight: 900;
   color: var(--ph-text);
   letter-spacing: -.6px;
@@ -311,7 +310,7 @@ body {
 }
 
 .ph-stat {
-  background: #ffffff;
+  background: #FDFBF7;
   border: 1px solid rgba(226, 232, 240, .8);
   border-radius: 16px;
   padding: 1.25rem 1.5rem;
@@ -424,7 +423,7 @@ body {
   font-size: .83rem;
   color: var(--ph-text);
   border: none;
-  background: #fff;
+  background: #FDFBF7;
   vertical-align: middle;
   transition: background .15s;
 }
@@ -546,7 +545,7 @@ body {
 .badge-primary {
   background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
   color: var(--ph-primary-dark);
-  box-shadow: 0 2px 6px rgba(15, 164, 175, .15);
+  box-shadow: 0 2px 6px rgba(31, 107, 74, .15);
 }
 
 .badge-dark {
@@ -577,12 +576,12 @@ body {
 .ph-btn-primary {
   background: linear-gradient(135deg, var(--ph-primary), #0d8a94);
   color: #fff;
-  box-shadow: 0 4px 12px rgba(15, 164, 175, .3);
+  box-shadow: 0 4px 12px rgba(31, 107, 74, .3);
 }
 
 .ph-btn-primary:hover {
   background: linear-gradient(135deg, #0d8a94, #0a7580);
-  box-shadow: 0 8px 20px rgba(15, 164, 175, .45);
+  box-shadow: 0 8px 20px rgba(31, 107, 74, .45);
   transform: translateY(-1px);
   color: #fff;
 }
@@ -596,7 +595,7 @@ body {
 .ph-btn-outline:hover {
   border-color: var(--ph-primary);
   color: var(--ph-primary);
-  background: rgba(15, 164, 175, .05);
+  background: rgba(31, 107, 74, .05);
 }
 
 .ph-btn-danger {
@@ -668,8 +667,8 @@ body {
 .ph-btn-dark-pill:hover {
   background: #1e293b;
   color: #fff !important;
-  border-color: rgba(15, 164, 175, .5);
-  box-shadow: 0 8px 24px rgba(15, 23, 42, .35), 0 0 0 4px rgba(15, 164, 175, .1);
+  border-color: rgba(31, 107, 74, .5);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, .35), 0 0 0 4px rgba(31, 107, 74, .1);
   transform: translateY(-1px);
 }
 
@@ -711,8 +710,8 @@ body {
 .ph-select:focus,
 .ph-textarea:focus {
   border-color: var(--ph-primary);
-  box-shadow: 0 0 0 3px rgba(15, 164, 175, .12);
-  background: #fff;
+  box-shadow: 0 0 0 3px rgba(31, 107, 74, .12);
+  background: #FDFBF7;
 }
 
 .ph-textarea {
@@ -768,8 +767,8 @@ body {
 
 .ph-search-input-wrap input:focus {
   border-color: var(--ph-primary);
-  background: #fff;
-  box-shadow: 0 0 0 3px rgba(15, 164, 175, .1);
+  background: #FDFBF7;
+  box-shadow: 0 0 0 3px rgba(31, 107, 74, .1);
 }
 
 /* =====================================================
@@ -825,7 +824,7 @@ body {
   justify-content: center;
   border-radius: 8px;
   border: 1.5px solid var(--ph-border);
-  background: #fff;
+  background: #FDFBF7;
   font-size: .77rem;
   font-weight: 700;
   cursor: pointer;
@@ -835,14 +834,14 @@ body {
 .ph-page-btn:hover {
   border-color: var(--ph-primary);
   color: var(--ph-primary);
-  background: rgba(15, 164, 175, .05);
+  background: rgba(31, 107, 74, .05);
 }
 
 .ph-page-btn.active {
   background: var(--ph-primary);
   border-color: var(--ph-primary);
   color: #fff;
-  box-shadow: 0 4px 10px rgba(15, 164, 175, .3);
+  box-shadow: 0 4px 10px rgba(31, 107, 74, .3);
 }
 
 .ph-page-btn:disabled {
@@ -1146,7 +1145,7 @@ body {
   }
 
   50% {
-    box-shadow: 0 8px 24px rgba(15, 164, 175, .18), 0 4px 8px rgba(15, 164, 175, .1);
+    box-shadow: 0 8px 24px rgba(31, 107, 74, .18), 0 4px 8px rgba(31, 107, 74, .1);
   }
 }
 
@@ -1284,11 +1283,11 @@ body {
 
   0%,
   100% {
-    box-shadow: 0 0 0 0 rgba(15, 164, 175, .0), 0 0 0 1px rgba(15, 164, 175, .2);
+    box-shadow: 0 0 0 0 rgba(31, 107, 74, .0), 0 0 0 1px rgba(31, 107, 74, .2);
   }
 
   50% {
-    box-shadow: 0 0 12px 2px rgba(15, 164, 175, .2), 0 0 0 1px rgba(15, 164, 175, .3);
+    box-shadow: 0 0 12px 2px rgba(31, 107, 74, .2), 0 0 0 1px rgba(31, 107, 74, .3);
   }
 }
 
@@ -1434,11 +1433,11 @@ body {
 
   0%,
   100% {
-    box-shadow: 0 4px 12px rgba(15, 164, 175, .3);
+    box-shadow: 0 4px 12px rgba(31, 107, 74, .3);
   }
 
   50% {
-    box-shadow: 0 4px 24px rgba(15, 164, 175, .55), 0 0 0 4px rgba(15, 164, 175, .12);
+    box-shadow: 0 4px 24px rgba(31, 107, 74, .55), 0 0 0 4px rgba(31, 107, 74, .12);
   }
 }
 
@@ -1455,7 +1454,7 @@ body {
   }
 
   50% {
-    box-shadow: 0 6px 20px rgba(15, 23, 42, .4), 0 0 0 3px rgba(15, 164, 175, .15);
+    box-shadow: 0 6px 20px rgba(15, 23, 42, .4), 0 0 0 3px rgba(31, 107, 74, .15);
   }
 }
 
@@ -1669,11 +1668,11 @@ body {
 
   0%,
   100% {
-    box-shadow: 0 4px 14px rgba(15, 164, 175, .45);
+    box-shadow: 0 4px 14px rgba(31, 107, 74, .45);
   }
 
   50% {
-    box-shadow: 0 6px 24px rgba(15, 164, 175, .7), 0 0 0 4px rgba(15, 164, 175, .15);
+    box-shadow: 0 6px 24px rgba(31, 107, 74, .7), 0 0 0 4px rgba(31, 107, 74, .15);
   }
 }
 

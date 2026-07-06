@@ -1,4 +1,25 @@
 <?php
+/**
+ * ============================================================
+ * PharmacyPatientReturnsController — API Reference (OPD/IPD Returns)
+ * ============================================================
+ * Base URL : http://localhost/GM_HMS/api/pharmacy/patient-returns
+ * Auth     : All endpoints require Auth
+ * ------------------------------------------------------------
+ *
+ * 1. GET /api/pharmacy/patient-returns
+ *    Query: patient_id, date_from, date_to
+ *
+ * 2. POST /api/pharmacy/patient-returns
+ *    Body: { "patient_id":"PID-001", "sale_id":55, "reason":"Allergy",
+ *            "items":[{"product_id":15,"qty":5,"return_price":6.00}] }
+ *
+ * 3. DELETE /api/pharmacy/patient-returns/{id}
+ *
+ * 4. GET /api/pharmacy/patient-returns/receipt/{id}
+ *    Returns return receipt details
+ * ------------------------------------------------------------
+ */
 namespace GM_HMS\Controllers\api;
 
 use Exception;
@@ -190,3 +211,4 @@ class PharmacyPatientReturnsController extends BaseController {
         } catch (Exception $e) { $this->handleException($e); }
     }
 }
+

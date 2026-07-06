@@ -249,7 +249,7 @@ class PatientManager {
                         <button class="action-icon reschedule" onclick="patientManager.bookAppointment('${patient.patient_id}')" title="Book Appointment" style="color: #0d9488; background: #f0fdfa; border: 1px solid #99f6e4;">
                             <i class="fas fa-calendar-plus"></i>
                         </button>
-                        <button class="action-icon edit" onclick="patientManager.openModal('edit', '${patient.patient_id}')" title="Edit" style="color: #0fa4af; background: #f0f9fa; border: 1px solid #b2ebf2;">
+                        <button class="action-icon edit" onclick="patientManager.openModal('edit', '${patient.patient_id}')" title="Edit" style="color: #1f6b4a; background: #f0f9fa; border: 1px solid #b2ebf2;">
                             <i class="fas fa-edit"></i>
                         </button>
                         <button class="action-icon delete" onclick="patientManager.deletePatient('${patient.patient_id}')" title="Delete" style="color: #ef4444; background: #fef2f2; border: 1px solid #fecaca;">
@@ -626,7 +626,7 @@ class PatientManager {
                         if (areaClear)  areaClear.style.display = 'block';
                         areaDropdown.style.display = 'none';
                         // Highlight input border
-                        if (areaSearch) areaSearch.style.borderColor = '#0FA4AF';
+                        if (areaSearch) areaSearch.style.borderColor = '#1f6b4a';
                     });
                     areaDropdown.appendChild(row);
                 });

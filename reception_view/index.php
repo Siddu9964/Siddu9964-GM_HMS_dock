@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Receptionist') {
+if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], ['Receptionist', 'admin', 'Admin'])) {
     header("Location: /GM_HMS/login.php");
     exit();
 }
@@ -10,174 +10,1002 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Receptionist') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Reception Dashboard - GM Hospital Management System. Manage patient registrations, appointments, and front desk operations.">
     <title>Reception Dashboard - GM HMS</title>
-    
+
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="assets/css/reception_dashboard.css">
+
+    <!-- GM Theme (CSS Variables & Global Resets) -->
+    <link rel="stylesheet" href="/GM_HMS/assets/css/gm-theme.css">
+
+    <!-- Reception Dashboard CSS -->
+    <link rel="stylesheet" href="assets/css/reception_dashboard.css?v=<?= time() ?>">
+
+    <style>
+        /* ─── Dashboard-specific page enhancements ─── */
+
+        /* Greeting card with subtle shimmer animation */
+        @keyframes shimmer {
+            0% { background-position: -400px 0; }
+            100% { background-position: 400px 0; }
+        }
+
+        @keyframes countUp {
+            from { opacity: 0; transform: translateY(8px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeSlideIn {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(31, 107, 74, 0.15); }
+            50%       { box-shadow: 0 0 0 8px rgba(31, 107, 74, 0); }
+        }
+
+        @keyframes rotateDot {
+            from { transform: rotate(0deg); }
+            to   { transform: rotate(360deg); }
+        }
+
+        /* ─── Page body ─── */
+        body {
+            background: #f0ede6 !important;
+        }
+
+        /* ─── Reception content wrapper ─── */
+        .reception-content {
+            padding: 1.5rem 1.75rem 2rem;
+            animation: fadeSlideIn 0.45s ease-out both;
+        }
+
+        /* ─── Page header: breadcrumb-style title bar ─── */
+        .dash-page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .dash-page-header-left {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .dash-page-title {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #1f6b4a;
+            letter-spacing: -0.4px;
+            margin: 0;
+        }
+
+        .dash-page-subtitle {
+            font-size: 0.78rem;
+            color: #64748b;
+            font-weight: 500;
+            margin: 0;
+        }
+
+        .dash-date-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(31, 107, 74, 0.08);
+            color: #1f6b4a;
+            font-size: 0.78rem;
+            font-weight: 600;
+            padding: 6px 14px;
+            border-radius: 30px;
+            border: 1px solid rgba(31, 107, 74, 0.15);
+        }
+
+        .dash-live-dot {
+            width: 7px;
+            height: 7px;
+            background: #22c55e;
+            border-radius: 50%;
+            animation: pulseGlow 2s ease-in-out infinite;
+        }
+
+        /* ─── Main dashboard grid ─── */
+        .dashboard-main-grid {
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .dashboard-left-column {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            min-width: 0;
+        }
+
+        /* ─── Greeting card ─── */
+        .greeting-card-compact {
+            background: #f3efe6 !important;
+            border-radius: 20px !important;
+            padding: 1.75rem 2rem !important;
+            margin-bottom: 0 !important;
+            border: 1px solid rgba(31,107,74,0.1) !important;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06) !important;
+            position: relative !important;
+            overflow: hidden !important;
+            animation: fadeSlideIn 0.5s ease-out both;
+        }
+
+        .greeting-card-compact::before {
+            content: '' !important;
+            position: absolute !important;
+            top: -60px !important;
+            right: -60px !important;
+            width: 220px !important;
+            height: 220px !important;
+            background: rgba(255,255,255,0.06) !important;
+            border-radius: 50% !important;
+            pointer-events: none !important;
+        }
+
+        .greeting-card-compact::after {
+            content: '' !important;
+            position: absolute !important;
+            bottom: -40px !important;
+            left: 30% !important;
+            width: 140px !important;
+            height: 140px !important;
+            background: rgba(255,255,255,0.04) !important;
+            border-radius: 50% !important;
+            pointer-events: none !important;
+        }
+
+        .greeting-inner {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .greeting-title-compact {
+            font-size: 1.5rem !important;
+            font-weight: 800 !important;
+            color: #1f6b4a !important;
+            margin: 0 0 0.35rem !important;
+            letter-spacing: -0.5px !important;
+            line-height: 1.2 !important;
+        }
+
+        .greeting-date-compact {
+            font-size: 0.82rem !important;
+            color: #475569 !important;
+            font-weight: 500 !important;
+            margin: 0 !important;
+        }
+
+        .greeting-date-compact span {
+            color: #1f6b4a !important;
+            font-weight: 700 !important;
+            background: rgba(31,107,74,0.1) !important;
+            padding: 2px 10px !important;
+            border-radius: 6px !important;
+            display: inline-block !important;
+        }
+
+        .greeting-emoji-badge {
+            font-size: 3rem;
+            line-height: 1;
+            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.2));
+            animation: fadeSlideIn 0.6s ease-out 0.2s both;
+            flex-shrink: 0;
+        }
+
+        /* ─── KPI cards grid ─── */
+        .kpi-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+        }
+
+        .kpi-card {
+            background: #ffffff !important;
+            border-radius: 12px !important;
+            padding: 0.75rem 0.9rem !important;
+            border: 1px solid rgba(0,0,0,0.045) !important;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04) !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 0.7rem !important;
+            transition: all 0.25s cubic-bezier(0.4,0,0.2,1) !important;
+            cursor: default;
+            animation: fadeSlideIn 0.5s ease-out both;
+            min-width: 0 !important;
+            position: relative !important;
+            overflow: hidden !important;
+        }
+
+        .kpi-card:nth-child(1) { animation-delay: 0.05s; }
+        .kpi-card:nth-child(2) { animation-delay: 0.10s; }
+        .kpi-card:nth-child(3) { animation-delay: 0.15s; }
+
+        .kpi-card:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 8px 20px rgba(31,107,74,0.10) !important;
+            border-color: rgba(31,107,74,0.18) !important;
+        }
+
+        .kpi-card::before,
+        .kpi-card::after {
+            display: none !important;
+        }
+
+        .kpi-icon-wrapper {
+            width: 36px !important;
+            height: 36px !important;
+            border-radius: 9px !important;
+            background: #f1f5f9 !important;
+            color: #1f6b4a !important;
+            font-size: 0.9rem !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            flex-shrink: 0 !important;
+            transition: all 0.25s ease !important;
+            position: static !important;
+            transform: none !important;
+            opacity: 1 !important;
+        }
+
+        .kpi-card:hover .kpi-icon-wrapper {
+            background: #1f6b4a !important;
+            color: #ffffff !important;
+            transform: scale(1.06) !important;
+        }
+
+        .kpi-content-inline {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 1px !important;
+            min-width: 0 !important;
+            flex: 1 !important;
+        }
+
+        .kpi-card-value {
+            font-size: 1.3rem !important;
+            font-weight: 800 !important;
+            color: #1e293b !important;
+            line-height: 1 !important;
+            margin: 0 !important;
+            letter-spacing: -0.3px !important;
+            animation: countUp 0.5s ease-out both;
+        }
+
+        .kpi-card-label {
+            font-size: 0.65rem !important;
+            font-weight: 600 !important;
+            color: #64748b !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.04em !important;
+            margin: 0 !important;
+            line-height: 1.3 !important;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Accent stripe on KPI cards */
+        .kpi-card .kpi-stripe {
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            width: 3px;
+            background: linear-gradient(180deg, #1f6b4a, #22c55e);
+            border-radius: 12px 0 0 12px;
+        }
+
+        /* ─── Quick Actions card ─── */
+        .quick-actions-card {
+            background: #ffffff;
+            border-radius: 14px;
+            border: 1px solid rgba(0,0,0,0.045);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+            overflow: hidden;
+            animation: fadeSlideIn 0.5s ease-out 0.2s both;
+        }
+
+        .quick-actions-card .card-header {
+            padding: 0.75rem 1.1rem;
+            margin-bottom: 0;
+            border-bottom: 1px solid #f1f5f9;
+            background: #fafbfc;
+        }
+
+        .quick-actions-card .card-title {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #1f6b4a;
+        }
+
+        .quick-actions-card .card-body {
+            padding: 0.9rem 1rem;
+        }
+
+        /* 2×3 icon grid */
+        .quick-actions-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.6rem;
+        }
+
+        .quick-action-btn {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 0.45rem !important;
+            padding: 0.85rem 0.5rem !important;
+            background: #f8fafc !important;
+            border: 1.5px solid #e8edf2 !important;
+            border-radius: 12px !important;
+            color: #334155 !important;
+            font-size: 0.7rem !important;
+            font-weight: 600 !important;
+            text-align: center !important;
+            cursor: pointer;
+            transition: all 0.22s cubic-bezier(0.4,0,0.2,1) !important;
+            box-shadow: none !important;
+            white-space: normal !important;
+            line-height: 1.25 !important;
+            height: auto !important;
+            width: 100% !important;
+        }
+
+        .quick-action-btn i {
+            width: 36px !important;
+            height: 36px !important;
+            border-radius: 10px !important;
+            background: rgba(31,107,74,0.09) !important;
+            color: #1f6b4a !important;
+            font-size: 0.95rem !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            transition: all 0.22s ease !important;
+            transform: none !important;
+            flex-shrink: 0 !important;
+        }
+
+        .quick-action-btn:hover {
+            background: #1f6b4a !important;
+            color: #ffffff !important;
+            border-color: #1f6b4a !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 6px 16px rgba(31,107,74,0.20) !important;
+        }
+
+        .quick-action-btn:hover i {
+            background: rgba(255,255,255,0.18) !important;
+            color: #ffffff !important;
+            transform: scale(1.08) !important;
+        }
+
+        /* ─── Right column: Doctors Panel ─── */
+        .dashboard-right-column {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .doctors-panel-compact {
+            background: #ffffff;
+            border-radius: 20px;
+            border: 1px solid rgba(0,0,0,0.045);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            max-height: 580px;
+            overflow: hidden;
+            animation: fadeSlideIn 0.5s ease-out 0.1s both;
+            transition: box-shadow 0.25s ease;
+        }
+
+        .doctors-panel-compact:hover {
+            box-shadow: 0 8px 32px rgba(31,107,74,0.08);
+        }
+
+        /* Doctors panel inner header */
+        .doctors-panel-top {
+            padding: 1.1rem 1.25rem 0.85rem;
+            border-bottom: 1px solid #f1f5f9;
+            background: #fafbfc;
+            border-radius: 20px 20px 0 0;
+            flex-shrink: 0;
+        }
+
+        .doctors-panel-title-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+        }
+
+        .doctors-panel-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: #1f6b4a;
+        }
+
+        .doctors-panel-title i {
+            font-size: 1rem;
+            color: #1f6b4a;
+        }
+
+        .live-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(34,197,94,0.1);
+            color: #15803d;
+            font-size: 0.68rem;
+            font-weight: 700;
+            padding: 3px 9px;
+            border-radius: 20px;
+            border: 1px solid rgba(34,197,94,0.2);
+        }
+
+        .live-badge-dot {
+            width: 6px;
+            height: 6px;
+            background: #22c55e;
+            border-radius: 50%;
+            animation: pulseGlow 2s ease-in-out infinite;
+        }
+
+        .doctor-search-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .doctor-search-wrapper i {
+            position: absolute;
+            left: 11px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            font-size: 0.8rem;
+            pointer-events: none;
+        }
+
+        .doctor-search-input {
+            width: 100%;
+            padding: 8px 12px 8px 32px;
+            border-radius: 10px;
+            border: 1.5px solid rgba(0,0,0,0.07);
+            background: #f8fafc;
+            font-size: 0.8rem;
+            color: #334155;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            transition: all 0.25s ease;
+            box-sizing: border-box;
+        }
+
+        .doctor-search-input:focus {
+            border-color: #1f6b4a;
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(31,107,74,0.10);
+        }
+
+        .doctor-search-input::placeholder {
+            color: #94a3b8;
+        }
+
+        .doctors-list {
+            flex: 1;
+            padding: 0.85rem;
+            overflow-y: auto;
+        }
+
+        /* Doctor item styling */
+        .doctor-item {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            padding: 0.75rem 0.9rem;
+            margin-bottom: 0.5rem;
+            background: #f8fafc;
+            border-radius: 12px;
+            border-left: 3px solid #1f6b4a;
+            transition: all 0.22s ease;
+            cursor: pointer;
+            animation: fadeSlideIn 0.4s ease-out both;
+        }
+
+        .doctor-item:hover {
+            background: #f0fdf4;
+            transform: translateX(3px);
+            border-left-color: #22c55e;
+            box-shadow: 0 2px 10px rgba(31,107,74,0.08);
+        }
+
+        .doctor-item:last-child { margin-bottom: 0; }
+
+        .doctor-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1f6b4a, #144d34);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(31,107,74,0.25);
+        }
+
+        .doctor-info { flex: 1; min-width: 0; }
+
+        .doctor-name {
+            font-weight: 600;
+            font-size: 0.83rem;
+            color: #1e293b;
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .doctor-specialization {
+            font-size: 0.72rem;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .doctor-specialization i {
+            color: #1f6b4a;
+            font-size: 0.68rem;
+        }
+
+        .loading-doctors {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.65rem;
+            padding: 2rem;
+            color: #94a3b8;
+            font-size: 0.85rem;
+        }
+
+        .loading-doctors i { font-size: 1.1rem; }
+
+        .no-doctors {
+            text-align: center;
+            padding: 2rem 1rem;
+            color: #94a3b8;
+        }
+
+        .no-doctors i {
+            font-size: 2.2rem;
+            margin-bottom: 0.65rem;
+            opacity: 0.45;
+            display: block;
+        }
+
+        .no-doctors p {
+            font-size: 0.83rem;
+            margin: 0;
+        }
+
+        /* ─── Bottom row ─── */
+        .bottom-row-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .bottom-row-grid .card {
+            background: #ffffff;
+            border-radius: 18px;
+            border: 1px solid rgba(0,0,0,0.045);
+            box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+            padding: 0;
+            overflow: hidden;
+            transition: box-shadow 0.25s ease, transform 0.25s ease;
+            animation: fadeSlideIn 0.5s ease-out 0.25s both;
+        }
+
+        .bottom-row-grid .card:hover {
+            box-shadow: 0 8px 28px rgba(31,107,74,0.08);
+            transform: translateY(-2px);
+        }
+
+        .bottom-row-grid .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.35rem;
+            border-bottom: 1px solid #f1f5f9;
+            background: #fafbfc;
+            margin-bottom: 0;
+        }
+
+        .bottom-row-grid .card-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #1f6b4a;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .bottom-row-grid .card-title i {
+            color: #1f6b4a;
+            font-size: 0.9rem;
+        }
+
+        .bottom-row-grid .card-body {
+            padding: 1.15rem 1.35rem;
+            color: #334155;
+        }
+
+        .view-all-link {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #1f6b4a;
+            text-decoration: none;
+            padding: 4px 10px;
+            border-radius: 20px;
+            background: rgba(31,107,74,0.08);
+            transition: all 0.2s ease;
+        }
+
+        .view-all-link:hover {
+            background: rgba(31,107,74,0.15);
+            color: #155638;
+        }
+
+        /* Activity list item */
+        .activity-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 0.65rem 0;
+            border-bottom: 1px solid #f1f5f9;
+            transition: background 0.2s ease;
+        }
+
+        .activity-item:last-child { border-bottom: none; }
+
+        .activity-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            flex-shrink: 0;
+        }
+
+        .activity-icon.green  { background: rgba(31,107,74,0.10); color: #1f6b4a; }
+        .activity-icon.blue   { background: rgba(26,35,126,0.10); color: #1A237E; }
+        .activity-icon.amber  { background: rgba(217,119,6,0.10); color: #D97706; }
+
+        .activity-info { flex: 1; min-width: 0; }
+
+        .activity-text {
+            font-size: 0.8rem;
+            color: #334155;
+            font-weight: 500;
+            margin: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .activity-time {
+            font-size: 0.7rem;
+            color: #94a3b8;
+            margin: 1px 0 0;
+        }
+
+        /* ─── Responsive ─── */
+        @media (max-width: 1100px) {
+            .dashboard-main-grid {
+                grid-template-columns: 1fr;
+            }
+            .dashboard-right-column {
+                flex-direction: row;
+            }
+            .doctors-panel-compact {
+                flex: 1;
+                max-height: 360px;
+            }
+            .kpi-cards-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 900px) {
+            .kpi-cards-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .bottom-row-grid {
+                grid-template-columns: 1fr;
+            }
+            .dashboard-right-column {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .reception-content { padding: 1rem; }
+            .kpi-cards-grid { grid-template-columns: 1fr; }
+            .greeting-title-compact { font-size: 1.1rem !important; }
+            .greeting-emoji-badge { font-size: 2rem; }
+            .dash-page-header { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+            .quick-actions-grid { gap: 0.5rem; }
+        }
+    </style>
 </head>
 <body>
-    <div class="reception-layout">
-        <!-- Sidebar -->
-        <?php include 'includes/reception_sidebar.php'; ?>
-        
-        <!-- Main Content -->
-        <div class="reception-main-content">
-            <!-- Top Navbar -->
-            <?php include 'includes/reception_navbar.php'; ?>
-            
-            <!-- Dashboard Content -->
-            <div class="reception-content">
-                <!-- New Layout: Left Column (Greeting + KPI Cards) | Right Column (Available Doctors) -->
-                <div class="dashboard-main-grid">
-                    <!-- Left Column: Greeting + KPI Cards -->
-                    <div class="dashboard-left-column">
-                        <!-- Greeting Card -->
-                        <div class="greeting-card-compact">
-                            <h1 class="greeting-title-compact">
-                                Good <span id="greeting-time">Afternoon</span>, <?php echo htmlspecialchars($_SESSION['full_name']); ?>! 👋
-                            </h1>
-                            <p class="greeting-date-compact">
-                                Today is <span id="current-date">Monday, January 26, 2026</span>
-                            </p>
-                        </div>
-                        
-                        <!-- KPI Cards Grid (2x2) -->
-                        <div class="kpi-cards-grid">
-                            <!-- New Registrations -->
-                            <div class="kpi-card card" style="background: linear-gradient(135deg, #0FA4AF 0%, #056674 100%);">
-                                <div style="position: relative; z-index: 1;">
-                                    <div class="kpi-card-label">New Registrations</div>
-                                    <div class="kpi-card-value" id="kpi-registrations">0</div>
-                                </div>
-                                <i class="fas fa-user-plus kpi-card-icon"></i>
-                            </div>
-                            
-                            <!-- Waiting Patients -->
-                            <div class="kpi-card card" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
-                                <div style="position: relative; z-index: 1;">
-                                    <div class="kpi-card-label">OPD Waiting</div>
-                                    <div class="kpi-card-value" id="kpi-waiting">0</div>
-                                </div>
-                                <i class="fas fa-clock kpi-card-icon"></i>
-                            </div>
-                            
-                            <!-- Active IPD Patients -->
-                            <div class="kpi-card card" onclick="window.location.href='ipd_management/public/index.php'" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); cursor: pointer;">
-                                <div style="position: relative; z-index: 1;">
-                                    <div class="kpi-card-label">Active IPD Patients</div>
-                                    <div class="kpi-card-value" id="kpi-ipd">0</div>
-                                </div>
-                                <i class="fas fa-procedures kpi-card-icon"></i>
-                            </div>
-                            
-                            <!-- Available Doctors -->
-                            <div class="kpi-card card" style="background: linear-gradient(135deg, #0FA4AF 0%, #2EAFB9 100%);">
-                                <div style="position: relative; z-index: 1;">
-                                    <div class="kpi-card-label">Doctors Available</div>
-                                    <div class="kpi-card-value" id="kpi-doctors">0</div>
-                                </div>
-                                <i class="fas fa-user-md kpi-card-icon"></i>
-                            </div>
-                        </div>
-                        
-                        <!-- Quick Actions Section -->
-                        <div class="quick-actions-card card">
-                            <div class="card-header">
-                                <div class="card-title">
-                                    <i class="fas fa-bolt"></i>
-                                    Quick Actions
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <div class="quick-actions-grid">
-                                    <button onclick="window.location.href='patient_registration.php'" class="btn btn-outline quick-action-btn">
-                                        <i class="fas fa-user-plus"></i>
-                                        Register Patient
-                                    </button>
-                                    <button onclick="window.location.href='appointment_management.php'" class="btn btn-outline quick-action-btn">
-                                        <i class="fas fa-calendar-check"></i>
-                                        Book Appointment
-                                    </button>
-                                    <button onclick="window.location.href='prescriptions.php'" class="btn btn-outline quick-action-btn">
-                                        <i class="fas fa-prescription"></i>
-                                        View Prescription
-                                    </button>
-                                    <button onclick="window.location.href='billing.php'" class="btn btn-outline quick-action-btn">
-                                        <i class="fas fa-file-invoice-dollar"></i>
-                                        Create Invoice
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Right Column: Available Doctors Panel + Patient Flow Chart -->
-                    <div class="dashboard-right-column">
-                        <!-- Available Doctors Panel -->
-                        <div class="doctors-panel-compact">
-                            <div class="doctors-header">
-                                <i class="fas fa-user-md"></i>
-                                <h3>Available Doctors</h3>
-                            </div>
-                            <div class="doctors-list" id="available-doctors-list">
-                                <div class="loading-doctors">
-                                    <i class="fas fa-spinner fa-spin"></i>
-                                    <span>Loading doctors...</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+<div class="reception-layout">
+
+    <!-- Sidebar -->
+    <?php include 'includes/reception_sidebar.php'; ?>
+
+    <!-- Main Content -->
+    <div class="reception-main-content">
+
+        <!-- Top Navbar -->
+        <?php include 'includes/reception_navbar.php'; ?>
+
+        <!-- Dashboard Content -->
+        <div class="reception-content">
+
+            <!-- ── Page Header ── -->
+            <div class="dash-page-header">
+                <div class="dash-page-header-left">
+                    <h1 class="dash-page-title">Reception Dashboard</h1>
+                    <p class="dash-page-subtitle">Welcome back! Here's what's happening today.</p>
                 </div>
-                
-                <!-- Bottom Row: Patient Flow & Recent Activity (Horizontal Layout) -->
-                <div class="bottom-row-grid">
-                    <!-- Patient Flow Chart -->
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="card-title">
-                                <i class="fas fa-chart-line"></i>
-                                Patient Flow (Weekly)
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <canvas id="patientFlowChart" height="250"></canvas>
-                        </div>
-                    </div>
-                    
-                    <!-- Recent Front Desk Activity -->
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="card-title">
-                                <i class="fas fa-history"></i>
-                                Recent Front Desk Activity
-                            </div>
-                            <a href="#" style="font-size: 0.875rem; color: var(--primary-blue);">View All</a>
-                        </div>
-                        <div class="card-body">
-                            <div id="recent-activity-list">
-                                <div style="text-align: center; padding: 2rem; color: var(--gray-400);">
-                                    <i class="fas fa-spinner fa-spin" style="font-size: 2rem; margin-bottom: 0.5rem;"></i>
-                                    <p>Loading activity...</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="dash-date-pill">
+                    <span class="dash-live-dot"></span>
+                    <span id="current-date-pill">Loading...</span>
                 </div>
             </div>
-        </div>
-    </div>
-    
-    <!-- JavaScript -->
-    <script src="assets/js/reception_utils.js"></script>
-    <script src="assets/js/dashboard.js"></script>
+
+            <!-- ── Main Grid: Left Column + Right Column (Doctors) ── -->
+            <div class="dashboard-main-grid">
+
+                <!-- LEFT: Greeting + KPI Cards + Quick Actions -->
+                <div class="dashboard-left-column">
+
+                    <!-- Greeting Card -->
+                    <div class="greeting-card-compact">
+                        <div class="greeting-inner">
+                            <div>
+                                <h2 class="greeting-title-compact">
+                                    Good <span id="greeting-time">Morning</span>,
+                                    <?php echo htmlspecialchars($_SESSION['full_name']); ?>!
+                                </h2>
+                                <p class="greeting-date-compact">
+                                    Today is <span id="current-date">Loading...</span>
+                                </p>
+                            </div>
+                            <div class="greeting-emoji-badge">👋</div>
+                        </div>
+                    </div>
+
+                    <!-- KPI Cards -->
+                    <div class="kpi-cards-grid">
+
+                        <!-- New Registrations -->
+                        <div class="kpi-card">
+                            <span class="kpi-stripe"></span>
+                            <div class="kpi-icon-wrapper">
+                                <i class="fas fa-user-plus"></i>
+                            </div>
+                            <div class="kpi-content-inline">
+                                <span class="kpi-card-value" id="kpi-registrations">0</span>
+                                <span class="kpi-card-label">New Registrations</span>
+                            </div>
+                        </div>
+
+                        <!-- OPD Waiting -->
+                        <div class="kpi-card">
+                            <span class="kpi-stripe" style="background: linear-gradient(180deg,#d97706,#f59e0b);"></span>
+                            <div class="kpi-icon-wrapper" style="background: rgba(217,119,6,0.08) !important; color: #d97706 !important;">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="kpi-content-inline">
+                                <span class="kpi-card-value" id="kpi-waiting">0</span>
+                                <span class="kpi-card-label">OPD Waiting</span>
+                            </div>
+                        </div>
+
+                        <!-- Active IPD Patients -->
+                        <div class="kpi-card" onclick="window.location.href='ipd_management/public/index.php'" style="cursor: pointer;">
+                            <span class="kpi-stripe" style="background: linear-gradient(180deg,#1A237E,#3949ab);"></span>
+                            <div class="kpi-icon-wrapper" style="background: rgba(26,35,126,0.08) !important; color: #1A237E !important;">
+                                <i class="fas fa-procedures"></i>
+                            </div>
+                            <div class="kpi-content-inline">
+                                <span class="kpi-card-value" id="kpi-ipd">0</span>
+                                <span class="kpi-card-label">Active IPD Patients</span>
+                            </div>
+                        </div>
+
+                    </div><!-- /.kpi-cards-grid -->
+
+                    <!-- Quick Actions -->
+                    <div class="quick-actions-card">
+                        <div class="card-header">
+                            <div class="card-title">
+                                <i class="fas fa-bolt"></i>
+                                Quick Actions
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="quick-actions-grid">
+                                <button onclick="window.location.href='patient_registration.php'" class="quick-action-btn">
+                                    <i class="fas fa-user-plus"></i>
+                                    Register Patient
+                                </button>
+                                <button onclick="window.location.href='appointment_management.php'" class="quick-action-btn">
+                                    <i class="fas fa-calendar-check"></i>
+                                    Book Appointment
+                                </button>
+                                <button onclick="window.location.href='prescriptions.php'" class="quick-action-btn">
+                                    <i class="fas fa-prescription"></i>
+                                    View Prescription
+                                </button>
+                                <button onclick="window.location.href='billing.php'" class="quick-action-btn">
+                                    <i class="fas fa-file-invoice-dollar"></i>
+                                    Create Invoice
+                                </button>
+                                <button onclick="window.location.href='opd_management.php'" class="quick-action-btn">
+                                    <i class="fas fa-stethoscope"></i>
+                                    OPD Management
+                                </button>
+                                <button onclick="window.location.href='doctor_availability.php'" class="quick-action-btn">
+                                    <i class="fas fa-user-md"></i>
+                                    Doctor Schedule
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div><!-- /.dashboard-left-column -->
+
+                <!-- RIGHT: Available Doctors Panel -->
+                <div class="dashboard-right-column">
+                    <div class="doctors-panel-compact">
+
+                        <!-- Panel Header -->
+                        <div class="doctors-panel-top">
+                            <div class="doctors-panel-title-row">
+                                <div class="doctors-panel-title">
+                                    <i class="fas fa-user-md"></i>
+                                    Available Doctors
+                                </div>
+                                <div class="live-badge">
+                                    <span class="live-badge-dot"></span>
+                                    Live
+                                </div>
+                            </div>
+                            <!-- Search -->
+                            <div class="doctor-search-wrapper">
+                                <i class="fas fa-search"></i>
+                                <input
+                                    type="text"
+                                    id="doctor-search-input"
+                                    class="doctor-search-input"
+                                    placeholder="Search by name or specialty…"
+                                >
+                            </div>
+                        </div>
+
+                        <!-- Doctors List -->
+                        <div class="doctors-list" id="available-doctors-list">
+                            <div class="loading-doctors">
+                                <i class="fas fa-spinner fa-spin"></i>
+                                <span>Loading doctors…</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div><!-- /.dashboard-right-column -->
+
+            </div><!-- /.dashboard-main-grid -->
+
+            <!-- ── Bottom Row: Patient Flow Chart + Recent Activity ── -->
+            <div class="bottom-row-grid">
+
+                <!-- Patient Flow Chart -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <i class="fas fa-chart-line"></i>
+                            Patient Flow (Weekly)
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="patientFlowChart" height="210"></canvas>
+                    </div>
+                </div>
+
+                <!-- Recent Front Desk Activity -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <i class="fas fa-history"></i>
+                            Recent Front Desk Activity
+                        </div>
+                        <a href="#" class="view-all-link">View All</a>
+                    </div>
+                    <div class="card-body" style="padding-top:0.75rem; padding-bottom:0.75rem;">
+                        <div id="recent-activity-list">
+                            <div style="text-align:center; padding:2rem; color:#94a3b8;">
+                                <i class="fas fa-spinner fa-spin" style="font-size:1.75rem; margin-bottom:0.5rem; display:block;"></i>
+                                <p style="font-size:0.82rem; margin:0; color:#94a3b8 !important;">Loading activity…</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div><!-- /.bottom-row-grid -->
+
+        </div><!-- /.reception-content -->
+    </div><!-- /.reception-main-content -->
+</div><!-- /.reception-layout -->
+
+<!-- ── Scripts ── -->
+<script src="assets/js/reception_utils.js"></script>
+<script src="assets/js/dashboard.js"></script>
+
+<script>
+    /* ── Greeting time & date ── */
+    (function() {
+        const hour = new Date().getHours();
+        const timeEl = document.getElementById('greeting-time');
+        const dateEl = document.getElementById('current-date');
+        const pillEl = document.getElementById('current-date-pill');
+
+        if (timeEl) {
+            if (hour < 12)      timeEl.textContent = 'Morning';
+            else if (hour < 17) timeEl.textContent = 'Afternoon';
+            else                timeEl.textContent = 'Evening';
+        }
+
+        const now = new Date();
+        const opts = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        const shortOpts = { weekday: 'short', month: 'short', day: 'numeric' };
+        const formatted = now.toLocaleDateString('en-US', opts);
+        const short = now.toLocaleDateString('en-US', shortOpts);
+
+        if (dateEl) dateEl.textContent = formatted;
+        if (pillEl) pillEl.textContent = short;
+    })();
+</script>
 </body>
 </html>

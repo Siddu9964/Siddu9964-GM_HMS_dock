@@ -128,13 +128,13 @@ async function loadUpcomingAppointments() {
                             <div style="font-weight: 700; font-size: 0.95rem; color: #0f172a;">
                                 ${appointment.patient_name}
                             </div>
-                            <div style="font-size: 0.75rem; font-weight: 700; color: #0FA4AF; background: #0FA4AF15; padding: 2px 8px; border-radius: 4px;">
+                            <div style="font-size: 0.75rem; font-weight: 700; color: #1f6b4a; background: #1f6b4a15; padding: 2px 8px; border-radius: 4px;">
                                 ${DateUtils.formatDateReadable(appointment.appointment_date)}
                             </div>
                         </div>
                         <div style="font-size: 0.8rem; color: var(--gray-500); display: flex; gap: 1rem;">
-                            <span><i class="fas fa-clock" style="color: #0FA4AF; margin-right: 4px;"></i> ${appointment.appointment_time}</span>
-                            <span><i class="fas fa-notes-medical" style="color: #0FA4AF; margin-right: 4px;"></i> ${appointment.reason || 'General Consultation'}</span>
+                            <span><i class="fas fa-clock" style="color: #1f6b4a; margin-right: 4px;"></i> ${appointment.appointment_time}</span>
+                            <span><i class="fas fa-notes-medical" style="color: #1f6b4a; margin-right: 4px;"></i> ${appointment.reason || 'General Consultation'}</span>
                         </div>
                     </div>
                     <div style="margin-left: 1rem;">

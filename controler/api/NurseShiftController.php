@@ -1,4 +1,66 @@
 <?php
+/**
+ * ============================================================
+ * NurseShiftController — API Reference
+ * ============================================================
+ * Base URL : http://localhost/GM_HMS/api
+ * Auth     : All endpoints require Auth (Session or Bearer token)
+ * Tables   : nurse_allocation, hospital_beds, staff
+ * ------------------------------------------------------------
+ *
+ * 1. GET /api/nurse-shifts
+ *    Query Params:
+ *      role_id    (int)    - Filter by nurse role ID
+ *      date_from  (date)   - Shift date from YYYY-MM-DD
+ *      date_to    (date)   - Shift date to YYYY-MM-DD
+ *      ward       (string) - Filter by ward name
+ *    Response: [ { id, role_id, nurse_name, shift_date, shift_type, ward_name, status } ]
+ *
+ * 2. POST /api/nurse-shifts        [Required: role_id, shift_date_from, shift_date_to, shift_type, ward_name]
+ *    Creates shifts for a date range (one shift per day in range)
+ *    Body:
+ *      {
+ *        "role_id":         12,
+ *        "shift_date_from": "2026-06-26",
+ *        "shift_date_to":   "2026-06-30",
+ *        "shift_type":      "Morning",
+ *        "ward_name":       "General Ward",
+ *        "floor_name":      "Ground Floor",
+ *        "floor_number":    0,
+ *        "ward_type":       "General",
+ *        "room_number":     "101",
+ *        "room_name":       "Recovery Room",
+ *        "assigned_beds":   "Bed 1, Bed 2",
+ *        "status":          "Scheduled"
+ *      }
+ *    shift_type: Morning | Evening | Night
+ *    Response 201: { allocation_id, days, message }
+ *
+ * 3. PUT /api/nurse-shifts/{id}
+ *    Body: Send only fields to update (same as POST)
+ *
+ * 4. DELETE /api/nurse-shifts/{id}
+ *    No body required.
+ *
+ * 5. GET /api/nurse-shifts/nurses
+ *    Returns all Active staff with Nurse in designation.
+ *    Response: [ { sl_no, role_id, full_name, designation } ]
+ *
+ * 6. GET /api/nurse-shifts/wards
+ *    Query: ward_type, floor (optional filters)
+ *    Response: [ { ward_name, ward_type, floor_name, floor_number } ]
+ *
+ * 7. GET /api/nurse-shifts/floors
+ *    Response: [ { floor_number, floor_name } ]
+ *
+ * 8. GET /api/nurse-shifts/ward-types
+ *    Response: [ { ward_type } ]
+ *
+ * 9. GET /api/nurse-shifts/rooms
+ *    Query: ward, floor_number (optional)
+ *    Response: [ { floor_number, floor_name, ward_name, ward_type, room_number, room_name } ]
+ * ------------------------------------------------------------
+ */
 namespace GM_HMS\Controllers\api;
 
 use Exception;

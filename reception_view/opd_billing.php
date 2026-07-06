@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Receptionist') {
+if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], ['Receptionist', 'admin', 'Admin'])) {
     header("Location: ../receptionist_login.php");
     exit();
 }
@@ -9,6 +9,8 @@ $pageTitle = 'OPD Billing';
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="/GM_HMS/assets/css/gm-theme.css">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OPD Billing — GM HMS</title>
@@ -253,7 +255,7 @@ $pageTitle = 'OPD Billing';
                     <div class="billing-card">
                         <div class="billing-card-head">
                             <i class="fas fa-history"></i>
-                            <h3>Recent Bills</h3>
+                            <h3 style="color: #1f6b4a;">Recent Bills</h3>
                             <div class="bills-toolbar" style="margin-left:auto;">
                                 <div class="search-input-wrap" style="margin-bottom:0; width:220px;">
                                     <i class="fas fa-search search-icon"></i>
@@ -394,7 +396,7 @@ $pageTitle = 'OPD Billing';
             </div>
 
             <div style="margin-top:2rem;">
-                <button class="btn btn-primary" onclick="opdBilling.submitSettlement()" style="width:100%; justify-content:center; padding:0.8rem; font-size:1rem; background:linear-gradient(135deg, var(--teal), #0d9488); border:none; box-shadow: 0 4px 12px rgba(15,164,175,0.3);">
+                <button class="btn btn-primary" onclick="opdBilling.submitSettlement()" style="width:100%; justify-content:center; padding:0.8rem; font-size:1rem; background:linear-gradient(135deg, var(--teal), #0d9488); border:none; box-shadow: 0 4px 12px rgba(31, 107, 74,0.3);">
                     <i class="fas fa-check-circle"></i> Confirm Payment
                 </button>
             </div>

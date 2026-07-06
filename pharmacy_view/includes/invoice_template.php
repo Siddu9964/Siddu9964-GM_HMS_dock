@@ -55,34 +55,36 @@ if (!$itemsHtml) {
 }
 
 $balLabel = $balanceFinal < 0 ? 'Balance Due' : 'Change';
-$balColor = $balanceFinal < 0 ? '#e53e3e' : '#0FA4AF';
+$balColor = $balanceFinal < 0 ? '#e53e3e' : '#1f6b4a';
 
 ob_start(); ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="/GM_HMS/assets/css/gm-theme.css">
+
 <meta charset="UTF-8">
 <title>Invoice <?= htmlspecialchars($invoice_no) ?></title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Segoe UI',Arial,sans-serif;font-size:12px;color:#222;background:#fff;padding:28px;max-width:800px;margin:0 auto;}
 /* ── Header ── */
-.inv-hdr{display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:14px;border-bottom:3px solid #0FA4AF;margin-bottom:18px;}
-.co-name{font-size:24px;font-weight:800;color:#0FA4AF;margin-bottom:4px;}
+.inv-hdr{display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:14px;border-bottom:3px solid #1f6b4a;margin-bottom:18px;}
+.co-name{font-size:24px;font-weight:800;color:#1f6b4a;margin-bottom:4px;}
 .co-addr{font-size:10.5px;color:#666;line-height:1.65;}
 .inv-label{font-size:15px;font-weight:800;color:#222;text-transform:uppercase;letter-spacing:1.5px;text-align:right;}
-.inv-no{font-size:13px;font-weight:700;color:#0FA4AF;text-align:right;margin:3px 0;}
+.inv-no{font-size:13px;font-weight:700;color:#1f6b4a;text-align:right;margin:3px 0;}
 .inv-date{font-size:11px;color:#888;text-align:right;}
 /* ── Patient box ── */
 .pt-box{background:#f5fbfc;border:1px solid #d0edf0;border-radius:8px;padding:12px 18px;margin-bottom:16px;display:grid;grid-template-columns:1fr 1fr;gap:7px 30px;}
 .pf{display:flex;gap:8px;}
-.pf-l{font-size:9px;font-weight:800;color:#0FA4AF;text-transform:uppercase;letter-spacing:.5px;min-width:78px;padding-top:1px;}
+.pf-l{font-size:9px;font-weight:800;color:#1f6b4a;text-transform:uppercase;letter-spacing:.5px;min-width:78px;padding-top:1px;}
 .pf-v{font-size:12px;font-weight:500;color:#222;}
 /* ── Section title ── */
 .sec-title{font-size:9.5px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#777;margin-bottom:6px;}
 /* ── Items table ── */
 table.items{width:100%;border-collapse:collapse;margin-bottom:16px;font-size:11.5px;}
-table.items thead tr{background:#0FA4AF;}
+table.items thead tr{background:#1f6b4a;}
 table.items thead th{color:#fff;padding:8px 8px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;}
 table.items tbody td{border-bottom:1px solid #e8f4f5;}
 /* ── Totals ── */
@@ -90,12 +92,12 @@ table.items tbody td{border-bottom:1px solid #e8f4f5;}
 .tot-inner{width:290px;border:1px solid #e0f0f2;border-radius:8px;overflow:hidden;}
 .tot-row{display:flex;justify-content:space-between;padding:6px 14px;font-size:12px;border-bottom:1px solid #f0f0f0;}
 .tot-row:last-child{border-bottom:none;}
-.tot-grand{font-size:15px;font-weight:800;color:#0FA4AF;background:#f0fbfc;padding:8px 14px;}
-.tot-paid{color:#0FA4AF;font-weight:700;}
+.tot-grand{font-size:15px;font-weight:800;color:#1f6b4a;background:#f0fbfc;padding:8px 14px;}
+.tot-paid{color:#1f6b4a;font-weight:700;}
 .tot-bal-row{font-weight:700;}
 /* ── Amount words ── */
 .amt-words{background:#f5fbfc;border:1px solid #d0edf0;border-radius:6px;padding:9px 14px;font-size:11.5px;color:#333;margin-bottom:14px;}
-.amt-words strong{display:block;font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:#0FA4AF;margin-bottom:3px;}
+.amt-words strong{display:block;font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:#1f6b4a;margin-bottom:3px;}
 /* ── Footer ── */
 .inv-foot{display:flex;justify-content:space-between;align-items:flex-end;border-top:1px dashed #ccc;padding-top:10px;margin-top:4px;}
 .foot-note{font-size:11px;color:#888;font-style:italic;}

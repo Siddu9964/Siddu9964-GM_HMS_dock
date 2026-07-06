@@ -10,6 +10,8 @@ $bill_id = $_GET['bill_id'] ?? '';
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="/GM_HMS/assets/css/gm-theme.css">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bill Details - <?php echo htmlspecialchars($bill_id); ?></title>

@@ -1,4 +1,23 @@
 <?php
+/**
+ * ============================================================
+ * PharmacySalesController — API Reference
+ * ============================================================
+ * Base URL : http://localhost/GM_HMS/api/pharmacy/sales
+ * Auth     : All endpoints require Auth
+ * ------------------------------------------------------------
+ *
+ * 1. GET /api/pharmacy/sales
+ *    Query: date_from, date_to, patient_id, payment_mode
+ *    Response: All sales history
+ *
+ * 2. GET /api/pharmacy/sales/{id}
+ *    Returns full sale details with line items
+ *
+ * 3. GET /api/pharmacy/sales/{id}/reprint
+ *    Returns printable receipt data
+ * ------------------------------------------------------------
+ */
 namespace GM_HMS\Controllers\api;
 
 use Exception;
@@ -8,9 +27,9 @@ use GM_HMS\Models\PharmacyBillingModel;
 /**
  * PharmacySalesController
  * Routes:
- *   GET /api/pharmacy/sales              → list (with date filters)
- *   GET /api/pharmacy/sales/{invoice_no} → view single invoice
- *   GET /api/pharmacy/sales/{invoice_no}/reprint → get invoice HTML for reprint
+ *   GET /api/pharmacy/sales              â†’ list (with date filters)
+ *   GET /api/pharmacy/sales/{invoice_no} â†’ view single invoice
+ *   GET /api/pharmacy/sales/{invoice_no}/reprint â†’ get invoice HTML for reprint
  */
 class PharmacySalesController extends BaseController {
     private $billing;
@@ -96,3 +115,4 @@ class PharmacySalesController extends BaseController {
         } catch (Exception $e) { $this->handleException($e); }
     }
 }
+

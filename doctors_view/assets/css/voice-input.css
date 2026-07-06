@@ -19,7 +19,7 @@
 .recording-pulse {
     width: 12px;
     height: 12px;
-    background: white;
+    background: #FDFBF7;
     border-radius: 50%;
     animation: pulse 1.5s ease-in-out infinite;
 }
@@ -55,7 +55,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: white;
+    background: #FDFBF7;
     padding: 30px 40px;
     border-radius: 16px;
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
@@ -71,7 +71,7 @@
     width: 40px;
     height: 40px;
     border: 4px solid #e5e7eb;
-    border-top-color: #0FA4AF;
+    border-top-color: #1f6b4a;
     border-radius: 50%;
     animation: spin 1s linear infinite;
 }
@@ -122,7 +122,7 @@
 /* Voice Button Hover Effect */
 .btn-voice:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(15, 164, 175, 0.3);
+    box-shadow: 0 4px 12px rgba(31, 107, 74, 0.3);
 }
 
 .btn-voice i {

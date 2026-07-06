@@ -259,7 +259,7 @@ class VoiceInput {
                 icon: 'error',
                 title: 'Voice Input Error',
                 text: message,
-                confirmButtonColor: '#0FA4AF'
+                confirmButtonColor: '#1f6b4a'
             });
         } else {
             alert(message);

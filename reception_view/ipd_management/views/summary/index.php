@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Receptionist') {
+if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], ['Receptionist', 'admin', 'Admin'])) {
     header("Location: ../../../receptionist_login.php");
     exit();
 }
@@ -8,6 +8,8 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Receptionist') {
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="/GM_HMS/assets/css/gm-theme.css">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IPD Daily Reports - GM HMS</title>
@@ -30,16 +32,16 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Receptionist') {
     
     <style>
         :root {
-            --primary-gradient: linear-gradient(135deg, #0FA4AF 0%, #056674 100%);
+            --primary-gradient: linear-gradient(135deg, #1f6b4a 0%, #144d34 100%);
             --glass-bg: rgba(255, 255, 255, 0.95);
             --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-            --accent-color: #0FA4AF;
+            --accent-color: #1f6b4a;
             --success-color: #10b981;
             --danger-color: #ef4444;
             --warning-color: #f59e0b;
             --text-main: #0f172a;
             --text-muted: #64748b;
-            --sidebar-color: #056674;
+            --sidebar-color: #144d34;
         }
         
         body {
@@ -158,9 +160,9 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Receptionist') {
             flex-shrink: 0;
         }
 
-        .stats-pill.blue .icon { background: rgba(15, 164, 175, 0.1); color: #0FA4AF; }
+        .stats-pill.blue .icon { background: rgba(31, 107, 74, 0.1); color: #1f6b4a; }
         .stats-pill.green .icon { background: rgba(16, 185, 129, 0.1); color: #10b981; }
-        .stats-pill.purple .icon { background: rgba(5, 102, 116, 0.1); color: #056674; }
+        .stats-pill.purple .icon { background: rgba(20, 77, 52, 0.1); color: #144d34; }
 
         .stats-pill .info h4 {
             font-size: 1.1rem;
@@ -223,7 +225,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Receptionist') {
 
         .timeline-row:hover .timeline-dot {
             background: var(--accent-color);
-            box-shadow: 0 0 0 6px rgba(15, 164, 175, 0.2);
+            box-shadow: 0 0 0 6px rgba(31, 107, 74, 0.2);
         }
 
         .summary-card {

@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Doctor') {
+if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], ['Doctor', 'admin', 'Admin'])) {
     header("Location: ../doctor_login.php");
     exit();
 }
@@ -8,6 +8,8 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Doctor') {
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="/GM_HMS/assets/css/gm-theme.css">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OPD Patients - GM HMS</title>
@@ -19,7 +21,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Doctor') {
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
     
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="assets/css/doctor_dashboard.css">
+    <link rel="stylesheet" href="assets/css/doctor_dashboard.css?v=<?= time() ?>">
     <style>
         .opd-badge { padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
         .badge-scheduled { background: #e0f2fe; color: #0369a1; }
@@ -41,71 +43,59 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Doctor') {
             <!-- Page Content -->
             <div class="doctor-content">
                 <!-- Page Header -->
-                <div class="d-flex" style="justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-                    <div>
-                        <h1 class="main-page-title">
-                            <i class="fas fa-calendar-check"></i>
-                            OPD Appointments
-                        </h1>
-                        <p style="color: var(--gray-500);">Manage your outpatient visits and clinical encounters</p>
-                    </div>
-                    <div class="d-flex gap-2">
-                        <button onclick="refreshData()" class="btn btn-outline">
+                <div class="welcome-banner fade-in-up">
+                    <div class="d-flex" style="justify-content: space-between; align-items: center; position: relative; z-index: 2;">
+                        <div>
+                            <h1 class="welcome-title">
+                                <i class="fas fa-calendar-check"></i> OPD Appointments
+                            </h1>
+                            <p class="welcome-subtitle">Manage your outpatient visits and clinical encounters</p>
+                        </div>
+                        <button onclick="refreshData()" class="btn btn-outline" style="border-color: rgba(255,255,255,0.2); color: white;">
                             <i class="fas fa-sync-alt"></i> Refresh
                         </button>
                     </div>
+                    <i class="fas fa-calendar-plus welcome-icon-bg"></i>
                 </div>
                 
                 <!-- KPI Section -->
-                <div class="d-grid grid-cols-4 gap-3 mb-4">
-                    <div class="card card-info">
-                        <div class="card-body">
-                            <div class="d-flex" style="justify-content: space-between; align-items: center;">
-                                <div>
-                                    <div style="font-size: 0.875rem; color: var(--gray-600); margin-bottom: 0.5rem;">Total Today</div>
-                                    <div style="font-size: 2rem; font-weight: 700; color: var(--primary-blue);" id="kpi-total">0</div>
-                                </div>
-                                <i class="fas fa-user-clock" style="font-size: 2.5rem; color: var(--primary-blue); opacity: 0.2;"></i>
-                            </div>
+                <div class="bento-grid">
+                    <div class="bento-card gm-kpi-card col-span-3 fade-in-up delay-1">
+                        <div>
+                            <div class="gm-kpi-icon-wrap icon-blue"><i class="fas fa-user-clock"></i></div>
+                            <div class="gm-kpi-value" id="kpi-total">0</div>
+                            <div class="gm-kpi-label">Total Today</div>
                         </div>
+                        <i class="fas fa-users bg-icon"></i>
                     </div>
-                    <div class="card card-warning">
-                        <div class="card-body">
-                            <div class="d-flex" style="justify-content: space-between; align-items: center;">
-                                <div>
-                                    <div style="font-size: 0.875rem; color: var(--gray-600); margin-bottom: 0.5rem;">Scheduled</div>
-                                    <div style="font-size: 2rem; font-weight: 700; color: var(--status-warning);" id="kpi-scheduled">0</div>
-                                </div>
-                                <i class="fas fa-clock" style="font-size: 2.5rem; color: var(--status-warning); opacity: 0.2;"></i>
-                            </div>
+                    <div class="bento-card gm-kpi-card col-span-3 fade-in-up delay-1">
+                        <div>
+                            <div class="gm-kpi-icon-wrap icon-orange"><i class="fas fa-clock"></i></div>
+                            <div class="gm-kpi-value" id="kpi-scheduled">0</div>
+                            <div class="gm-kpi-label">Scheduled</div>
                         </div>
+                        <i class="fas fa-calendar-day bg-icon"></i>
                     </div>
-                    <div class="card card-success">
-                        <div class="card-body">
-                            <div class="d-flex" style="justify-content: space-between; align-items: center;">
-                                <div>
-                                    <div style="font-size: 0.875rem; color: var(--gray-600); margin-bottom: 0.5rem;">Completed</div>
-                                    <div style="font-size: 2rem; font-weight: 700; color: var(--status-success);" id="kpi-completed">0</div>
-                                </div>
-                                <i class="fas fa-check-circle" style="font-size: 2.5rem; color: var(--status-success); opacity: 0.2;"></i>
-                            </div>
+                    <div class="bento-card gm-kpi-card col-span-3 fade-in-up delay-2">
+                        <div>
+                            <div class="gm-kpi-icon-wrap icon-teal"><i class="fas fa-check-circle"></i></div>
+                            <div class="gm-kpi-value" id="kpi-completed">0</div>
+                            <div class="gm-kpi-label">Completed</div>
                         </div>
+                        <i class="fas fa-clipboard-check bg-icon"></i>
                     </div>
-                    <div class="card card-danger">
-                        <div class="card-body">
-                            <div class="d-flex" style="justify-content: space-between; align-items: center;">
-                                <div>
-                                    <div style="font-size: 0.875rem; color: var(--gray-600); margin-bottom: 0.5rem;">Cancelled</div>
-                                    <div style="font-size: 2rem; font-weight: 700; color: var(--status-danger);" id="kpi-cancelled">0</div>
-                                </div>
-                                <i class="fas fa-times-circle" style="font-size: 2.5rem; color: var(--status-danger); opacity: 0.2;"></i>
-                            </div>
+                    <div class="bento-card gm-kpi-card col-span-3 fade-in-up delay-2">
+                        <div>
+                            <div class="gm-kpi-icon-wrap icon-red"><i class="fas fa-times-circle"></i></div>
+                            <div class="gm-kpi-value" id="kpi-cancelled">0</div>
+                            <div class="gm-kpi-label">Cancelled</div>
                         </div>
+                        <i class="fas fa-ban bg-icon"></i>
                     </div>
                 </div>
-
+                
                 <!-- Appointments Table -->
-                <div class="card">
+                <div class="bento-card fade-in-up delay-3 col-span-12">
                     <div class="card-header d-flex" style="justify-content: space-between; align-items: center;">
                         <div class="card-title">
                             <i class="fas fa-list"></i>

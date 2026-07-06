@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Receptionist') {
+if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], ['Receptionist', 'admin', 'Admin'])) {
     header("Location: ../../../../receptionist_login.php");
     exit();
 }
@@ -8,6 +8,8 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Receptionist') {
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="/GM_HMS/assets/css/gm-theme.css">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ward & Room Management - GM HMS</title>
@@ -75,7 +77,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Receptionist') {
         
         .ward-tab:hover {
             transform: translateY(-4px);
-            box-shadow: 0 8px 16px rgba(15, 164, 175, 0.2);
+            box-shadow: 0 8px 16px rgba(31, 107, 74, 0.2);
             border-color: var(--primary-color);
         }
         
@@ -84,7 +86,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Receptionist') {
             border-color: var(--primary-dark);
             color: white;
             transform: translateY(-4px);
-            box-shadow: 0 8px 20px rgba(15, 164, 175, 0.4);
+            box-shadow: 0 8px 20px rgba(31, 107, 74, 0.4);
         }
         
         .ward-tab.active::before {

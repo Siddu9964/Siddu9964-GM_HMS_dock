@@ -1,4 +1,47 @@
 <?php
+/**
+ * ============================================================
+ * NotificationController — API Reference
+ * ============================================================
+ * Base URL : http://localhost/GM_HMS/api
+ * Auth     : No auth required (but doctor_id filter uses session)
+ * Table    : notifications
+ * ------------------------------------------------------------
+ *
+ * 1. GET /api/notifications
+ *    Query Params:
+ *      doctor_id   (string)  - Recipient doctor/user ID
+ *      category    (string)  - Filter by category
+ *      unread_only (bool)    - 1 = only unread
+ *      limit       (int)     - Max results (default: 50)
+ *    Response: [ { notification_id, title, message, category, is_read, priority, created_at } ]
+ *
+ * 2. GET /api/notifications/unread-count
+ *    Query: doctor_id (optional)
+ *    Response: { "count": 3 }
+ *
+ * 3. POST /api/notifications/mark-read
+ *    Required: notification_ids (array)
+ *    Body: { "notification_ids": [1, 2, 3] }
+ *    Response: { "message": "Notifications marked as read" }
+ *
+ * 4. POST /api/notifications     [Required: recipient_id, title, message, category]
+ *    Body:
+ *      {
+ *        "recipient_id": "DOC-001",
+ *        "title":        "New Appointment",
+ *        "message":      "Patient Anita Sharma has a 10:30 appointment",
+ *        "category":     "appointment",
+ *        "priority":     "high",
+ *        "action_url":   "/doctors_view/dashboard.php"
+ *      }
+ *    priority values: low | normal | high
+ *    Response 201: Full notification object
+ *
+ * 5. DELETE /api/notifications/{id}
+ *    Example: DELETE /api/notifications/NOTIF-1750000000-1234
+ * ------------------------------------------------------------
+ */
 namespace GM_HMS\Controllers\api;
 
 use Exception;
@@ -6,10 +49,10 @@ use GM_HMS\Controllers\BaseController;
 
 /**
  * Notification API Controller
- * 
+ *
  * Handles doctor notifications, alerts, and real-time updates
  * Database: hmsci, Table: notifications
- * 
+ *
  * @package GM_HMS\Controllers\API
  * @version 1.1.0
  */

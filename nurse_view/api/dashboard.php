@@ -20,14 +20,15 @@ header('Content-Type: application/json');
 session_start();
 
 // Check authentication
-if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'Nurse') {
+if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], ['Nurse', 'admin', 'Admin'])) {
     http_response_code(401);
     echo json_encode(['success' => false, 'message' => 'Unauthorized']);
     exit();
 }
 
 $nurseId = $_SESSION['user_id'] ?? null;
-$roleId = $_SESSION['role_id'] ?? null;
+// Use user_id for roleId since AuthenticationManager sets user_id to the staff sl_no and doesn't set role_id
+$roleId = $_SESSION['role_id'] ?? $_SESSION['user_id'] ?? null;
 
 if (!$nurseId || !$roleId) {
     http_response_code(400);

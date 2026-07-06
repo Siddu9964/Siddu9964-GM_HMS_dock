@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Receptionist') {
+if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], ['Receptionist', 'admin', 'Admin'])) {
     header("Location: ../receptionist_login.php");
     exit();
 }
@@ -9,6 +9,8 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Receptionist') {
 <html lang="en">
 
 <head>
+    <link rel="stylesheet" href="/GM_HMS/assets/css/gm-theme.css">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OPD Management - GM HMS</title>
@@ -17,9 +19,9 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Receptionist') {
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Base CSS -->
-    <link rel="stylesheet" href="assets/css/reception_dashboard.css">
+    <link rel="stylesheet" href="assets/css/reception_dashboard.css?v=<?= time() ?>">
     <!-- Module CSS -->
-    <link rel="stylesheet" href="assets/css/opd_management.css">
+    <link rel="stylesheet" href="assets/css/opd_management.css?v=<?= time() ?>">
 </head>
 
 <body>
@@ -119,22 +121,17 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Receptionist') {
     <div id="encounterModal" class="modal-overlay hidden" onclick="if(event.target === this) closeModal()">
         <div class="modal-content" onclick="event.stopPropagation()">
             <!-- Header -->
-            <div class="modal-header">
-                <div class="d-flex justify-content-between align-items-start">
-                    <div>
-                        <h2 class="text-2xl font-bold mb-1" id="modal-patient-name">Patient Name</h2>
-                        <div class="modal-patient-info">
-                            <span class="info-badge"><i class="fas fa-id-card-alt mr-2"></i><span
-                                    id="modal-patient-id">PID-000</span></span>
-                            <span class="info-badge"><i class="fas fa-user mr-2"></i><span id="modal-patient-details">25
-                                    Y / Male</span></span>
-                            <span class="info-badge"><i class="fas fa-user-md mr-2"></i><span id="modal-doctor-name">Dr.
-                                    Name</span></span>
+            <div class="modal-header border-0 pb-0" style="padding: 1.5rem 1.5rem 0.5rem 1.5rem;">
+                <div class="d-flex justify-content-between align-items-center w-100">
+                    <div class="d-flex align-items-center" style="gap: 1rem;">
+                        <div class="patient-avatar" style="font-size: 2.5rem; color: #1f6b4a;">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                        <div>
+                            <h2 class="font-weight-bold mb-0 text-dark" style="font-size: 1.25rem;" id="modal-patient-name">Patient Name</h2>
+                            <span class="badge mt-1" style="background: #f1f5f9; color: #475569; font-size: 0.75rem;"><i class="fas fa-id-card-alt mr-1"></i><span id="modal-patient-id">PID-000</span></span>
                         </div>
                     </div>
-                    <button class="btn btn-link text-white" onclick="closeModal()">
-                        <i class="fas fa-times fa-lg"></i>
-                    </button>
                 </div>
             </div>
 
@@ -143,19 +140,9 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Receptionist') {
                 <button class="tab-btn active" onclick="switchTab('clinical')">
                     <i class="fas fa-heartbeat mr-2"></i> Clinical & Vitals
                 </button>
-                <button class="tab-btn" onclick="switchTab('rx')">
-                    <i class="fas fa-prescription mr-2"></i> Prescriptions
-                </button>
-                <button class="tab-btn" onclick="switchTab('labs')">
-                    <i class="fas fa-microscope mr-2"></i> Lab Reports
-                </button>
-                <button class="tab-btn" onclick="switchTab('followup')">
-                    <i class="fas fa-calendar-alt mr-2"></i> Follow-up
-                </button>
             </div>
 
-            <div class="p-0">
-
+            <div class="modal-body p-4" style="overflow-y: auto; max-height: calc(90vh - 120px);">
                 <!-- Tab: Clinical -->
                 <div id="tab-clinical" class="tab-content active">
                     <form id="vitals-form">
@@ -163,148 +150,75 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Receptionist') {
                         <input type="hidden" name="patient_id" id="vitals-patient-id">
                         <input type="hidden" name="doctor_id" id="vitals-doctor-id">
 
-                        <h4 class="form-label mb-3">Vital Signs</h4>
-                        <div class="vitals-grid">
-                            <div class="vital-input">
-                                <label>Blood Pressure</label>
-                                <input type="text" name="bp" placeholder="---/---">
-                                <div class="vital-unit">mmHg</div>
-                            </div>
-                            <div class="vital-input">
-                                <label>Pulse Rate</label>
-                                <input type="text" name="pulse" placeholder="---">
-                                <div class="vital-unit">bpm</div>
-                            </div>
-                            <div class="vital-input">
-                                <label>Temperature</label>
-                                <input type="text" name="temp" placeholder="---">
-                                <div class="vital-unit">°F</div>
-                            </div>
-                            <div class="vital-input">
-                                <label>Weight</label>
-                                <input type="text" name="weight" placeholder="---">
-                                <div class="vital-unit">kg</div>
-                            </div>
-                            <div class="vital-input">
-                                <label>SpO2</label>
-                                <input type="text" name="spo2" placeholder="---">
-                                <div class="vital-unit">%</div>
+                        <div class="single-vitals-card">
+                            <div class="vitals-row">
+                                <div class="vital-item" style="flex: 1.4;">
+                                    <label><i class="fas fa-heartbeat text-danger mr-1"></i> BP</label>
+                                    <div class="input-wrap">
+                                        <input type="text" name="bp_sys" placeholder="120" style="text-align: right; width: 35px; border-radius: 0;">
+                                        <span class="mx-1 font-weight-bold text-muted" style="font-size: 1.2rem;">/</span>
+                                        <input type="text" name="bp_dia" placeholder="80" style="text-align: left; width: 35px; border-radius: 0;">
+                                        <span>mmHg</span>
+                                    </div>
+                                </div>
+                                <div class="vital-item">
+                                    <label><i class="fas fa-wave-square text-warning mr-1"></i> Pulse</label>
+                                    <div class="input-wrap">
+                                        <input type="text" name="pulse" placeholder="72">
+                                        <span>bpm</span>
+                                    </div>
+                                </div>
+                                <div class="vital-item">
+                                    <label><i class="fas fa-thermometer-half text-warning mr-1"></i> Temp</label>
+                                    <div class="input-wrap">
+                                        <input type="text" name="temp" placeholder="98.6">
+                                        <span>°F</span>
+                                    </div>
+                                </div>
+                                <div class="vital-item">
+                                    <label><i class="fas fa-weight text-success mr-1"></i> Weight</label>
+                                    <div class="input-wrap">
+                                        <input type="text" name="weight" placeholder="65">
+                                        <span>kg</span>
+                                    </div>
+                                </div>
+                                <div class="vital-item">
+                                    <label><i class="fas fa-lungs text-primary mr-1"></i> SpO2</label>
+                                    <div class="input-wrap">
+                                        <input type="text" name="spo2" placeholder="98">
+                                        <span>%</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label class="form-label">Chief Complaint</label>
-                            <textarea name="chief_complaint" class="form-control" rows="3"
-                                placeholder="Enter patient's main problem or symptoms..."></textarea>
+                        <div class="form-group mb-0 mt-3">
+                            <label class="form-label font-weight-bold text-dark mb-2">Chief Complaint <span class="text-danger">*</span></label>
+                            <textarea class="form-control" name="chief_complaint" rows="2"
+                                placeholder="Enter patient's main problem or symptoms..." required></textarea>
                         </div>
-
-                        <div class="text-right">
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-save"></i> Save Vitals
+                    
+                        <div class="mt-4 d-flex justify-content-end gap-3 border-top pt-4">
+                            <button type="button" class="btn btn-light font-weight-bold px-4" onclick="closeModal()">
+                                Cancel
+                            </button>
+                            <button type="submit" class="btn btn-primary px-6" id="save-vitals-btn">
+                                <i class="fas fa-save mr-2"></i> Save Vitals
                             </button>
                         </div>
                     </form>
                 </div>
-
-                <!-- Tab: Rx -->
-                <div id="tab-rx" class="tab-content">
-                    <div class="d-flex justify-content-between mb-3">
-                        <h4 class="form-label">Active Prescriptions</h4>
-                        <button class="btn btn-outline btn-sm" onclick="printPrescription()">
-                            <i class="fas fa-print"></i> Print Rx
-                        </button>
-                    </div>
-                    <div id="rx-list">
-                        <!-- Loaded dynamically -->
-                        <p class="text-center text-gray-500 py-4">No prescriptions found for this visit.</p>
-                    </div>
-                </div>
-
-                <!-- Tab: Labs -->
-                <div id="tab-labs" class="tab-content">
-                    <div class="row">
-                        <div class="col-md-7 border-right">
-                            <div class="d-flex justify-content-between mb-3">
-                                <h4 class="form-label">Lab Tests Requests</h4>
-                            </div>
-                            <div id="lab-list">
-                                <!-- Loaded dynamically -->
-                                <p class="text-center text-gray-500 py-4">No lab orders found.</p>
-                            </div>
-                        </div>
-                        <div class="col-md-5 pl-3">
-                            <h4 class="form-label mb-3">New Lab Request</h4>
-                            <form id="lab-form">
-                                <div class="form-group">
-                                    <label class="form-label">Test Name</label>
-                                    <select name="test_name" class="form-control" required>
-                                        <option value="">Select Test</option>
-                                        <option value="CBC">Complete Blood Count (CBC)</option>
-                                        <option value="Lipid Profile">Lipid Profile</option>
-                                        <option value="Liver Function">Liver Function Test</option>
-                                        <option value="Kidney Function">Kidney Function Test</option>
-                                        <option value="Thyroid Profile">Thyroid Profile</option>
-                                        <option value="Blood Sugar Fasting">Blood Sugar (Fasting)</option>
-                                        <option value="Urine Routine">Urine Routine</option>
-                                        <option value="X-Ray Chest">X-Ray Chest PA</option>
-                                        <option value="USG Abdomen">USG Abdomen</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">Priority</label>
-                                    <select name="priority" class="form-control">
-                                        <option value="Normal">Normal</option>
-                                        <option value="Urgent">Urgent</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">Clinical Notes</label>
-                                    <textarea name="notes" class="form-control" rows="2"></textarea>
-                                </div>
-                                <button type="submit" class="btn btn-primary w-100">
-                                    <i class="fas fa-plus"></i> Add Request
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-
-
-
-                <!-- Tab: Follow-up -->
-                <div id="tab-followup" class="tab-content">
-                    <form id="followup-form">
-                        <h4 class="form-label mb-3">Schedule Follow-up</h4>
-                        <div class="row">
-                            <div class="col-md-6 form-group">
-                                <label class="form-label">Date</label>
-                                <input type="date" name="follow_up_date" class="form-control" required>
-                            </div>
-                            <div class="col-md-6 form-group">
-                                <label class="form-label">Notes for Next Visit</label>
-                                <textarea name="notes" class="form-control" rows="1"></textarea>
-                            </div>
-                        </div>
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-calendar-check"></i> Schedule Follow-up
-                        </button>
-                    </form>
-                    <div class="mt-4 pt-4 border-top">
-                        <div class="alert alert-info" id="current-followup" style="display:none;">
-                            <strong>Scheduled:</strong> <span id="followup-display"></span>
-                        </div>
-                    </div>
-                </div>
-
             </div>
+
         </div>
     </div>
 
 
 
     <!-- Scripts -->
-    <script src="assets/js/reception_utils.js"></script>
-    <script src="assets/js/opd_management.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="assets/js/reception_utils.js?v=<?= time() ?>"></script>
+    <script src="assets/js/opd_management.js?v=<?= time() ?>"></script>
 </body>
 
 </html>

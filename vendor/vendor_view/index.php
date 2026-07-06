@@ -6,6 +6,8 @@ $vendorName = htmlspecialchars($_SESSION['vendor_name'] ?? 'Vendor');
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="/GM_HMS/assets/css/gm-theme.css">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MediVend Nexus | Procurement Marketplace</title>

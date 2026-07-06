@@ -62,9 +62,9 @@ function fmt($n) { return number_format((float)$n, 2, '.', ','); }
 
 <div class="professional-invoice" style="font-family: 'Inter', sans-serif; color: #1e293b; line-height: 1.5;">
     <!-- Invoice Header -->
-    <div style="display: flex; justify-content: space-between; border-bottom: 3px solid #0FA4AF; padding-bottom: 20px; margin-bottom: 30px;">
+    <div style="display: flex; justify-content: space-between; border-bottom: 3px solid #1f6b4a; padding-bottom: 20px; margin-bottom: 30px;">
         <div>
-            <h1 style="margin: 0; color: #0FA4AF; font-size: 28px; font-weight: 800;">GM HOSPITAL</h1>
+            <h1 style="margin: 0; color: #1f6b4a; font-size: 28px; font-weight: 800;">GM HOSPITAL</h1>
             <p style="margin: 5px 0 0; color: #64748b; font-size: 13px;">
                 Advanced Medical Care & Research Center<br>
                 Papreddy Palya, 2nd Stage, Naagarabhaavi<br>
@@ -73,7 +73,7 @@ function fmt($n) { return number_format((float)$n, 2, '.', ','); }
         </div>
         <div style="text-align: right;">
             <h2 style="margin: 0; font-size: 22px; color: #1e293b; font-weight: 700;">INVOICE</h2>
-            <p style="margin: 5px 0 0; font-weight: 600; color: #0FA4AF;">#<?php echo htmlspecialchars($bill['bill_id']); ?></p>
+            <p style="margin: 5px 0 0; font-weight: 600; color: #1f6b4a;">#<?php echo htmlspecialchars($bill['bill_id']); ?></p>
             <p style="margin: 2px 0 0; font-size: 13px; color: #64748b;"><?php echo date('d M Y', strtotime($bill['bill_date'])); ?></p>
         </div>
     </div>
@@ -149,7 +149,7 @@ function fmt($n) { return number_format((float)$n, 2, '.', ','); }
                 <span>Tax</span>
                 <span>₹<?php echo fmt($bill['tax_amount']); ?></span>
             </div>
-            <div style="display: flex; justify-content: space-between; padding: 15px 0; margin-top: 10px; border-top: 2px solid #0FA4AF; color: #0FA4AF; font-size: 18px; font-weight: 800;">
+            <div style="display: flex; justify-content: space-between; padding: 15px 0; margin-top: 10px; border-top: 2px solid #1f6b4a; color: #1f6b4a; font-size: 18px; font-weight: 800;">
                 <span>Total</span>
                 <span>₹<?php echo fmt($bill['grand_total']); ?></span>
             </div>
